@@ -22,8 +22,8 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
   }
 
   Future<void> _fetchProfesores() async {
-    final urlProfesores = Uri.parse('${Config.baseUrl}/get/teachers');
-    final urlCursos = Uri.parse('${Config.baseUrl}/get/courses');
+    final urlProfesores = Config.getProfessorsUrl();
+    final urlCursos = Config.getCoursesUrl(); 
 
     try {
       final responseProfesores = await http.get(urlProfesores);
