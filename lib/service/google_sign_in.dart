@@ -7,7 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kk/providers/credenciales_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:kk/main.dart';
-import 'package:kk/providers/credenciales_provider.dart';
 import 'package:kk/service/firebase_service.dart';
 
 class GoogleSignIn extends StatefulWidget {
