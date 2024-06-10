@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kk/utils/config.dart';
+import 'package:kk/models/profesor.dart';
 
 class ListadoProfesores extends StatefulWidget {
   const ListadoProfesores({Key? key}) : super(key: key);
@@ -18,10 +19,10 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
   @override
   void initState() {
     super.initState();
-    _fetchProfesores();
+    _getProfesores();
   }
 
-  Future<void> _fetchProfesores() async {
+  Future<void> _getProfesores() async {
     final urlProfesores = Config.getProfessorsUrl();
     final urlCursos = Config.getCoursesUrl(); 
 
@@ -104,23 +105,4 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
   }
 }
 
-class Profesor {
-  final String nombre;
-  final String primerApellido;
-  final String segundoApellido;
 
-  Profesor({
-    required this.nombre,
-    String? primerApellido,
-    String? segundoApellido,
-  })  : primerApellido = primerApellido ?? '',
-        segundoApellido = segundoApellido ?? '';
-
-  factory Profesor.fromJson(Map<String, dynamic> json) {
-    return Profesor(
-      nombre: json['nombre'],
-      primerApellido: json['primerApellido'] ?? '',
-      segundoApellido: json['segundoApellido'] ?? '',
-    );
-  }
-}

@@ -1,29 +1,67 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:kk/providers/providers.dart';
+import 'package:http/http.dart' as http;
+import 'package:kk/utils/config.dart'; 
 
-class HorarioProfesoresScreen extends StatelessWidget {
-  const HorarioProfesoresScreen({super.key});
+class HorarioProfesoresScreen extends StatefulWidget {
+  const HorarioProfesoresScreen({Key? key}) : super(key: key);
+
+  @override
+  _HorarioProfesoresScreenState createState() =>
+      _HorarioProfesoresScreenState();
+}
+
+class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
+  List<dynamic> listadoProfesores = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _getProfesores();
+  }
+
+  Future<void> _getProfesores() async {
+    final url = Config.getProfessorsUrl(); 
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          listadoProfesores = json.decode(response.body);
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        debugPrint('Error fetching teachers: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      debugPrint('Error fetching teachers: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final centroProvider = Provider.of<CentroProvider>(context);
-    final listadoProfesores = centroProvider.listaProfesores;
     return Scaffold(
       appBar: AppBar(
         title: const Text("HORARIO"),
       ),
-      body: Center(
-        child: ListView.builder(
-            itemCount: listadoProfesores.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == 0) {
-                return GestureDetector(
-                    onTap: () {
-                      null;
-                    },
-                    child: Container());
-              } else {
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: listadoProfesores.length,
+              itemBuilder: (BuildContext context, int index) {
+                final profesor = listadoProfesores[index];
+                final nombre = profesor['nombre'];
+                final primerApellido = profesor['primerApellido'];
+                final segundoApellido = profesor['segundoApellido'];
+
                 return GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(
@@ -31,12 +69,11 @@ class HorarioProfesoresScreen extends StatelessWidget {
                         arguments: index);
                   },
                   child: ListTile(
-                    title: Text(listadoProfesores[index].nombre),
+                    title: Text('$nombre $primerApellido $segundoApellido'),
                   ),
                 );
-              }
-            }),
-      ),
+              },
+            ),
     );
   }
 }
