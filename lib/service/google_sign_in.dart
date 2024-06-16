@@ -37,7 +37,7 @@ class GoogleSignInState extends State<GoogleSignIn> {
 
                 try {
                   while (lista.isEmpty) {
-                    await credencialesProvider.getCredencialesUsuario();
+                     credencialesProvider.listaCredenciales;
                   }
 
                   FirebaseService service = FirebaseService();

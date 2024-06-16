@@ -105559,23 +105559,24 @@ var $async$$0=A.H(function(a1,a2){if(a1===1){p=a2
 s=q}while(true)switch(s){case 0:a=n.a
 a.H(new A.ahr(a))
 q=3
-f=n.b
-s=f.length===0?6:7
-break
-case 6:e=n.c.uK()
+f=n.b,e=n.c
+case 6:if(!(f.length===0)){s=7
+break}d=e.uK()
 s=8
-return A.O(e,$async$$0)
-case 8:case 7:e=$.eD
-d=(e==null?$.eD=$.lh():e).kP("[DEFAULT]")
+return A.O(d,$async$$0)
+case 8:s=6
+break
+case 7:e=$.eD
+c=(e==null?$.eD=$.lh():e).kP("[DEFAULT]")
 e=$.ka()
-A.eg(d,e,!0)
-m=new A.QX(A.QU(new A.h7(d)),A.aUp(u.W))
+A.eg(c,e,!0)
+m=new A.QX(A.QU(new A.h7(c)),A.aUp(u.W))
 s=9
 return A.O(m.qX(),$async$$0)
-case 9:c=$.eD
-d=(c==null?$.eD=$.lh():c).kP("[DEFAULT]")
-A.eg(d,e,!0)
-l=A.QU(new A.h7(d)).gtl()
+case 9:d=$.eD
+c=(d==null?$.eD=$.lh():d).kP("[DEFAULT]")
+A.eg(c,e,!0)
+l=A.QU(new A.h7(c)).gtl()
 k=l.a.c.a.b
 j=l.a.c.a.c
 i=!1
@@ -105584,9 +105585,9 @@ if(f[h].b===J.bR(k)){i=!0
 f=A.c8(n.d,!1)
 e=f.BW("main_screen",j,t.X)
 e.toString
-c=f.e
-c.a.push(new A.iA(e,null,!1,B.qo,B.cd,new A.od(new ($.NL())(B.cd),t.tl),B.cd))
-c.am()
+d=f.e
+d.a.push(new A.iA(e,null,!1,B.qo,B.cd,new A.od(new ($.NL())(B.cd),t.tl),B.cd))
+d.am()
 f.AH()
 f.Aj()
 break}}if(!i){a.aiv(n.d)
