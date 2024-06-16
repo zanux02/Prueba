@@ -36,8 +36,11 @@ class GoogleSignInState extends State<GoogleSignIn> {
                 });
 
                 try {
-                  while (lista.isEmpty) {
-                     credencialesProvider.listaCredenciales;
+                  if(lista.isEmpty) {
+                    await credencialesProvider.getCredencialesUsuario();
+                    Future.delayed(const Duration(seconds: 2), () {
+                      
+        });
                   }
 
                   FirebaseService service = FirebaseService();
