@@ -48,11 +48,9 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
   }
 
   void _sortProfesoresByName() {
-    listadoProfesores.sort((a, b) {
-      final fullNameA =
-          '${a['primerApellido']} ${a['segundoApellido']} ${a['nombre']}';
-      final fullNameB =
-          '${b['primerApellido']} ${b['segundoApellido']} ${b['nombre']}';
+      listadoProfesores.sort((a, b) {
+      final fullNameA = '${a.nombre} ${a.primerApellido} ${a.segundoApellido}';
+      final fullNameB = '${b.nombre} ${b.primerApellido} ${b.segundoApellido}';
       return fullNameA.compareTo(fullNameB);
     });
   }

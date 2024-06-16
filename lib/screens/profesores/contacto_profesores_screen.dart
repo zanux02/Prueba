@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kk/models/profesor_contacto.dart';
+import 'package:kk/screens/profesores/listado_profesores.dart';
 import 'package:kk/utils/config.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -53,9 +54,9 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
   }
 
   void _sortProfesoresByName() {
-    listaProfesores.sort((a, b) {
-      final fullNameA = '${a.primerApellido} ${a.segundoApellido} ${a.nombre}';
-      final fullNameB = '${b.primerApellido} ${b.segundoApellido} ${b.nombre}';
+      listaProfesores.sort((a, b) {
+      final fullNameA = '${a.nombre} ${a.primerApellido} ${a.segundoApellido}';
+      final fullNameB = '${b.nombre} ${b.primerApellido} ${b.segundoApellido}';
       return fullNameA.compareTo(fullNameB);
     });
   }
