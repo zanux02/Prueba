@@ -39,6 +39,9 @@ class GoogleSignInState extends State<GoogleSignIn> {
                     await credencialesProvider.getCredencialesUsuario();
                   }
 
+                  // Agregar log para mostrar el contenido de lista
+                  debugPrint('Credenciales obtenidas: ${lista.map((credencial) => credencial.usuario).toList()}');
+
                   FirebaseService service = FirebaseService();
                   await service.signInWithGoogle();
 
