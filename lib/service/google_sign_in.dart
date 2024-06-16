@@ -44,22 +44,17 @@ class GoogleSignInState extends State<GoogleSignIn> {
             String? nombreUsuarioGoogle = user.displayName;
             bool existe = false;
 
-            // Verificar si la lista de credenciales es nula y obtenerla nuevamente si es necesario
-            if (lista == null) {
-              await credencialesProvider.listaCredenciales; // Asumiendo que existe un método así en CredencialesProvider
-            }
+            credencialesProvider.listaCredenciales;             
 
-            // Verificar la existencia del usuario en la lista de credenciales
-            if (lista != null) {
-              for (int i = 0; i < lista.length; i++) {
-                debugPrint(lista[i].usuario);
-                if (lista[i].usuario == usuarioGoogle.toString()) {
-                  existe = true;
-                  Navigator.pushNamed(context, "main_screen", arguments: nombreUsuarioGoogle);
-                  break; // Salir del bucle una vez encontrado el usuario
-                }
+            for (int i = 0; i < lista.length; i++) {
+              debugPrint(lista[i].usuario);
+              if (lista[i].usuario == usuarioGoogle.toString()) {
+                existe = true;
+                Navigator.pushNamed(context, "main_screen", arguments: nombreUsuarioGoogle);
+                break;
               }
             }
+            
 
             if (!existe) {
               _mostrarAlert(context);

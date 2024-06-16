@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kk/utils/config.dart';
+import 'package:kk/models/profesor.dart';
 
 class HorarioProfesoresScreen extends StatefulWidget {
   const HorarioProfesoresScreen({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class HorarioProfesoresScreen extends StatefulWidget {
 }
 
 class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
-  List<dynamic> listadoProfesores = [];
+  List<Profesor> listadoProfesores = [];
   bool isLoading = true;
 
   @override
@@ -28,8 +29,9 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
         setState(() {
-          listadoProfesores = json.decode(response.body);
+          listadoProfesores = data.map((json) => Profesor.fromJson(json)).toList();
           _sortProfesoresByName();
           isLoading = false;
         });
@@ -67,18 +69,19 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
               itemCount: listadoProfesores.length,
               itemBuilder: (BuildContext context, int index) {
                 final profesor = listadoProfesores[index];
-                final nombre = profesor['nombre'];
-                final primerApellido = profesor['primerApellido'];
-                final segundoApellido = profesor['segundoApellido'];
 
                 return GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(
-                        context, "horario_profesores_detalles_screen",
-                        arguments: index);
+                      context, 
+                      "horario_profesores_detalles_screen",
+                      arguments: index,
+                    );
                   },
                   child: ListTile(
-                    title: Text('$nombre $primerApellido $segundoApellido'),
+                    title: Text(
+                      '${profesor.nombre} ${profesor.primerApellido} ${profesor.segundoApellido}'
+                    ),
                   ),
                 );
               },
