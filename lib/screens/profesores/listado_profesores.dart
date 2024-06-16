@@ -59,11 +59,9 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
 
   void _sortProfesoresByName() {
     listaProfesores.sort((a, b) {
-      int comparison = a.primerApellido.compareTo(b.primerApellido);
-      if (comparison != 0) return comparison;
-      comparison = a.segundoApellido.compareTo(b.segundoApellido);
-      if (comparison != 0) return comparison;
-      return a.nombre.compareTo(b.nombre);
+      final fullNameA = '${a.nombre} ${a.primerApellido} ${a.segundoApellido}';
+      final fullNameB = '${b.nombre} ${b.primerApellido} ${b.segundoApellido}';
+      return fullNameA.compareTo(fullNameB);
     });
   }
 
@@ -71,7 +69,7 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("PROFESORES"),
+        title: const Text("LISTA PROFESORES"),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
