@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kk/providers/credenciales_provider.dart';
 import 'package:provider/provider.dart';
@@ -36,11 +35,8 @@ class GoogleSignInState extends State<GoogleSignIn> {
                 });
 
                 try {
-                  if(lista.isEmpty) {
+                  if (lista.isEmpty) {
                     await credencialesProvider.getCredencialesUsuario();
-                    Future.delayed(const Duration(seconds: 6), () {
-
-        });
                   }
 
                   FirebaseService service = FirebaseService();
@@ -66,8 +62,7 @@ class GoogleSignInState extends State<GoogleSignIn> {
                     logOut();
                   }
                 } catch (e) {
-                  debugPrint('Error al iniciar sesión con Google: $e');
-                  _mostrarError(context, e.toString());
+                  _mostrarError(context, "Error al iniciar sesión con Google: $e");
                 } finally {
                   setState(() {
                     isLoading = false;
@@ -80,14 +75,15 @@ class GoogleSignInState extends State<GoogleSignIn> {
                     TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
               ),
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
-                  side: MaterialStateProperty.all<BorderSide>(BorderSide.none)),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                side: MaterialStateProperty.all<BorderSide>(BorderSide.none),
+              ),
             ),
           )
         : Container(
             margin: const EdgeInsets.all(15),
-            child: const CircularProgressIndicator());
+            child: const CircularProgressIndicator(),
+          );
   }
 
   void _mostrarAlert(BuildContext context) {
@@ -107,7 +103,9 @@ class GoogleSignInState extends State<GoogleSignIn> {
           ),
           actions: [
             TextButton(
-                onPressed: () => Navigator.pop(context), child: const Text("OK")),
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
           ],
         );
       },
@@ -126,7 +124,9 @@ class GoogleSignInState extends State<GoogleSignIn> {
           content: Text(message),
           actions: [
             TextButton(
-                onPressed: () => Navigator.pop(context), child: const Text("OK")),
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
           ],
         );
       },
