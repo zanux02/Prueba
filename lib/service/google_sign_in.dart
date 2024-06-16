@@ -44,17 +44,20 @@ class GoogleSignInState extends State<GoogleSignIn> {
             String? nombreUsuarioGoogle = user.displayName;
             bool existe = false;
 
-            credencialesProvider.listaCredenciales;             
-
-            for (int i = 0; i < lista.length; i++) {
-              debugPrint(lista[i].usuario);
-              if (lista[i].usuario == usuarioGoogle.toString()) {
-                existe = true;
-                Navigator.pushNamed(context, "main_screen", arguments: nombreUsuarioGoogle);
-                break;
-              }
+            if (lista == null) {
+              credencialesProvider.listaCredenciales; 
             }
             
+            if (lista != null) {
+              for (int i = 0; i < lista.length; i++) {
+                debugPrint(lista[i].usuario);
+                if (lista[i].usuario == usuarioGoogle.toString()) {
+                  existe = true;
+                  Navigator.pushNamed(context, "main_screen", arguments: nombreUsuarioGoogle);
+                  break;
+                }
+              }
+            }
 
             if (!existe) {
               _mostrarAlert(context);

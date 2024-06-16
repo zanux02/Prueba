@@ -11,66 +11,52 @@ class MenuExpulsados extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final expulsadosProvider = Provider.of<ExpulsadosProvider>(context);
-    
+    List<Expulsado> expulsados = [];
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expulsados'),
       ),
-      body: FutureBuilder<List<Expulsado>>(
+      body: FutureBuilder(
         future: expulsadosProvider.getExpulsados(),
-        builder: (BuildContext context, AsyncSnapshot<List<Expulsado>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              List<Expulsado> expulsados = snapshot.data!;
-              List<Expulsado> filteredExpulsados = expulsados.where((expulsado) {
-                DateTime selectedDate = expulsadosProvider.selectedDate.toLocal();
-                DateTime fecInic = DateTime.parse(expulsado.fecInic);
-                DateTime fecFin = DateTime.parse(expulsado.fecFin);
-                return selectedDate.isAfter(fecInic) && selectedDate.isBefore(fecFin.add(const Duration(days: 1)));
-              }).toList();
-
-              return Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      await expulsadosProvider.selectDate(context);
-                    },
-                    child: Text(HumanFormats.formatDate(expulsadosProvider.selectedDate.toLocal())),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: filteredExpulsados.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                          onTap: () {
-                            //_mostrarAlert(context, index, listadoExpulsadosHoy,
-                            //    cogerDatosExpulsados);
-                          },
-                          child: ListTile(
-                            title: Text(filteredExpulsados[index].apellidosNombre),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(filteredExpulsados[index].fecInic),
-                                const Text(" - "),
-                                Text(filteredExpulsados[index].fecFin),
-                              ],
-                            ),
-                            subtitle: Text(filteredExpulsados[index].curso),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            expulsados = snapshot.data;
+            return Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () => expulsadosProvider.selectDate(context),
+                  child: Text(HumanFormats.formatDate(
+                    expulsadosProvider.selectedDate.toLocal())),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: expulsados.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          //_mostrarAlert(context, index, listadoExpulsadosHoy,
+                          //    cogerDatosExpulsados);
+                        },
+                        child: ListTile(
+                          title: Text(expulsados[index].apellidosNombre),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(expulsados[index].fecInic),
+                              const Text(" - "),
+                              Text(expulsados[index].fecFin),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                          subtitle: Text(expulsados[index].curso),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              );
-            } else {
-              return const Center(child: Text('No data available'));
-            }
+                ),
+              ],
+            );
           } else {
-            return const Center(child: Text('Error fetching data'));
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),

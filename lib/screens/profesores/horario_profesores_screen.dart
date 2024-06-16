@@ -32,9 +32,8 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
         List<dynamic> data = json.decode(response.body);
         setState(() {
           listadoProfesores = data.map((json) => Profesor.fromJson(json)).toList();
-          _sortProfesoresByName();
-          isLoading = false;
         });
+        _sortProfesoresByName();
       } else {
         setState(() {
           isLoading = false;
@@ -54,6 +53,10 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
       final fullNameA = '${a.nombre} ${a.primerApellido} ${a.segundoApellido}';
       final fullNameB = '${b.nombre} ${b.primerApellido} ${b.segundoApellido}';
       return fullNameA.compareTo(fullNameB);
+    });
+
+    setState(() {
+      isLoading = false;
     });
   }
 
