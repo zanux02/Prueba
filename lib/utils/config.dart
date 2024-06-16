@@ -12,4 +12,10 @@ class Config
   {
     return Uri.parse('$baseUrl/get/courses');
   }
+
+  static Uri getSortStudentsUrl() 
+  {
+    return Uri.parse('$baseUrl/get/sortstudents');
+  }
 }
+

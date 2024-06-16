@@ -31,7 +31,6 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      print('JSON recibido: $jsonResponse');
       
       List<dynamic> data = jsonResponse as List<dynamic>;
       setState(() {
@@ -94,8 +93,8 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
               const Divider(color: Colors.black, thickness: 1),
               Row(
                 children: [
-                  Text('Correo: ',
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const Text('Correo: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   Text(profesor.correo),
                   IconButton(
                     onPressed: () {
@@ -108,8 +107,8 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
               ),
               Row(
                 children: [
-                  Text('Teléfono: ',
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const Text('Teléfono: ',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   Text(profesor.telefono ?? 'No disponible'),
                   IconButton(
                     onPressed: profesor.telefono != null

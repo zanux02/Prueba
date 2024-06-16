@@ -18,11 +18,11 @@ class _LocalizacionAlumnadoScreenState extends State<LocalizacionAlumnadoScreen>
   @override
   void initState() {
     super.initState();
-    _fetchAlumnos();
+    _getAlumnos();
   }
 
-  Future<void> _fetchAlumnos() async {
-    final urlEstudiantes = Uri.parse('${Config.baseUrl}/get/sortstudents');
+  Future<void> _getAlumnos() async {
+    final urlEstudiantes = Config.getSortStudentsUrl();
 
     try {
       final response = await http.get(urlEstudiantes);
@@ -44,7 +44,7 @@ class _LocalizacionAlumnadoScreenState extends State<LocalizacionAlumnadoScreen>
         setState(() {
           isLoading = false;
         });
-        debugPrint('Error fetching students: ${response.statusCode}');
+        debugPrint('Error taking students: ${response.statusCode}');
       }
     } catch (e) {
       setState(() {
