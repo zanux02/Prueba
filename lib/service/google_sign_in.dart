@@ -38,23 +38,36 @@ class GoogleSignInState extends State<GoogleSignIn> {
                   // Llamar al método para cargar credenciales periódicamente
                   await cargarCredencialesPeriodicamente(credencialesProvider);
 
+                  // Volver a obtener la lista actualizada después de la carga
+                  final listaActualizada = credencialesProvider.listaCredenciales;
+
                   FirebaseService service = FirebaseService();
                   await service.signInWithGoogle();
 
                   User? user = FirebaseAuth.instance.currentUser;
-                  String? usuarioGoogle = user!.email;
-                  String? nombreUsuarioGoogle = user.displayName;
+                  String? usuarioGoogle = user?.email;
+                  String? nombreUsuarioGoogle = user?.displayName;
+
+                  if (usuarioGoogle == null) {
+                    _mostrarError(context, "No se pudo obtener el usuario de Google.");
+                    return;
+                  }
+
                   bool existe = false;
 
-                  // Iterar sobre la lista solo si no está vacía
-                  for (int i = 0; i < lista.length; i++) {
-                    debugPrint(lista[i].usuario);
-                    if (lista[i].usuario == usuarioGoogle.toString()) {
-                      existe = true;
-                      Navigator.pushNamed(context, "main_screen",
-                          arguments: nombreUsuarioGoogle);
-                      break;
+                  // Iterar sobre la lista actualizada solo si no está vacía
+                  if (listaActualizada.isNotEmpty) {
+                    for (int i = 0; i < listaActualizada.length; i++) {
+                      debugPrint(listaActualizada[i].usuario);
+                      if (listaActualizada[i].usuario == usuarioGoogle) {
+                        existe = true;
+                        Navigator.pushNamed(context, "main_screen",
+                            arguments: nombreUsuarioGoogle);
+                        break;
+                      }
                     }
+                  } else {
+                    _mostrarError(context, "No se pudieron cargar las credenciales.");
                   }
 
                   if (!existe) {
@@ -71,8 +84,7 @@ class GoogleSignInState extends State<GoogleSignIn> {
               },
               label: const Text(
                 "Accede a tu cuenta de Google",
-                style:
-                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
@@ -87,7 +99,6 @@ class GoogleSignInState extends State<GoogleSignIn> {
   }
 
   Future<void> cargarCredencialesPeriodicamente(CredencialesProvider credencialesProvider) async {
-    // Intentar cargar credenciales cada 2 segundos hasta que la lista no sea nula
     while (credencialesProvider.listaCredenciales.isEmpty) {
       await credencialesProvider.getCredencialesUsuario();
       await Future.delayed(const Duration(seconds: 2));
@@ -100,8 +111,7 @@ class GoogleSignInState extends State<GoogleSignIn> {
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           title: const Text("Error en la verificación"),
           content: const Column(
             mainAxisSize: MainAxisSize.min,
@@ -126,8 +136,7 @@ class GoogleSignInState extends State<GoogleSignIn> {
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           title: const Text("Error"),
           content: Text(message),
           actions: [
