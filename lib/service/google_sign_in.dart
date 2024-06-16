@@ -35,9 +35,8 @@ class GoogleSignInState extends State<GoogleSignIn> {
                 });
 
                 try {
-                  if (lista.isEmpty) {
-                    await credencialesProvider.getCredencialesUsuario();
-                  }
+                  // Llamar al método para cargar credenciales periódicamente
+                  await cargarCredencialesPeriodicamente(credencialesProvider);
 
                   FirebaseService service = FirebaseService();
                   await service.signInWithGoogle();
@@ -47,6 +46,7 @@ class GoogleSignInState extends State<GoogleSignIn> {
                   String? nombreUsuarioGoogle = user.displayName;
                   bool existe = false;
 
+                  // Iterar sobre la lista solo si no está vacía
                   for (int i = 0; i < lista.length; i++) {
                     debugPrint(lista[i].usuario);
                     if (lista[i].usuario == usuarioGoogle.toString()) {
@@ -84,6 +84,14 @@ class GoogleSignInState extends State<GoogleSignIn> {
             margin: const EdgeInsets.all(15),
             child: const CircularProgressIndicator(),
           );
+  }
+
+  Future<void> cargarCredencialesPeriodicamente(CredencialesProvider credencialesProvider) async {
+    // Intentar cargar credenciales cada 2 segundos hasta que la lista no sea nula
+    while (credencialesProvider.listaCredenciales.isEmpty) {
+      await credencialesProvider.getCredencialesUsuario();
+      await Future.delayed(const Duration(seconds: 2));
+    }
   }
 
   void _mostrarAlert(BuildContext context) {
