@@ -19,6 +19,7 @@ class GoogleSignInState extends State<GoogleSignIn> {
   Widget build(BuildContext context) {
     final credencialesProvider = Provider.of<CredencialesProvider>(context);
     final lista = credencialesProvider.listaCredenciales;
+    final listaUsuarios = credencialesProvider.getCredencialesUsuario();  
 
     Size size = MediaQuery.of(context).size;
 
@@ -35,12 +36,9 @@ class GoogleSignInState extends State<GoogleSignIn> {
                 });
 
                 try {
-                  if (lista.isEmpty) {
+                  if (listaUsuarios.isEmpty) {
                     await credencialesProvider.getCredencialesUsuario();
                   }
-
-                  // Agregar log para mostrar el contenido de lista
-                  debugPrint('Credenciales obtenidas: ${lista.map((credencial) => credencial.usuario).toList()}');
 
                   FirebaseService service = FirebaseService();
                   await service.signInWithGoogle();
