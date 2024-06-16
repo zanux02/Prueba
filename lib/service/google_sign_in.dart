@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,87 +24,93 @@ class GoogleSignInState extends State<GoogleSignIn> {
 
     Size size = MediaQuery.of(context).size;
 
-    return !isLoading
-        ? Container(
-            margin: const EdgeInsets.only(top: 15),
-            width: size.width * 0.85,
-            height: 55,
-            child: OutlinedButton.icon(
-              icon: const FaIcon(FontAwesomeIcons.google),
-              onPressed: () async {
-                setState(() {
-                  isLoading = true;
-                });
-                FirebaseService service = FirebaseService();
-                try {
-                  await service.signInWithGoogle();
+    return Container(
+      margin: const EdgeInsets.only(top: 15),
+      width: size.width * 0.85,
+      height: 55,
+      child: OutlinedButton.icon(
+        icon: const FaIcon(FontAwesomeIcons.google),
+        onPressed: () async {
+          setState(() {
+            isLoading = true;
+          });
+          FirebaseService service = FirebaseService();
+          try {
+            await service.signInWithGoogle();
 
-                  User? user = FirebaseAuth.instance.currentUser;
-                  String? usuarioGoogle = user!.email;
+            User? user = FirebaseAuth.instance.currentUser;
+            String? usuarioGoogle = user!.email;
 
-                  String? nombreUsuarioGoogle = user.displayName;
-                  bool existe = false;
+            String? nombreUsuarioGoogle = user.displayName;
+            bool existe = false;
 
-                  for (int i = 0; i < lista.length; i++) {
-                    debugPrint(lista[i].usuario);
-                    if (lista[i].usuario == usuarioGoogle.toString()) {
-                      existe = true;
-                      Navigator.pushNamed(context, "main_screen",
-                          arguments: nombreUsuarioGoogle);
-                    }
-                  }
+            // Verificar si la lista de credenciales es nula y obtenerla nuevamente si es necesario
+            if (lista == null) {
+              await credencialesProvider.listaCredenciales; // Asumiendo que existe un método así en CredencialesProvider
+            }
 
-                  if (!existe) {
-                    _mostrarAlert(context);
-                    logOut();
-                  }
-                } catch (e) {
-                  if (e is FirebaseAuthException) {
-                    debugPrint(e.message!);
-                  }
-                  if (e is PlatformException) {
-                    logOut();
-                  }
+            // Verificar la existencia del usuario en la lista de credenciales
+            if (lista != null) {
+              for (int i = 0; i < lista.length; i++) {
+                debugPrint(lista[i].usuario);
+                if (lista[i].usuario == usuarioGoogle.toString()) {
+                  existe = true;
+                  Navigator.pushNamed(context, "main_screen", arguments: nombreUsuarioGoogle);
+                  break; // Salir del bucle una vez encontrado el usuario
                 }
-                setState(() {
-                  isLoading = false;
-                });
-              },
-              label: const Text(
-                "Accede a tu cuenta de Google",
-                style:
-                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-              ),
-              style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.white),
-                  side: MaterialStateProperty.all<BorderSide>(BorderSide.none)),
-            ),
-          )
-        : Container(
-            margin: const EdgeInsets.all(15), child: const CircularProgressIndicator());
+              }
+            }
+
+            if (!existe) {
+              _mostrarAlert(context);
+              logOut();
+            }
+          } catch (e) {
+            if (e is FirebaseAuthException) {
+              debugPrint(e.message!);
+            }
+            if (e is PlatformException) {
+              logOut();
+            }
+          }
+          setState(() {
+            isLoading = false;
+          });
+        },
+        label: const Text(
+          "Accede a tu cuenta de Google",
+          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+        ),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          side: MaterialStateProperty.all<BorderSide>(BorderSide.none),
+        ),
+      ),
+    );
   }
 }
 
 void _mostrarAlert(BuildContext context) {
   showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: const Text("Error en la verificación"),
-          content: const Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text("No existe ninguna cuenta con esas credenciales"),
-            ],
-          ),
-          actions: [
-            TextButton(
-                onPressed: () => Navigator.pop(context), child: const Text("OK")),
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        title: const Text("Error en la verificación"),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("No existe ninguna cuenta con esas credenciales"),
           ],
-        );
-      });
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -11,14 +11,17 @@ class MenuExpulsados extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final expulsadosProvider = Provider.of<ExpulsadosProvider>(context);
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expulsados'),
       ),
-      body: FutureBuilder(
+      body: FutureBuilder<List<Expulsado>>(
         future: expulsadosProvider.getExpulsados(),
         builder: (BuildContext context, AsyncSnapshot<List<Expulsado>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               List<Expulsado> expulsados = snapshot.data!;
               List<Expulsado> filteredExpulsados = expulsados.where((expulsado) {
@@ -67,7 +70,7 @@ class MenuExpulsados extends StatelessWidget {
               return const Center(child: Text('No data available'));
             }
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: Text('Error fetching data'));
           }
         },
       ),
