@@ -38,8 +38,8 @@ class GoogleSignInState extends State<GoogleSignIn> {
                 try {
                   if(lista.isEmpty) {
                     await credencialesProvider.getCredencialesUsuario();
-                    Future.delayed(const Duration(seconds: 2), () {
-                      
+                    Future.delayed(const Duration(seconds: 6), () {
+
         });
                   }
 
