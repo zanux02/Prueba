@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:kk/utils/config.dart'; 
+import 'package:kk/utils/config.dart';
 
 class HorarioProfesoresScreen extends StatefulWidget {
   const HorarioProfesoresScreen({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
   }
 
   Future<void> _getProfesores() async {
-    final url = Config.getProfessorsUrl(); 
+    final url = Config.getProfessorsUrl();
 
     try {
       final response = await http.get(url);
@@ -30,6 +30,7 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
       if (response.statusCode == 200) {
         setState(() {
           listadoProfesores = json.decode(response.body);
+          _sortProfesoresByName();
           isLoading = false;
         });
       } else {
@@ -44,6 +45,16 @@ class _HorarioProfesoresScreenState extends State<HorarioProfesoresScreen> {
       });
       debugPrint('Error fetching teachers: $e');
     }
+  }
+
+  void _sortProfesoresByName() {
+    listadoProfesores.sort((a, b) {
+      final fullNameA =
+          '${a['primerApellido']} ${a['segundoApellido']} ${a['nombre']}';
+      final fullNameB =
+          '${b['primerApellido']} ${b['segundoApellido']} ${b['nombre']}';
+      return fullNameA.compareTo(fullNameB);
+    });
   }
 
   @override

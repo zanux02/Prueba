@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:kk/models/models.dart';
 import 'package:kk/providers/providers.dart';
+//import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ExpulsadosScreen extends StatelessWidget {
@@ -17,27 +18,48 @@ class ExpulsadosScreen extends StatelessWidget {
     List<Expulsado> listadoExpulsadosHoy = [];
     List<DatosAlumnos> cogerDatosExpulsados = [];
 
-    DateTime now = DateTime.now();
+    // DateTime now = DateTime.now();
 
     for (int i = 0; i < listadoExpulsados.length; i++) {
-      final listaExpulsion = listadoExpulsados[i].fecInic.split("-");
-      if (int.parse(listaExpulsion[0]) == now.year &&
-          int.parse(listaExpulsion[1]) == now.month &&
-          int.parse(listaExpulsion[2]) == now.day) {
-        listadoExpulsadosHoy.add(listadoExpulsados[i]);
-      }
-    }
+      //Líneas comentadas para desvincular fecha de contenido
+      // debugPrint('Dentro del for');
+      // final listaExpulsion = listadoExpulsados[i].fec_inic.split("-");
+      // debugPrint(listaExpulsion);
 
-    listadoExpulsadosHoy.sort((a, b) => b.fecFin.compareTo(a.fecFin));
+      // if (int.parse(listaExpulsion[0]) == now.year &&
+      //     int.parse(listaExpulsion[1]) == now.month &&
+      //     int.parse(listaExpulsion[2]) == now.day) {
+
+      //Sólo dejamos estas dos líneas para ver todo el contenido
+      listadoExpulsadosHoy.add(listadoExpulsados[i]);
+      listadoExpulsadosHoy.sort((a, b) => b.fecFin.compareTo(a.fecFin));
+
+      //Líneas comentadas para desvincular fecha de contenido
+      // debugPrint('Entra en el if');
+      // debugPrint(listadoExpulsadosHoy);
+      // }
+    }
 
     for (int i = 0; i < listadoExpulsadosHoy.length; i++) {
       for (int j = 0; j < listadoAlumnos.length; j++) {
         if (listadoExpulsadosHoy[i].apellidosNombre ==
             listadoAlumnos[j].nombre) {
+          listadoAlumnos[j].email;
+          listadoAlumnos[j].telefonoAlumno;
+          listadoAlumnos[j].telefonoMadre;
+          listadoAlumnos[j].telefonoPadre;
+
           cogerDatosExpulsados.add(listadoAlumnos[j]);
         }
       }
     }
+
+    // for (int j = 0; j < cogerDatosExpulsados.length; j++) {
+    //   debugPrint(cogerDatosExpulsados[j].email);
+    //   debugPrint(cogerDatosExpulsados[j].telefonoAlumno);
+    //   debugPrint(cogerDatosExpulsados[j].telefonoMadre);
+    //   debugPrint(cogerDatosExpulsados[j].telefonoPadre);
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -65,9 +87,7 @@ class ExpulsadosScreen extends StatelessWidget {
               ),
             );
           }),
-      drawer: const NavigationDrawer(
-        children: [],
-      ),
+          drawer: const NavigationDrawer(children: [],),
     );
   }
 

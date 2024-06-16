@@ -24,33 +24,41 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
   }
 
   Future<void> _fetchProfesores() async {
-  final urlProfesores = Uri.parse('${Config.baseUrl}/get/teachers');
+    final urlProfesores = Uri.parse('${Config.baseUrl}/get/teachers');
 
-  try {
-    final response = await http.get(urlProfesores);
+    try {
+      final response = await http.get(urlProfesores);
 
-    if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
-      
-      List<dynamic> data = jsonResponse as List<dynamic>;
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+
+        List<dynamic> data = jsonResponse as List<dynamic>;
+        setState(() {
+          listaProfesores = data.map((json) => ProfesorContacto.fromJson(json)).toList();
+          _sortProfesoresByName();
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        debugPrint('Error fetching teachers: ${response.statusCode}');
+      }
+    } catch (e) {
       setState(() {
-        listaProfesores = data.map((json) => ProfesorContacto.fromJson(json)).toList();
         isLoading = false;
       });
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-      debugPrint('Error fetching teachers: ${response.statusCode}');
+      debugPrint('Error fetching teachers: $e');
     }
-  } catch (e) {
-    setState(() {
-      isLoading = false;
-    });
-    debugPrint('Error fetching teachers: $e');
   }
-}
 
+  void _sortProfesoresByName() {
+    listaProfesores.sort((a, b) {
+      final fullNameA = '${a.primerApellido} ${a.segundoApellido} ${a.nombre}';
+      final fullNameB = '${b.primerApellido} ${b.segundoApellido} ${b.nombre}';
+      return fullNameA.compareTo(fullNameB);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
