@@ -19,7 +19,6 @@ class GoogleSignInState extends State<GoogleSignIn> {
   Widget build(BuildContext context) {
     final credencialesProvider = Provider.of<CredencialesProvider>(context);
     final lista = credencialesProvider.listaCredenciales;
-    final listaUsuarios = credencialesProvider.getCredencialesUsuario();  
 
     Size size = MediaQuery.of(context).size;
 
@@ -36,7 +35,7 @@ class GoogleSignInState extends State<GoogleSignIn> {
                 });
 
                 try {
-                  if (listaUsuarios.isEmpty) {
+                  if (lista.isEmpty) {
                     await credencialesProvider.getCredencialesUsuario();
                   }
 
