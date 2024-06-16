@@ -36,6 +36,7 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
 
         setState(() {
           listaProfesores = dataProfesores.map((json) => Profesor.fromJson(json)).toList();
+          _sortProfesoresByName();
           cursosProfesores = {
             for (var curso in dataCursos)
               '${curso['nombreProfesor']} ${curso['primerApellido']} ${curso['segundoApellido']}': curso['nombreAula']
@@ -56,11 +57,21 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
     }
   }
 
+  void _sortProfesoresByName() {
+    listaProfesores.sort((a, b) {
+      int comparison = a.primerApellido.compareTo(b.primerApellido);
+      if (comparison != 0) return comparison;
+      comparison = a.segundoApellido.compareTo(b.segundoApellido);
+      if (comparison != 0) return comparison;
+      return a.nombre.compareTo(b.nombre);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("LISTA PROFESORES"),
+        title: const Text("PROFESORES"),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -72,7 +83,7 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
                 String segundoApellido = listaProfesores[index].segundoApellido;
                 return GestureDetector(
                   onTap: () {
-                    _mostrarProfesorEnCurso(context, nombreProfesor);
+                    _mostrarProfesorEnCurso(context, '$nombreProfesor $primerApellido $segundoApellido');
                   },
                   child: ListTile(
                     title: Text('$nombreProfesor $primerApellido $segundoApellido'),
@@ -82,8 +93,8 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
     );
   }
 
-  void _mostrarProfesorEnCurso(BuildContext context, String nombreProfesor) {
-    String curso = cursosProfesores[nombreProfesor] ?? 'No se encuentra disponible';
+  void _mostrarProfesorEnCurso(BuildContext context, String nombreCompletoProfesor) {
+    String curso = cursosProfesores[nombreCompletoProfesor] ?? 'No se encuentra disponible';
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -91,7 +102,7 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
         return AlertDialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0)),
-          title: Text(nombreProfesor),
+          title: Text(nombreCompletoProfesor),
           content: Text(curso),
           actions: [
             TextButton(
@@ -104,5 +115,3 @@ class _ListadoProfesoresState extends State<ListadoProfesores> {
     );
   }
 }
-
-
