@@ -1,112 +1,87 @@
-import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:kk/models/profesor_contacto.dart';
-import 'package:kk/utils/config.dart';
+import 'package:provider/provider.dart';
+import 'package:kk/models/centro_response.dart';
+import 'package:kk/providers/providers.dart';
+//import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class ContactoProfesoresScreen extends StatefulWidget {
-  const ContactoProfesoresScreen({Key? key}) : super(key: key);
-
-  @override
-  _ContactoProfesoresScreenState createState() =>
-      _ContactoProfesoresScreenState();
-}
-
-class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
-  List<ProfesorContacto> listaProfesores = [];
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchProfesores();
-  }
-
-  Future<void> _fetchProfesores() async {
-    final urlProfesores = Uri.parse('${Config.baseUrl}/get/teachers');
-
-    try {
-      final response = await http.get(urlProfesores);
-
-      if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
-
-        List<dynamic> data = jsonResponse as List<dynamic>;
-        setState(() {
-          listaProfesores = data.map((json) => ProfesorContacto.fromJson(json)).toList();
-          _sortProfesoresByName();
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        debugPrint('Error fetching teachers: ${response.statusCode}');
-      }
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      debugPrint('Error fetching teachers: $e');
-    }
-  }
-
-  void _sortProfesoresByName() {
-      listaProfesores.sort((a, b) {
-      final fullNameA = '${a.nombre} ${a.primerApellido} ${a.segundoApellido}';
-      final fullNameB = '${b.nombre} ${b.primerApellido} ${b.segundoApellido}';
-      return fullNameA.compareTo(fullNameB);
-    });
-  }
+class ContactoProfesoresScreen extends StatelessWidget {
+  const ContactoProfesoresScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final centroProvider = Provider.of<CentroProvider>(context);
+    final listadoProfesores = centroProvider.listaProfesores;
+    List<Profesor> listaOrdenadaProfesores = [];
+
+    listaOrdenadaProfesores.addAll(listadoProfesores);
+
+    listaOrdenadaProfesores.sort(((a, b) => a.nombre.compareTo(b.nombre)));
+
     return Scaffold(
-      appBar: AppBar(title: const Text("CONTACTO")),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: listaProfesores.length,
-              itemBuilder: (BuildContext context, int index) {
+      appBar: AppBar(
+        title: const Text("CONTACTO"),
+      ),
+      body: Center(
+        child: ListView.builder(
+            itemCount: listaOrdenadaProfesores.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                return GestureDetector(
+                    onTap: () {
+                      null;
+                    },
+                    child: Container());
+              } else {
                 return GestureDetector(
                   onTap: () {
-                    _mostrarAlert(context, index);
+                    _mostrarAlert(context, index, listaOrdenadaProfesores);
                   },
                   child: ListTile(
-                    title: Text(
-                        '${listaProfesores[index].nombre} ${listaProfesores[index].primerApellido} ${listaProfesores[index].segundoApellido}'),
+                    title: Text(listaOrdenadaProfesores[index].nombre),
                   ),
                 );
-              },
-            ),
+              }
+            }),
+      ),
     );
   }
+}
 
-  void _mostrarAlert(BuildContext context, int index) {
-    final profesor = listaProfesores[index];
+void _mostrarAlert(
+    BuildContext context, int index, List<Profesor> listadoProfesores) {
+  final int numeroTlf = (Random().nextInt(99999999) + 600000000);
+  const String mailProfesor = "Correo@gmail.com";
 
-    showDialog(
+  showDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {
+        TextStyle textStyle = const TextStyle(fontWeight: FontWeight.bold);
+
         return AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text(
-              '${profesor.nombre} ${profesor.primerApellido} ${profesor.segundoApellido}'),
+          title: Text(listadoProfesores[index].nombre),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const Divider(color: Colors.black, thickness: 1),
+              const Divider(
+                color: Colors.black,
+                thickness: 1,
+              ),
               Row(
                 children: [
-                  const Text('Correo: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(profesor.correo),
+                  Text(
+                    "Correo: ",
+                    style: textStyle,
+                  ),
+                  const Text(mailProfesor),
                   IconButton(
                     onPressed: () {
-                      launchUrlString('email:${profesor.correo}');
+                      launchUrlString("mailto: $mailProfesor");
                     },
                     icon: const Icon(Icons.mail),
                     color: Colors.blue,
@@ -115,30 +90,54 @@ class _ContactoProfesoresScreenState extends State<ContactoProfesoresScreen> {
               ),
               Row(
                 children: [
-                  const Text('Teléfono: ',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(profesor.telefono ?? 'No disponible'),
-                  IconButton(
-                    onPressed: profesor.telefono != null
-                        ? () {
-                            launchUrlString('tel:${profesor.telefono}');
-                          }
-                        : null,
-                    icon: const Icon(Icons.phone),
-                    color: Colors.blue,
+                  Text(
+                    "Teléfono: ",
+                    style: textStyle,
                   ),
+                  Text("$numeroTlf"),
+                  IconButton(
+                      onPressed: () {
+                        launchUrlString("tel:$numeroTlf");
+                      },
+                      icon: const Icon(Icons.phone),
+                      color: Colors.blue)
                 ],
-              ),
+              )
             ],
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cerrar'),
-            ),
+                onPressed: () => Navigator.pop(context), child: const Text("Cerrar")),
           ],
         );
-      },
-    );
-  }
+      });
 }
+
+/*List<String> _averiguarHorario(BuildContext context, int tramo, int id_prof) {
+  final centroProvider = Provider.of<CentroProvider>(context, listen: false);
+  final listadoHorariosProfesores = centroProvider.listaHorariosProfesores;
+  List<String> horario = [];
+
+  for (int i = 0; i < listadoHorariosProfesores.length; i++) {
+    if (int.parse(listadoHorariosProfesores[i].horNumIntPr) == id_prof) {
+      debugPrint("id iguales");
+      for (int j = 0; j < listadoHorariosProfesores[i].actividad.length; j++) {
+        debugPrint("Tramo JSON: ${listadoHorariosProfesores[i].actividad[j].tramo}");
+        debugPrint("Tramo: $tramo");
+
+        if (int.parse(listadoHorariosProfesores[i].actividad[j].tramo) ==
+            tramo) {
+          debugPrint("bruh");
+          horario.add(listadoHorariosProfesores[i].actividad[j].asignatura);
+
+          horario.add(listadoHorariosProfesores[i].actividad[j].aula);
+
+          debugPrint("Asignatura: " + horario[0]);
+          debugPrint("Aula: " + horario[1]);
+        }
+      }
+    }
+  }
+
+  return horario;
+}*/

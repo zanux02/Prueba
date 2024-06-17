@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kk/models/models.dart';
 import 'package:kk/utils/utilidades.dart';
-//import 'package:iseneca/utils/config.dart';
-
 
 class AlumnadoProvider extends ChangeNotifier {
   List<DatosAlumnos> listadoAlumnos = [];
   List<HorarioResult> listadoHorarios = [];
+  final String baseUrl = 'http://5.250.184.231:8088';
 
   //Prueba Google Script ejecutado
   //https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=11Y4M52bYFMCIa5uU52vKll2-OY0VtFiGK2PhMWShngg&sheet=Datos_Alumnado
@@ -21,7 +20,7 @@ class AlumnadoProvider extends ChangeNotifier {
   }
 
   Future<List<String>> getCursos() async {
-    const url ="https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=11Y4M52bYFMCIa5uU52vKll2-OY0VtFiGK2PhMWShngg&sheet=Datos_Alumnado";
+    final url ="$baseUrl/get/coursenames";
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final cursosResponse = CursosResponse.fromJson(jsonData);
@@ -49,8 +48,8 @@ class AlumnadoProvider extends ChangeNotifier {
   }
 
   getAlumno() async {
-    const url = "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=14nffuLY-WILXuAQFMUWNEZIYK08WxI0g1_aK73Ths9Q&sheet=Datos_Alumnado";
-    //final url = Uri.parse('${Config.baseUrl}/get/teachers');
+    const url =
+        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=14nffuLY-WILXuAQFMUWNEZIYK08WxI0g1_aK73Ths9Q&sheet=Datos_Alumnado";
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final cursosResponse = AlumnosResponse.fromJson(jsonData);

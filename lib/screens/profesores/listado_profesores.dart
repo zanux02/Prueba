@@ -1,115 +1,208 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:kk/utils/config.dart';
-import 'package:kk/models/profesor.dart';
+import 'package:provider/provider.dart';
+import 'package:kk/models/centro_response.dart';
+import 'package:kk/providers/centro_provider.dart';
 
-class ListadoProfesores extends StatefulWidget {
+class ListadoProfesores extends StatelessWidget {
   const ListadoProfesores({Key? key}) : super(key: key);
 
   @override
-  _ListadoProfesoresState createState() => _ListadoProfesoresState();
-}
-
-class _ListadoProfesoresState extends State<ListadoProfesores> {
-  List<Profesor> listaProfesores = [];
-  Map<String, String> cursosProfesores = {};
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _getProfesores();
-  }
-
-  Future<void> _getProfesores() async {
-    final urlProfesores = Config.getProfessorsUrl();
-    final urlCursos = Config.getCoursesUrl(); 
-
-    try {
-      final responseProfesores = await http.get(urlProfesores);
-      final responseCursos = await http.get(urlCursos);
-
-      if (responseProfesores.statusCode == 200 && responseCursos.statusCode == 200) {
-        List<dynamic> dataProfesores = json.decode(responseProfesores.body);
-        List<dynamic> dataCursos = json.decode(responseCursos.body);
-
-        setState(() {
-          listaProfesores = dataProfesores.map((json) => Profesor.fromJson(json)).toList();
-          _sortProfesoresByName();
-          cursosProfesores = {
-            for (var curso in dataCursos)
-              '${curso['nombreProfesor']} ${curso['primerApellido']} ${curso['segundoApellido']}': curso['nombreAula']
-          };
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        debugPrint('Error fetching data: Profesores: ${responseProfesores.statusCode}, Cursos: ${responseCursos.statusCode}');
-      }
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
-      debugPrint('Error fetching data: $e');
-    }
-  }
-
-  void _sortProfesoresByName() {
-    listaProfesores.sort((a, b) {
-      final fullNameA = '${a.nombre} ${a.primerApellido} ${a.segundoApellido}';
-      final fullNameB = '${b.nombre} ${b.primerApellido} ${b.segundoApellido}';
-      return fullNameA.compareTo(fullNameB);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final centroProvider = Provider.of<CentroProvider>(context);
+    final listadoProfesores = centroProvider.listaProfesores;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("LISTA PROFESORES"),
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: listaProfesores.length,
-              itemBuilder: (BuildContext context, int index) {
-                String nombreProfesor = listaProfesores[index].nombre;
-                String primerApellido = listaProfesores[index].primerApellido;
-                String segundoApellido = listaProfesores[index].segundoApellido;
-                return GestureDetector(
+      body: ListView.builder(
+          itemCount: listadoProfesores.length,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return GestureDetector(
                   onTap: () {
-                    _mostrarProfesorEnCurso(context, '$nombreProfesor $primerApellido $segundoApellido');
+                    null;
                   },
-                  child: ListTile(
-                    title: Text('$nombreProfesor $primerApellido $segundoApellido'),
-                  ),
-                );
-              }),
+                  child: Container());
+            } else {
+              return GestureDetector(
+                onTap: () {
+                  _mostrarLocalizacion(context, index);
+                },
+                child: ListTile(
+                  title: Text(listadoProfesores[index].nombre),
+                ),
+              );
+            }
+          }),
     );
+  }
+}
+
+List<String> _averiguarHorario(BuildContext context, int idProf, int tramo) {
+  final centroProvider = Provider.of<CentroProvider>(context, listen: false);
+  final listadoHorariosProfesores = centroProvider.listaHorariosProfesores;
+  List<String> horario = List.filled(2, "0");
+
+  for (int i = 0; i < listadoHorariosProfesores.length; i++) {
+    if (int.parse(listadoHorariosProfesores[i].horNumIntPr) == idProf + 1) {
+      for (int j = 0; j < listadoHorariosProfesores[i].actividad.length; j++) {
+        if (int.parse(listadoHorariosProfesores[i].actividad[j].tramo) ==
+            tramo) {
+          horario[0] = listadoHorariosProfesores[i].actividad[j].asignatura;
+
+          horario[1] = listadoHorariosProfesores[i].actividad[j].aula;
+
+          debugPrint("Asignatura: ${horario[0]}");
+          debugPrint("Aula: ${horario[1]}");
+        }
+      }
+    }
   }
 
-  void _mostrarProfesorEnCurso(BuildContext context, String nombreCompletoProfesor) {
-    String curso = cursosProfesores[nombreCompletoProfesor] ?? 'No se encuentra disponible';
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0)),
-          title: Text(nombreCompletoProfesor),
-          content: Text(curso),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cerrar"),
-            ),
-          ],
-        );
-      },
-    );
+  return horario;
+}
+
+int _averiguarTramo(
+    BuildContext context, List<Tramo> listadoTramos, int index) {
+  DateTime now = DateTime.now();
+  debugPrint(now.weekday.toString());
+
+  List<String> splitHoraInicio = [];
+  List<String> splitHoraFinal = [];
+  List<int> tramosProhibidos = [5, 10, 25, 30, 45, 50, 65, 70, 85, 90];
+  int tramo = 0;
+  int tramoCorrecto = 0;
+
+  for (int i = 0; i < listadoTramos.length; i++) {
+    splitHoraInicio = (listadoTramos[i].horaInicio.split(":"));
+    splitHoraFinal = (listadoTramos[i].horaFinal.split(":"));
+
+    if (int.parse(splitHoraInicio[0]) * 60 + int.parse(splitHoraInicio[1]) <=
+            (now.minute + now.hour * 60) &&
+        (now.minute + now.hour * 60) <
+            int.parse(splitHoraFinal[0]) * 60 + int.parse(splitHoraFinal[1]) &&
+        int.parse(listadoTramos[i].numeroDia) == now.weekday) {
+      tramo = int.parse(listadoTramos[i].numTr);
+      debugPrint("Número de tramo: $tramo");
+      if (tramosProhibidos.contains(tramo)) {
+        return tramo - 1;
+      } else {
+        if (comprobarTramo(context, tramo, index)) {
+          tramoCorrecto = tramo;
+          debugPrint("Tramo correcto: $tramoCorrecto");
+          return tramoCorrecto;
+        }
+      }
+    }
   }
+  return tramo;
+}
+
+bool comprobarTramo(BuildContext context, int tramo, int index) {
+  final centroProvider = Provider.of<CentroProvider>(context, listen: false);
+  final listadoHorarioProfesores = centroProvider.listaHorariosProfesores;
+  bool tramoCorrecto = false;
+
+  for (int i = 0;
+      i < listadoHorarioProfesores[index - 1].actividad.length;
+      i++) {
+    if (int.parse(listadoHorarioProfesores[index - 1].actividad[i].tramo) ==
+        tramo) {
+      tramoCorrecto = true;
+    }
+  }
+
+  return tramoCorrecto;
+}
+
+void _mostrarLocalizacion(BuildContext context, int index) {
+  final centroProvider = Provider.of<CentroProvider>(context, listen: false);
+  final listadoProfesores = centroProvider.listaProfesores;
+  final listadoTramos = centroProvider.listaTramos;
+  final listadoAsignaturas = centroProvider.listaAsignaturas;
+  final listadoAulas = centroProvider.listaAulas;
+
+  int tramo = _averiguarTramo(context, listadoTramos, index);
+
+  debugPrint(" Tramo obtenido del método: $tramo");
+  List<String> horario = _averiguarHorario(context, index, tramo);
+  String horaInicio = "";
+  String horaFinal = "";
+  DateTime now = DateTime.now();
+  String asignatura = "";
+  String aula = "";
+
+  for (int i = 0; i < listadoAsignaturas.length; i++) {
+    if (int.parse(listadoAsignaturas[i].numIntAs) == int.parse(horario[0])) {
+      asignatura = listadoAsignaturas[i].nombre;
+    }
+  }
+
+  for (int i = 0; i < listadoAulas.length; i++) {
+    if (int.parse(listadoAulas[i].numIntAu) == int.parse(horario[1])) {
+      aula = listadoAulas[i].nombre;
+    }
+  }
+  for (int i = 0; i < listadoTramos.length; i++) {
+    if (int.parse(listadoTramos[i].numTr) == tramo &&
+        int.parse(listadoTramos[i].numeroDia) == now.weekday) {
+      horaInicio = listadoTramos[i].horaInicio;
+      horaFinal = listadoTramos[i].horaFinal;
+    }
+  }
+
+  if (horario.isNotEmpty) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text(listadoProfesores[index].nombre),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                mostrarHorario(aula, asignatura, horaInicio, horaFinal)
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context), child: const Text("OK")),
+            ],
+          );
+        });
+  } else {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text(listadoProfesores[index].nombre),
+            content: const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text("No se encuentra en clase actualmente"),
+                Text(" "),
+              ],
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context), child: const Text("OK")),
+            ],
+          );
+        });
+  }
+}
+
+Widget mostrarHorario(aula, asignatura, horaInicio, horaFinal) {
+  if (aula == "" && asignatura == "") {
+    return const Text("No se encuentra disponible");
+  }
+
+  return Text(
+      "Se encuentra en el aula $aula impartiendo la asignatura $asignatura, de $horaInicio a $horaFinal");
 }
