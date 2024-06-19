@@ -27,7 +27,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
             Table(
               border: TableBorder.all(style: BorderStyle.solid),
               children: [
-                diasSemana(listadoHorarios),
+                diasSemana(),
                 for (int i = 0; i < 6; i++)
                   diaHorario(context, index, listadoHorarios, i),
               ],
@@ -38,7 +38,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     );
   }
 
-  TableRow diasSemana(List<HorarioResult> listadoHorarios) {
+  TableRow diasSemana() {
     List<String> diasOrdenados = ["L", "M", "X", "J", "V"];
     List<Widget> widgetsDias = [Container()];
 
@@ -71,11 +71,8 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
         .where((horario) => horario.curso == listadoAlumnos[index].curso)
         .toList();
 
-    // Sort the horarios by time
-    cursoHorarios.sort((a, b) => a.hora.compareTo(b.hora));
-
-    // Extract the unique sorted time slots
-    List<String> horarios = cursoHorarios.map((horario) => horario.hora).toSet().toList();
+    // Predefined sorted list of hours
+    List<String> sortedHours = ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00"];
 
     List<Widget> widgetsClases = [];
 
@@ -85,7 +82,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
 
       for (int i = 0; i < cursoHorarios.length; i++) {
         if (cursoHorarios[i].dia.substring(0, 1) == ['L', 'M', 'X', 'J', 'V'][numDia] &&
-            cursoHorarios[i].hora == horarios[horaDia]) {
+            cursoHorarios[i].hora.split(":")[0] == sortedHours[horaDia].split(":")[0]) {
           asignatura = cursoHorarios[i].asignatura;
           aula = cursoHorarios[i].aulas;
           break;
@@ -116,7 +113,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
       Container(
         color: Colors.blue,
         child: Text(
-          horarios[horaDia],
+          sortedHours[horaDia],
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
           textAlign: TextAlign.center,
         ),
