@@ -66,12 +66,16 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
 
-    List<String> horarios = listadoHorarios
+    // Get the horarios for the specific curso
+    List<HorarioResult> cursoHorarios = listadoHorarios
         .where((horario) => horario.curso == listadoAlumnos[index].curso)
-        .map((horario) => horario.hora)
-        .toSet()
-        .toList()
-      ..sort();
+        .toList();
+
+    // Sort the horarios by time
+    cursoHorarios.sort((a, b) => a.hora.compareTo(b.hora));
+
+    // Extract the unique sorted time slots
+    List<String> horarios = cursoHorarios.map((horario) => horario.hora).toSet().toList();
 
     List<Widget> widgetsClases = [];
 
@@ -79,12 +83,11 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
       String asignatura = "";
       String aula = "";
 
-      for (int i = 0; i < listadoHorarios.length; i++) {
-        if (listadoHorarios[i].curso == listadoAlumnos[index].curso &&
-            listadoHorarios[i].dia.substring(0, 1) == ['L', 'M', 'X', 'J', 'V'][numDia] &&
-            listadoHorarios[i].hora == horarios[horaDia]) {
-          asignatura = listadoHorarios[i].asignatura;
-          aula = listadoHorarios[i].aulas;
+      for (int i = 0; i < cursoHorarios.length; i++) {
+        if (cursoHorarios[i].dia.substring(0, 1) == ['L', 'M', 'X', 'J', 'V'][numDia] &&
+            cursoHorarios[i].hora == horarios[horaDia]) {
+          asignatura = cursoHorarios[i].asignatura;
+          aula = cursoHorarios[i].aulas;
           break;
         }
       }
