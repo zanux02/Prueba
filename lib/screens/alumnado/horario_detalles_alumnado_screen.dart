@@ -13,6 +13,10 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
     final listadoHorarios = alumnadoProvider.listadoHorarios;
 
+    // Get unique days sorted
+    Set<String> diasUnicos = listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
+    List<String> diasOrdenados = ["L", "M", "X", "J", "V"].where((dia) => diasUnicos.contains(dia)).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -27,9 +31,9 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
             Table(
               border: TableBorder.all(style: BorderStyle.solid),
               children: [
-                diasSemana(),
+                diasSemana(diasOrdenados),
                 for (int i = 0; i < 6; i++)
-                  diaHorario(context, index, listadoHorarios, i),
+                  diaHorario(context, index, listadoHorarios, i, diasOrdenados),
               ],
             ),
           ],
@@ -38,8 +42,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     );
   }
 
-  TableRow diasSemana() {
-    List<String> diasOrdenados = ["L", "M", "X", "J", "V"];
+  TableRow diasSemana(List<String> diasOrdenados) {
     List<Widget> widgetsDias = [Container()];
 
     for (var dia in diasOrdenados) {
@@ -50,8 +53,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
             child: Text(
               dia,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
         ),
@@ -61,8 +63,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     return TableRow(children: widgetsDias);
   }
 
-  TableRow diaHorario(BuildContext context, int index,
-      List<HorarioResult> listadoHorarios, int horaDia) {
+  TableRow diaHorario(BuildContext context, int index, List<HorarioResult> listadoHorarios, int horaDia, List<String> diasOrdenados) {
     final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
 
@@ -76,12 +77,12 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
 
     List<Widget> widgetsClases = [];
 
-    for (int numDia = 0; numDia < 5; numDia++) {
+    for (int numDia = 0; numDia < diasOrdenados.length; numDia++) {
       String asignatura = "";
       String aula = "";
 
       for (int i = 0; i < cursoHorarios.length; i++) {
-        if (cursoHorarios[i].dia.substring(0, 1) == ['L', 'M', 'X', 'J', 'V'][numDia] &&
+        if (cursoHorarios[i].dia.substring(0, 1) == diasOrdenados[numDia] &&
             cursoHorarios[i].hora.split(":")[0] == sortedHours[horaDia].split(":")[0]) {
           asignatura = cursoHorarios[i].asignatura;
           aula = cursoHorarios[i].aulas;
