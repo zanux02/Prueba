@@ -24,20 +24,17 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
         decoration: const BoxDecoration(color: Colors.white),
         child: Column(
           children: [
-            Container(
-              color: Colors.blue,
-              child: Table(
-                border: TableBorder.all(style: BorderStyle.solid),
-                children: [
-                  diasSemana(listadoHorarios),
-                  diaHorario(context, index, listadoHorarios, 0),
-                  diaHorario(context, index, listadoHorarios, 1),
-                  diaHorario(context, index, listadoHorarios, 2),
-                  diaHorario(context, index, listadoHorarios, 3),
-                  diaHorario(context, index, listadoHorarios, 4),
-                  diaHorario(context, index, listadoHorarios, 5),
-                ],
-              ),
+            Table(
+              border: TableBorder.all(style: BorderStyle.solid),
+              children: [
+                diasSemana(listadoHorarios),
+                diaHorario(context, index, listadoHorarios, 0),
+                diaHorario(context, index, listadoHorarios, 1),
+                diaHorario(context, index, listadoHorarios, 2),
+                diaHorario(context, index, listadoHorarios, 3),
+                diaHorario(context, index, listadoHorarios, 4),
+                diaHorario(context, index, listadoHorarios, 5),
+              ],
             ),
           ],
         ),
@@ -56,11 +53,14 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     for (var dia in diasOrdenados) {
       if (diasUnicos.contains(dia)) {
         widgetsDias.add(
-          Center(
-            child: Text(
-              dia,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+          Container(
+            color: Colors.blue,
+            child: Center(
+              child: Text(
+                dia,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              ),
             ),
           ),
         );
@@ -102,18 +102,21 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
       }
 
       widgetsClases.add(
-        Column(
-          children: [
-            Text(
-              asignatura.isNotEmpty ? asignatura.toUpperCase().substring(0, 3) : '',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-            Text(
-              aula.toUpperCase(),
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
+        Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              Text(
+                asignatura.isNotEmpty ? asignatura.toUpperCase().substring(0, 3) : '',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              Text(
+                aula.toUpperCase(),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -123,7 +126,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
         color: Colors.blue,
         child: Text(
           horario[horaDia],
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ),
