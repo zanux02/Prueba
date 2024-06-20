@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kk/models/profesor_response.dart';
 import 'package:kk/providers/profesor_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +9,10 @@ class HorarioProfesoresScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profesorProvider = Provider.of<ProfesorProvider>(context);
-    final listadoProfesores = profesorProvider.listadoProfesor;
+    List<ProfesorRes> listadoProfesores = profesorProvider.listadoProfesor;
+
+    // Ordenar la lista por nombre
+    listadoProfesores.sort((a, b) => a.nombre.compareTo(b.nombre));
 
     return Scaffold(
       appBar: AppBar(
@@ -21,7 +25,7 @@ class HorarioProfesoresScreen extends StatelessWidget {
             if (index == 0) {
               return GestureDetector(
                 onTap: () {
-                  null;
+                  // Puedes añadir lógica aquí si deseas manejar el primer elemento de manera diferente.
                 },
                 child: Container(),
               );
@@ -34,7 +38,9 @@ class HorarioProfesoresScreen extends StatelessWidget {
                   );
                 },
                 child: ListTile(
-                  title: Text(listadoProfesores[index].nombre),
+                  title: Text(
+                    '${listadoProfesores[index].nombre} ${listadoProfesores[index].apellidos}',
+                  ),
                 ),
               );
             }
