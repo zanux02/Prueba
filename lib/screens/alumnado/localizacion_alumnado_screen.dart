@@ -110,11 +110,8 @@ class _LocalizacionAlumnadoScreenState
 
   // Función para sumar una hora a la hora inicial
   String sumarHora(String hora) {
-    int horas = int.parse(hora.split(":")[0]);
+    int horas = int.parse(hora.split(":")[0]) + 1;
     int minutos = int.parse(hora.split(":")[1]);
-
-    // Sumar una hora
-    horas += 1;
 
     // Formatear los minutos a dos dígitos
     String minutosString = minutos.toString().padLeft(2, '0');
