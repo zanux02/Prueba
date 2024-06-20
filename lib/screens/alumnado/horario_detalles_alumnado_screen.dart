@@ -15,7 +15,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
 
     // Get unique days sorted and remove numbers
     Set<String> diasUnicos = listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
-    List<String> diasOrdenados = diasUnicos.toList()..sort();
+    List<String> diasOrdenados = ["L", "M", "X", "J", "V"].where((dia) => diasUnicos.contains(dia)).toList();
 
     // Get unique hours sorted
     Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
