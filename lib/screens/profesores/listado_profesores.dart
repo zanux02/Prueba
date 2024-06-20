@@ -71,9 +71,9 @@ class _LocalizacionProfesorScreenState
       }
     }
 
-    // Si no hay asignatura ni aula, es hora de recreo
+    // Si no hay asignatura ni aula no esta disponible
     if (aula.isEmpty || asignatura.isEmpty) {
-      texto = "Es hora de recreo, el profesor no está en clase en este momento";
+      texto = "el profesor no está disponible en este momento";
     } else {
       texto =
           "El profesor ${listaProfesores[index].nombre} ${listaProfesores[index].apellidos} está actualmente en el aula $aula, impartiendo la asignatura $asignatura";
@@ -101,7 +101,6 @@ class _LocalizacionProfesorScreenState
 
   String sumarHora(String hora) {
     int horas = int.parse(hora.split(":")[0]);
-    int minutos = int.parse(hora.split(":")[1].substring(0, 2));
     String periodo = hora.split(":")[1].substring(2);
     if (periodo == "00") {
       horas += 1;
