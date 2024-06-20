@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kk/models/models.dart';
 import 'package:kk/utils/peticion_expulsados.dart';
+import 'package:kk/utils/human_formats.dart';
 
 class ExpulsadosProvider extends ChangeNotifier {
-  //Script Google
-  //https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1ZcdgFdnsp69tXP-S2VVwRM2z3Ucmv2EPrOkH9QIp4nA&sheet=Expulsados
-  //Google Docs Convivencia
-  //cambiar el script por los endpoints de paco
   String seleccionCursos = ''; 
   String seleccionAula = ''; 
   DateTime selectedDate = DateTime.now();
 
   Map<String, List<String>> cursos = {};
-
 
   ExpulsadosProvider() {
     debugPrint('Convivencia Provider inicializada');
@@ -21,20 +17,19 @@ class ExpulsadosProvider extends ChangeNotifier {
   }
 
   Future<List<Expulsado>> getExpulsados() async {
-  final List<Expulsado> expulsadoResponse = await PeticionExpulsados().getExpulsados();
+    final List<Expulsado> expulsadoResponse = await PeticionExpulsados().getExpulsados();
 
-  // Filtrar la lista de expulsados por la fecha dada
-  //List<Expulsado> expulsadosFiltrados = expulsadoResponse.where((expulsado) {
-    // Convierte la fecha del objeto Expulsado a solo la fecha sin la hora
-    //DateTime fechaExpulsado = HumanFormats.formatStringToDate(expulsado.fecInic);
+    // Filtrar la lista de expulsados por la fecha seleccionada
+    List<Expulsado> expulsadosFiltrados = expulsadoResponse.where((expulsado) {
+      DateTime fecInic = HumanFormats.formatStringToDate(expulsado.fecInic);
+      DateTime fecFin = HumanFormats.formatStringToDate(expulsado.fecFin);
+      return selectedDate.isAtSameMomentAs(fecInic) ||
+          selectedDate.isAtSameMomentAs(fecFin) ||
+          (selectedDate.isAfter(fecInic) && selectedDate.isBefore(fecFin));
+    }).toList();
 
-    // Compara si la fecha del expulsado es igual a la fecha seleccionada
-    //return fechaExpulsado.isAtSameMomentAs(selectedDate);
-  //}).toList();
-
-  // Actualiza la lista de expulsados con la lista filtrada
-  return expulsadoResponse;
-}
+    return expulsadosFiltrados;
+  }
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -44,13 +39,12 @@ class ExpulsadosProvider extends ChangeNotifier {
       lastDate: DateTime.now(),
     );
     if (picked != null && picked != selectedDate) {
-        selectedDate = picked;
+      selectedDate = picked;
     }
     notifyListeners();
   }
 
-  Future<void> getCursos() async
-  {
+  Future<void> getCursos() async {
     Map<String, List<String>> cursos = {
       'ESO': ['1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B', '3C', '4A', '4B', '4C'],
       'BACH': ['1A', '1B', '1C', '1D', '2A', '2B'],
@@ -70,6 +64,7 @@ class ExpulsadosProvider extends ChangeNotifier {
     seleccionAula = cursos[seleccionCursos]![0];
     notifyListeners(); 
   }
+
   void setSeleccionAulas(String value){
     seleccionAula = value;
     notifyListeners(); 

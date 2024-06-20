@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kk/models/expulsados_response.dart';
+import 'package:kk/providers/expulsados_provider.dart';
+import 'package:kk/utils/human_formats.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -26,24 +28,26 @@ class MenuExpulsados extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             expulsados = snapshot.data;
+
             if (expulsadosProvider.selectedDate != null) {
               expulsados = expulsados.where((expulsado) {
-                DateTime fecInic = DateTime.parse(expulsado.fecInic);
-                DateTime fecFin = DateTime.parse(expulsado.fecFin);
-                DateTime selectedDate = expulsadosProvider.selectedDate!;
+                DateTime fecInic = HumanFormats.formatStringToDate(expulsado.fecInic);
+                DateTime fecFin = HumanFormats.formatStringToDate(expulsado.fecFin);
+                DateTime selectedDate = expulsadosProvider.selectedDate;
                 return selectedDate.isAtSameMomentAs(fecInic) ||
                     selectedDate.isAtSameMomentAs(fecFin) ||
                     (selectedDate.isAfter(fecInic) && selectedDate.isBefore(fecFin));
               }).toList();
             }
+
             return Column(
               children: [
                 ElevatedButton(
-                  onPressed: () => _selectDate(context, expulsadosProvider),
+                  onPressed: () => expulsadosProvider.selectDate(context),
                   child: Text(
                     expulsadosProvider.selectedDate == null
                         ? "Seleccionar Fecha"
-                        : DateFormat('dd/MM/yyyy').format(expulsadosProvider.selectedDate!.toLocal()),
+                        : DateFormat('dd/MM/yyyy').format(expulsadosProvider.selectedDate.toLocal()),
                   ),
                 ),
                 Expanded(
@@ -76,57 +80,5 @@ class MenuExpulsados extends StatelessWidget {
         },
       ),
     );
-  }
-
-  Future<void> _selectDate(BuildContext context, ExpulsadosProvider expulsadosProvider) async {
-    final DateTime now = DateTime.now();
-    final DateTime initialDate = expulsadosProvider.selectedDate ?? now;
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: DateTime(2000),
-      lastDate: now,
-    );
-
-    if (picked != null && picked != expulsadosProvider.selectedDate) {
-      expulsadosProvider.setSelectedDate(picked);
-    }
-  }
-}
-
-
-class ExpulsadosProvider with ChangeNotifier {
-  DateTime? selectedDate;
-
-  // Simulación de obtener los expulsados
-  Future<List<Expulsado>> getExpulsados() async {
-    // Aquí deberías obtener los datos reales de expulsados
-    return [];
-  }
-
-  void setSelectedDate(DateTime date) {
-    selectedDate = date;
-    notifyListeners();
-  }
-
-  Future<void> selectDate(BuildContext context) async {
-    final DateTime now = DateTime.now();
-    final DateTime initialDate = selectedDate ?? now;
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: DateTime(2000),
-      lastDate: now,
-    );
-
-    if (picked != null && picked != selectedDate) {
-      setSelectedDate(picked);
-    }
-  }
-}
-
-class HumanFormats {
-  static String formatDate(DateTime date) {
-    return DateFormat('dd/MM/yyyy').format(date);
   }
 }
