@@ -86,7 +86,7 @@ class _LocalizacionProfesorScreenState
     // Construir el mensaje a mostrar en el AlertDialog
     if (aula.isEmpty || asignatura.isEmpty) {
       texto =
-          "El profesor ${profesor.nombre} ${profesor.apellidos} no está disponible en este momentooooo";
+          "El profesor ${profesor.nombre} ${profesor.apellidos} no está disponible en este momento";
     } else {
       texto =
           "El profesor ${profesor.nombre} ${profesor.apellidos} está actualmente en el aula $aula, impartiendo la asignatura $asignatura";
@@ -117,9 +117,6 @@ class _LocalizacionProfesorScreenState
   String sumarHora(String hora) {
     int horas = int.parse(hora.split(":")[0]) + 1;
     int minutos = int.parse(hora.split(":")[1]);
-
-    // Asegurar que los minutos no superen 59
-    minutos = minutos % 60;
 
     // Formatear los minutos a dos dígitos
     String minutosString = minutos.toString().padLeft(2, '0');
