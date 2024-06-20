@@ -1,24 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Importa intl para utilizar DateFormat
 import 'package:kk/models/expulsados_response.dart';
 import 'package:kk/providers/expulsados_provider.dart';
+import 'package:kk/utils/human_formats.dart';
 import 'package:provider/provider.dart';
 
-class MenuExpulsados extends StatefulWidget {
+class MenuExpulsados extends StatelessWidget {
   const MenuExpulsados({Key? key}) : super(key: key);
-
-  @override
-  _MenuExpulsadosState createState() => _MenuExpulsadosState();
-}
-
-class _MenuExpulsadosState extends State<MenuExpulsados> {
-  DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     final expulsadosProvider = Provider.of<ExpulsadosProvider>(context);
     List<Expulsado> expulsados = [];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expulsados'),
@@ -29,76 +21,49 @@ class _MenuExpulsadosState extends State<MenuExpulsados> {
           },
         ),
       ),
-      body: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () => _selectDate(context),
-            child: Text(
-              DateFormat('dd/MM/yyyy').format(selectedDate), // Formato día/mes/año
-            ),
-          ),
-          Expanded(
-            child: FutureBuilder(
-              future: expulsadosProvider.getExpulsados(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.connectionState == ConnectionState.done) {
-                  expulsados = snapshot.data ?? [];
-                  // Filtrar los expulsados por la fecha seleccionada
-                  List<Expulsado> expulsadosFiltrados = expulsados
-                      .where((expulsado) =>
-                          _isDateInRange(selectedDate, expulsado.fecInic, expulsado.fecFin))
-                      .toList();
-
-                  return ListView.builder(
-                    itemCount: expulsadosFiltrados.length,
+      body: FutureBuilder(
+        future: expulsadosProvider.getExpulsados(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            expulsados = snapshot.data;
+            return Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () => expulsadosProvider.selectDate(context),
+                  child: Text(HumanFormats.formatDate(
+                    expulsadosProvider.selectedDate.toLocal())),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: expulsados.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text(expulsadosFiltrados[index].apellidosNombre),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(expulsadosFiltrados[index].fecInic),
-                            const Text(" - "),
-                            Text(expulsadosFiltrados[index].fecFin),
-                          ],
+                      return GestureDetector(
+                        onTap: () {
+                          
+                        },
+                        child: ListTile(
+                          title: Text(expulsados[index].apellidosNombre),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(expulsados[index].fecInic),
+                              const Text(" - "),
+                              Text(expulsados[index].fecFin),
+                            ],
+                          ),
+                          subtitle: Text(expulsados[index].curso),
                         ),
-                        subtitle: Text(expulsadosFiltrados[index].curso),
                       );
                     },
-                  );
-                } else {
-                  return const Center(child: Text('Error al cargar los datos'));
-                }
-              },
-            ),
-          ),
-        ],
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
-  }
-
-  // Función para seleccionar la fecha
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
-
-  // Función para verificar si la fecha seleccionada está dentro del rango de inicio y fin
-  bool _isDateInRange(DateTime selectedDate, String fechaInicio, String fechaFin) {
-    DateTime start = DateTime.parse(fechaInicio);
-    DateTime end = DateTime.parse(fechaFin);
-
-    return selectedDate.isAfter(start.subtract(const Duration(days: 1))) && selectedDate.isBefore(end.add(const Duration(days: 1)));
   }
 }

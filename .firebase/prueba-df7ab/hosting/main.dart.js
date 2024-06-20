@@ -103662,7 +103662,7 @@ o=A
 n=B.b_
 m='{"results":'
 s=2
-return A.P(A.l_("https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1cu_ZSghIYglmF48s4xGE97Pudj9-xlVue02rLoI-s-s&sheet=Hoja1"),$async$is)
+return A.P(A.l_("https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1cu_ZSghIYglmF48s4xGE97Pudj9-xlVue02rLoI-s-s&sheet=Pruebas"),$async$is)
 case 2:q.a=p.a5(o.b5g(n.dV(0,m+b+"}")).a,!0,t.ZM)
 q.am()
 return A.E(null,r)}})
@@ -104785,11 +104785,9 @@ $S:0}
 A.EI.prototype={
 ae(){return new A.a14(new A.B(Date.now(),!1),B.j)}}
 A.a14.prototype={
-F(a){var s,r,q=null,p={},o=A.et(a,!0,t.KQ)
-p.a=A.a([],t.Hd)
-s=A.dJ(q,q,A.dm(q,q,B.To,new A.aFw(a),q,q),q,B.lB)
-r=this.d
-return A.ds(s,A.bf(A.a([A.Qr(A.a2(A.c3("dd-MM-yyyy",q).c6(r),q,q,q,q,q,q,q,q),new A.aFx(this,a),q),A.dL(A.aTZ(new A.aFy(p,this),o.is(),t.We),1)],t.p),B.l,B.m,B.q),q,q)},
+F(a){var s=null,r={},q=A.et(a,!0,t.KQ)
+r.a=A.a([],t.Hd)
+return A.ds(A.dJ(s,s,A.dm(s,s,B.To,new A.aFw(a),s,s),s,B.lB),A.bf(A.a([A.Qr(A.a2(A.c3("dd/MM/yyyy",s).c6(this.d),s,s,s,s,s,s,s,s),new A.aFx(this,a),s),A.dL(A.aTZ(new A.aFy(r,this),q.is(),t.We),1)],t.p),B.l,B.m,B.q),s,s)},
 BV(a){return this.arn(a)},
 arn(a){var s=0,r=A.G(t.H),q=this,p,o,n,m
 var $async$BV=A.H(function(b,c){if(b===1)return A.D(c,r)
