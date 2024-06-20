@@ -16,9 +16,15 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
     // Ordenar los días de la semana
     List<String> diasOrdenados = ["L", "M", "X", "J", "V"];
 
-    // Crear lista de horas únicas y ordenarlas
-    Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
-    List<String> horasOrdenadas = horasUnicas.toList()..sort();
+    // Crear lista de horas ordenadas
+    List<String> horasOrdenadas = [
+      "08:00", "08:30",
+      "09:00", "09:30",
+      "10:00", "10:30",
+      "11:30", "12:00",
+      "12:30", "13:00",
+      "13:30"
+    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -138,11 +144,10 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
 
     // Calcular la hora de fin sumando 1 hora
     int endHour = startHour + 1;
-    int endMinute = startMinute;
 
     // Formatear la hora de fin
     String formattedEndHour = endHour.toString().padLeft(2, '0');
-    String formattedEndMinute = endMinute.toString().padLeft(2, '0');
+    String formattedEndMinute = startMinute.toString().padLeft(2, '0');
 
     return "$formattedEndHour:$formattedEndMinute";
   }
