@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kk/models/profesor_response.dart';
-import 'package:provider/provider.dart';
 import 'package:kk/providers/profesor_provider.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/models.dart';
 
@@ -25,8 +24,7 @@ class _LocalizacionProfesorScreenState
     List<ProfesorRes> listaOrdenada = [];
     listaOrdenada.addAll(listadoProfesores);
 
-    listaOrdenada.sort((a, b) => a.nombre.compareTo(b.nombre));
-
+    listaOrdenada.sort(((a, b) => a.nombre.compareTo(b.nombre)));
     return Scaffold(
       appBar: AppBar(title: const Text("LOCALIZACION PROFESORES")),
       body: ListView.builder(
@@ -64,6 +62,7 @@ class _LocalizacionProfesorScreenState
       String horaInicio = horariosProfesor[i].hora;
       String horaFin = sumarHora(horaInicio);
 
+      // Comprobar si la hora actual está dentro del rango de la clase
       if (horaActual >= int.parse(horaInicio.split(":")[0]) &&
           horaActual < int.parse(horaFin.split(":")[0])) {
         asignatura = horariosProfesor[i].asignatura;
@@ -72,8 +71,9 @@ class _LocalizacionProfesorScreenState
       }
     }
 
+    // Si no hay asignatura ni aula, es hora de recreo
     if (aula.isEmpty || asignatura.isEmpty) {
-      texto = "El profesor no está en clase en este momento";
+      texto = "Es hora de recreo, el profesor no está en clase en este momento";
     } else {
       texto =
           "El profesor ${listaProfesores[index].nombre} ${listaProfesores[index].apellidos} está actualmente en el aula $aula, impartiendo la asignatura $asignatura";
@@ -100,9 +100,14 @@ class _LocalizacionProfesorScreenState
   }
 
   String sumarHora(String hora) {
-    final DateFormat formatter = DateFormat('HH:mm');
-    DateTime dateTime = formatter.parse(hora);
-    dateTime = dateTime.add(const Duration(hours: 1));
-    return formatter.format(dateTime);
+    int horas = int.parse(hora.split(":")[0]);
+    int minutos = int.parse(hora.split(":")[1].substring(0, 2));
+    String periodo = hora.split(":")[1].substring(2);
+    if (periodo == "00") {
+      horas += 1;
+    } else {
+      horas += 2;
+    }
+    return "$horas:00";
   }
 }
