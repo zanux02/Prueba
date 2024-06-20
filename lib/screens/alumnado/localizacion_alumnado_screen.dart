@@ -74,7 +74,7 @@ class _LocalizacionAlumnadoScreenState
       if ((horaActual > horaInicioInt ||
               (horaActual == horaInicioInt && minutoActual >= minutoInicioInt)) &&
           (horaActual < horaFinInt ||
-              (horaActual == horaFinInt && minutoActual < minutoFinInt))) {
+              (horaActual == horaFinInt && minutoActual <= minutoFinInt))) {
         asignatura = horariosAlumno[i].asignatura;
         aula = horariosAlumno[i].aulas;
         break; // Se encontró la clase, salir del bucle
