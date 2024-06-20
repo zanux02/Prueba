@@ -86,7 +86,7 @@ class _LocalizacionProfesorScreenState
     // Construir el mensaje a mostrar en el AlertDialog
     if (aula.isEmpty || asignatura.isEmpty) {
       texto =
-          "El profesor ${profesor.nombre} ${profesor.apellidos} no está disponible en este momentooooooooooooooooooooooooooooooooooooooooooooooooooooooooo";
+          "El profesor ${profesor.nombre} ${profesor.apellidos} no está disponible en este momentooooo";
     } else {
       texto =
           "El profesor ${profesor.nombre} ${profesor.apellidos} está actualmente en el aula $aula, impartiendo la asignatura $asignatura";
