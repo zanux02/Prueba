@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Importa intl para utilizar DateFormat
 import 'package:kk/models/expulsados_response.dart';
 import 'package:kk/providers/expulsados_provider.dart';
-import 'package:kk/utils/human_formats.dart';
 import 'package:provider/provider.dart';
 
 class MenuExpulsados extends StatefulWidget {
@@ -33,7 +33,9 @@ class _MenuExpulsadosState extends State<MenuExpulsados> {
         children: [
           ElevatedButton(
             onPressed: () => _selectDate(context),
-            child: Text(HumanFormats.formatDate(selectedDate)),
+            child: Text(
+              DateFormat('dd/MM/yyyy').format(selectedDate), // Formato día/mes/año
+            ),
           ),
           Expanded(
             child: FutureBuilder(
