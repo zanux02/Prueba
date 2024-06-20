@@ -130,9 +130,9 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final startHour = int.parse(parts[0]);
     final startMinutes = int.parse(parts[1]);
 
-    final endHour = startMinutes == 30 ? startHour + 1 : startHour;
+    final endHour = startHour + 1;
     final endMinutes = startMinutes == 30 ? "30" : "00";
 
-    return "$hour - $endHour:$endMinutes";
+    return "$hour  -  $endHour:$endMinutes";
   }
 }
