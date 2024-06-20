@@ -13,18 +13,19 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
     final listadoHorarios = alumnadoProvider.listadoHorarios;
 
-    // Obtenemos los días únicos del horario
+    // Obtenemos los dias
     Set<String> diasUnicos = listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
     List<String> diasOrdenados = ["L", "M", "X", "J", "V"].where((dia) => diasUnicos.contains(dia)).toList();
 
-    // Ordenamos las horas únicas y las convertimos en una lista ordenada
+    // Obtenemos las horas ordeandas
     Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
-    List<String> horasOrdenadas = horasUnicas.toList()..sort((a, b) => a.compareTo(b));
+    List<String> horasOrdenadas = horasUnicas.toList()
+      ..sort((a, b) => int.parse(a.split(":")[0]).compareTo(int.parse(b.split(":")[0])));
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "HORARIO DE ${listadoAlumnos[index].curso}",
+          "HORARIO DE ${listadoAlumnos[index].curso} ",
           style: const TextStyle(fontSize: 16),
         ),
       ),
@@ -35,9 +36,9 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
             Table(
               border: TableBorder.all(style: BorderStyle.solid),
               children: [
-                _buildDiasSemana(diasOrdenados),
+                diasSemana(diasOrdenados),
                 for (int i = 0; i < horasOrdenadas.length; i++)
-                  _buildHorarioRow(context, index, listadoHorarios, i, diasOrdenados, horasOrdenadas),
+                  diaHorario(context, index, listadoHorarios, i, diasOrdenados, horasOrdenadas),
               ],
             ),
           ],
@@ -46,7 +47,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     );
   }
 
-  TableRow _buildDiasSemana(List<String> diasOrdenados) {
+  TableRow diasSemana(List<String> diasOrdenados) {
     List<Widget> widgetsDias = [Container()];
 
     for (var dia in diasOrdenados) {
@@ -67,26 +68,24 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     return TableRow(children: widgetsDias);
   }
 
-  TableRow _buildHorarioRow(BuildContext context, int index, List<HorarioResult> listadoHorarios,
-      int horaIndex, List<String> diasOrdenados, List<String> horasOrdenadas) {
+  TableRow diaHorario(BuildContext context, int index, List<HorarioResult> listadoHorarios, int horaDia, List<String> diasOrdenados, List<String> horasOrdenadas) {
     final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
 
-    // Filtramos los horarios por el curso del alumno
+    // Obtenemos el horaria del curso
     List<HorarioResult> cursoHorarios = listadoHorarios
         .where((horario) => horario.curso == listadoAlumnos[index].curso)
         .toList();
 
     List<Widget> widgetsClases = [];
 
-    for (int diaIndex = 0; diaIndex < diasOrdenados.length; diaIndex++) {
+    for (int numDia = 0; numDia < diasOrdenados.length; numDia++) {
       String asignatura = "";
       String aula = "";
 
-      // Buscamos la asignatura y el aula correspondiente para cada día y hora
       for (int i = 0; i < cursoHorarios.length; i++) {
-        if (cursoHorarios[i].dia.startsWith(diasOrdenados[diaIndex]) &&
-            cursoHorarios[i].hora == horasOrdenadas[horaIndex]) {
+        if (cursoHorarios[i].dia.startsWith(diasOrdenados[numDia]) &&
+            cursoHorarios[i].hora == horasOrdenadas[horaDia]) {
           asignatura = cursoHorarios[i].asignatura;
           aula = cursoHorarios[i].aulas;
           break;
@@ -113,19 +112,17 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
       );
     }
 
-    return TableRow(
-      children: [
-        Container(
-          color: Colors.blue,
-          child: Text(
-            _formatHourRange(horasOrdenadas[horaIndex]),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-            textAlign: TextAlign.center,
-          ),
+    return TableRow(children: [
+      Container(
+        color: Colors.blue,
+        child: Text(
+          _formatHourRange(horasOrdenadas[horaDia]),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+          textAlign: TextAlign.center,
         ),
-        ...widgetsClases,
-      ],
-    );
+      ),
+      ...widgetsClases,
+    ]);
   }
 
   String _formatHourRange(String hour) {
