@@ -18,7 +18,7 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
 
     // Definir el orden deseado de las horas
     List<String> horasOrdenadas = [
-      "08:00", "09:00",
+      "8:00", "9:00",
       "10:00", "11:00",
       "11:30", "12:30",
       "13:30", "14:30"
