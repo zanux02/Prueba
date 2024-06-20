@@ -19,7 +19,7 @@ class ConvivenciaProvider extends ChangeNotifier {
 
   getExpulsados() async {
     const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1ZcdgFdnsp69tXP-S2VVwRM2z3Ucmv2EPrOkH9QIp4nA&sheet=Expulsados";
+        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1cu_ZSghIYglmF48s4xGE97Pudj9-xlVue02rLoI-s-s&sheet=Hoja1";
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final expulsadoResponse = ExpulsadosResponse.fromJson(jsonData);
