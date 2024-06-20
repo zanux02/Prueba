@@ -23,73 +23,72 @@ class _LocalizacionAlumnadoScreenState
     List<DatosAlumnos> listaOrdenada = [];
     listaOrdenada.addAll(listadoAlumnos);
 
-    listaOrdenada.sort((a, b) => a.nombre.compareTo(b.nombre));
+    listaOrdenada.sort(((a, b) => a.nombre.compareTo(b.nombre)));
     return Scaffold(
       appBar: AppBar(title: const Text("LOCALIZACION ALUMNOS")),
       body: ListView.builder(
-        itemCount: listaOrdenada.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              _mostrarAlert(
-                  context, index, listaOrdenada[index], listadoHorarios);
-            },
-            child: ListTile(
-              title: Text(listaOrdenada[index].nombre),
-            ),
-          );
-        },
-      ),
+          itemCount: listaOrdenada.length,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+                onTap: () {
+                  _mostrarAlert(
+                      context, index, listaOrdenada, listadoHorarios);
+                },
+                child: ListTile(
+                  title: Text(listaOrdenada[index].nombre),
+                ));
+          }),
     );
   }
 
-  void _mostrarAlert(BuildContext context, int index, DatosAlumnos alumno,
-      List<HorarioResult> listadoHorarios) {
+  void _mostrarAlert(BuildContext context, int index,
+      List<DatosAlumnos> listaAlumnos, List<HorarioResult> listadoHorarios) {
     DateTime ahora = DateTime.now();
-    int horaActual = ahora.hour;
-    int minutoActual = ahora.minute;
 
-    // Filtrar los horarios del alumno actual
-    List<HorarioResult> horariosAlumno = listadoHorarios.where((horario) =>
-        horario.curso == alumno.curso &&
-        horario.dia == ahora.weekday.toString()).toList();
+    List<HorarioResult> listadoHorarioCurso = [];
+    for (int i = 0; i < listadoHorarios.length; i++) {
+      if (listaAlumnos[index].curso == listadoHorarios[i].curso) {
+        listadoHorarioCurso.add(listadoHorarios[i]);
+      }
+    }
+
+    // for (int i = 0; i < listadoHorarioCurso.length; i++) {
+    //   debugPrint(" Día $i: ${listadoHorarioCurso[i].dia}");
+    // }
+
+    int hora = ahora.hour;
+    int dia = ahora.weekday;
+    // debugPrint(dia);
 
     String asignatura = "";
     String aula = "";
     String texto = "";
 
-    // Iterar sobre los horarios del alumno actual
-    for (int i = 0; i < horariosAlumno.length; i++) {
-      String horaInicio = horariosAlumno[i].hora;
-      String horaFin = sumarHora(horaInicio);
-
-      // Convertir horas a enteros para la comparación
-      int horaInicioInt = int.parse(horaInicio.split(":")[0]);
-      int minutoInicioInt = int.parse(horaInicio.split(":")[1]);
-      int horaFinInt = int.parse(horaFin.split(":")[0]);
-      int minutoFinInt = int.parse(horaFin.split(":")[1]);
-
-      // Verificar si la hora actual está dentro del rango de la clase
-      if ((horaActual > horaInicioInt ||
-              (horaActual == horaInicioInt && minutoActual >= minutoInicioInt)) &&
-          (horaActual < horaFinInt ||
-              (horaActual == horaFinInt && minutoActual < minutoFinInt))) {
-        asignatura = horariosAlumno[i].asignatura;
-        aula = horariosAlumno[i].aulas;
-        break; // Se encontró la clase, salir del bucle
+    List<HorarioResult> listadoHorarioCursoDia = [];
+    for (int i = 0; i < 6; i++) {
+      if (dia == 1) {
+        listadoHorarioCursoDia.add(listadoHorarioCurso[i]);
+        // debugPrint("Dias: ${listadoHorarioCurso[i].dia}");
+      } else {
+        listadoHorarioCursoDia.add(listadoHorarioCurso[i + (6 * (dia - 1))]);
+        // debugPrint("Dias: ${listadoHorarioCurso[i + (6 * (dia - 1))].dia}");
       }
     }
 
-    // Construir el mensaje a mostrar en el AlertDialog
-    if (aula.isEmpty || asignatura.isEmpty) {
-      texto =
-          "El alumno ${alumno.nombre} no está disponible en este momento";
-    } else {
-      texto =
-          "El alumno ${alumno.nombre} se encuentra actualmente en el aula $aula, en la asignatura $asignatura";
+    for (int i = 0; i < listadoHorarioCursoDia.length; i++) {
+      if (hora == int.parse(listadoHorarioCursoDia[i].hora.split(":")[0])) {
+        asignatura = listadoHorarioCursoDia[i].asignatura;
+        aula = listadoHorarioCursoDia[i].aulas;
+      }
     }
 
-    // Mostrar el AlertDialog
+    if (aula == "" || asignatura == "") {
+      texto = "El alumno no está disponible en este momento";
+    } else {
+      texto =
+          "El alumno ${listaAlumnos[index].nombre} se encuentra actualmente en el aula $aula, en la asignatura $asignatura";
+    }
+
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -97,7 +96,7 @@ class _LocalizacionAlumnadoScreenState
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
-            title: Text(alumno.nombre),
+            title: Text(listaAlumnos[index].nombre),
             content: Text(texto),
             actions: [
               TextButton(
@@ -106,16 +105,5 @@ class _LocalizacionAlumnadoScreenState
             ],
           );
         });
-  }
-
-  // Función para sumar una hora a la hora inicial
-  String sumarHora(String hora) {
-    int horas = int.parse(hora.split(":")[0]) + 1;
-    int minutos = int.parse(hora.split(":")[1]);
-
-    // Formatear los minutos a dos dígitos
-    String minutosString = minutos.toString().padLeft(2, '0');
-
-    return "$horas:$minutosString";
   }
 }
