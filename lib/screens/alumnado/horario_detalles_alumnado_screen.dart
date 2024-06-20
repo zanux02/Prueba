@@ -101,13 +101,18 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
         }
       }
 
+      // Verificar si hay clase en este momento
+      bool isInClass = false;
       if (claseEncontrada != null) {
-        asignatura = claseEncontrada.asignatura;
-        aula = claseEncontrada.aulas;
+        isInClass = _isInClassTime(horasOrdenadas[horaIndex], claseEncontrada.hora);
+        if (isInClass) {
+          asignatura = claseEncontrada.asignatura;
+          aula = claseEncontrada.aulas;
+        }
       }
 
       // Mostrar la asignatura y aula si corresponde, o indicar que no hay clase en ese momento
-      if (claseEncontrada != null && _isInClassTime(horasOrdenadas[horaIndex], claseEncontrada.hora)) {
+      if (isInClass) {
         widgetsClases.add(
           Container(
             color: Colors.white,
@@ -166,11 +171,20 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     return "$hour - $endHour:$endMinutes";
   }
 
-  // Verificar si la hora está dentro del rango de la clase
+  // Verificar si la hora actual está dentro del rango de la clase
   bool _isInClassTime(String startTime, String classTime) {
     final startHour = int.parse(startTime.split(":")[0]);
-    final classHour = int.parse(classTime.split(":")[0]);
+    final startMinute = int.parse(startTime.split(":")[1]);
 
-    return startHour == classHour;
+    final classHour = int.parse(classTime.split(":")[0]);
+    final classMinute = int.parse(classTime.split(":")[1]);
+
+    if (startHour == classHour) {
+      // Misma hora, comprobar minutos
+      return startMinute < classMinute;
+    } else {
+      // Si la hora de inicio es anterior a la hora de clase, está en clase
+      return startHour < classHour;
+    }
   }
 }
