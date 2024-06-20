@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kk/models/expulsados_response.dart';
-import 'package:kk/providers/expulsados_provider.dart';
+import 'package:kk/providers/convivencia_provider.dart';
 import 'package:kk/utils/human_formats.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +10,7 @@ class MenuExpulsados extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final expulsadosProvider = Provider.of<ExpulsadosProvider>(context);
+    final convivenciaProvider = Provider.of<ConvivenciaProvider>(context);
     List<Expulsado> expulsados = [];
 
     return Scaffold(
@@ -24,16 +24,16 @@ class MenuExpulsados extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-        future: expulsadosProvider.getExpulsados(),
+        future: convivenciaProvider.getExpulsados(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
-              expulsados = snapshot.data;
+              expulsados = convivenciaProvider.listaExpulsados;
 
               expulsados = expulsados.where((expulsado) {
                 DateTime fecInic = HumanFormats.formatStringToDate(expulsado.fecInic);
                 DateTime fecFin = HumanFormats.formatStringToDate(expulsado.fecFin);
-                DateTime selectedDate = expulsadosProvider.selectedDate;
+                DateTime selectedDate = convivenciaProvider.selectedDate;
                 return selectedDate.isAtSameMomentAs(fecInic) ||
                     selectedDate.isAtSameMomentAs(fecFin) ||
                     (selectedDate.isAfter(fecInic) && selectedDate.isBefore(fecFin));
@@ -42,9 +42,9 @@ class MenuExpulsados extends StatelessWidget {
               return Column(
                 children: [
                   ElevatedButton(
-                    onPressed: () => expulsadosProvider.selectDate(context),
+                    onPressed: () => convivenciaProvider.selectDate(context),
                     child: Text(
-                      DateFormat('dd/MM/yyyy').format(expulsadosProvider.selectedDate.toLocal()),
+                      DateFormat('dd/MM/yyyy').format(convivenciaProvider.selectedDate.toLocal()),
                     ),
                   ),
                   Expanded(
