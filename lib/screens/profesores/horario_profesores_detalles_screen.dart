@@ -13,8 +13,19 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
     final listadoProfesores = profesorProvider.listadoProfesor;
     final listadoHorarios = profesorProvider.listadoHorarios;
 
-    // Crear lista de horas a partir de los horarios disponibles y ordenarlas
-    List<String> horasOrdenadas = _getOrderedHours(listadoHorarios);
+    // Obtener todas las horas disponibles
+    Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
+
+    // Definir el orden deseado de las horas
+    List<String> horasOrdenadas = [
+      "08:00", "09:00",
+      "10:00", "11:00",
+      "11:30", "12:30",
+      "13:30", "14:30"
+    ];
+
+    // Filtrar y ordenar solo las horas presentes en los horarios
+    List<String> horasFiltradas = horasOrdenadas.where((hora) => horasUnicas.contains(hora)).toList();
 
     // Ordenar los días de la semana
     List<String> diasOrdenados = ["L", "M", "X", "J", "V"];
@@ -36,8 +47,8 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
                 border: TableBorder.all(style: BorderStyle.solid),
                 children: [
                   _buildDiasSemana(diasOrdenados),
-                  for (int i = 0; i < horasOrdenadas.length; i++)
-                    _buildHorarioRow(context, listadoHorarios, horasOrdenadas[i], diasOrdenados),
+                  for (int i = 0; i < horasFiltradas.length; i++)
+                    _buildHorarioRow(context, listadoHorarios, horasFiltradas[i], diasOrdenados),
                 ],
               ),
             ),
@@ -45,26 +56,6 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  List<String> _getOrderedHours(List<HorarioResult> listadoHorarios) {
-    // Obtener todas las horas disponibles
-    Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
-
-    // Definir el orden deseado de las horas
-    List<String> horasOrdenadas = [
-      "08:00", "09:00",
-      "09:00", "10:00",
-      "10:00", "11:00",
-      "11:30", "12:30",
-      "12:30", "13:30",
-      "13:30", "14:30"
-    ];
-
-    // Filtrar y ordenar solo las horas presentes en los horarios
-    List<String> horasFiltradas = horasOrdenadas.where((hora) => horasUnicas.contains(hora)).toList();
-
-    return horasFiltradas;
   }
 
   TableRow _buildDiasSemana(List<String> diasOrdenados) {
