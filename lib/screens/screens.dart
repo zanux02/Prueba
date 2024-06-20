@@ -18,6 +18,7 @@ export 'package:kk/screens/alumnado/contacto_alumnado_screen.dart';
 export 'package:kk/screens/alumnado/horario_alumnado_screen.dart';
 export 'package:kk/screens/alumnado/localizacion_alumnado_screen.dart';
 export 'package:kk/screens/alumnado/contacto_detalles_alumnado_screen.dart';
+export 'package:kk/screens/alumnado/horario_detalles_alumnado_screen.dart';
 
 //Archivos de convivencia
 export 'package:kk/screens/convivencia/convivencia_screen.dart';

@@ -58,6 +58,7 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
 
   TableRow diaHorario(BuildContext context, int index, List<HorarioResult> listadoHorarios, String hora) {
 
+
     List<Widget> widgetsClases = [];
 
     for (int numDia = 0; numDia < 5; numDia++) { // Asumiendo L, M, X, J, V
