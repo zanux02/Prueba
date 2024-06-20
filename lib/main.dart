@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
         "dace_screen": (BuildContext context) => const DaceScreen(),
         "personal_screen": (BuildContext context) => const PersonalScreen(),
         "listado_profesores_screen": (BuildContext context) =>
-            const ListadoProfesores(),
+            const LocalizacionProfesorScreen(),
         "contacto_profesores_screen": (BuildContext context) =>
             const ContactoProfesoresScreen(),
         "horario_profesores_screen": (BuildContext context) =>
