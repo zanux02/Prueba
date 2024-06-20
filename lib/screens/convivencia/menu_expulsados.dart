@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kk/models/expulsados_response.dart';
 import 'package:kk/providers/expulsados_provider.dart';
 import 'package:kk/utils/human_formats.dart';
-import 'package:kk/widgets/side_menu.dart';
 import 'package:provider/provider.dart';
 
 class MenuExpulsados extends StatelessWidget {
@@ -15,6 +14,12 @@ class MenuExpulsados extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expulsados'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: FutureBuilder(
         future: expulsadosProvider.getExpulsados(),
@@ -60,7 +65,6 @@ class MenuExpulsados extends StatelessWidget {
           }
         },
       ),
-      drawer: const SideMenu(),
     );
   }
 }
