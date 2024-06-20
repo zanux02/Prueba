@@ -24,7 +24,7 @@ class _LocalizacionProfesorScreenState
     List<ProfesorRes> listaOrdenada = [];
     listaOrdenada.addAll(listadoProfesores);
 
-    listaOrdenada.sort(((a, b) => a.nombre.compareTo(b.nombre)));
+    listaOrdenada.sort((a, b) => a.nombre.compareTo(b.nombre));
     return Scaffold(
       appBar: AppBar(title: const Text("LOCALIZACION PROFESORES")),
       body: ListView.builder(
@@ -32,10 +32,12 @@ class _LocalizacionProfesorScreenState
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              _mostrarAlert(context, index, listaOrdenada, listadoHorarios);
+              _mostrarAlert(
+                  context, index, listaOrdenada[index], listadoHorarios);
             },
             child: ListTile(
-              title: Text("${listaOrdenada[index].nombre} ${listaOrdenada[index].apellidos}"),
+              title: Text(
+                  "${listaOrdenada[index].nombre} ${listaOrdenada[index].apellidos}"),
             ),
           );
         },
@@ -43,42 +45,54 @@ class _LocalizacionProfesorScreenState
     );
   }
 
-  void _mostrarAlert(BuildContext context, int index,
-      List<ProfesorRes> listaProfesores, List<HorarioResult> listadoHorarios) {
+  void _mostrarAlert(BuildContext context, int index, ProfesorRes profesor,
+      List<HorarioResult> listadoHorarios) {
     DateTime ahora = DateTime.now();
     int horaActual = ahora.hour;
+    int minutoActual = ahora.minute;
 
-    List<HorarioResult> horariosProfesor = listadoHorarios.where(
-      (horario) =>
-          horario.nombreProfesor == listaProfesores[index].nombre &&
-          horario.apellidoProfesor == listaProfesores[index].apellidos,
-    ).toList();
+    // Filtrar los horarios del profesor actual
+    List<HorarioResult> horariosProfesor = listadoHorarios.where((horario) =>
+            horario.nombreProfesor == profesor.nombre &&
+            horario.apellidoProfesor == profesor.apellidos)
+        .toList();
 
     String asignatura = "";
     String aula = "";
     String texto = "";
 
+    // Iterar sobre los horarios del profesor actual
     for (int i = 0; i < horariosProfesor.length; i++) {
       String horaInicio = horariosProfesor[i].hora;
       String horaFin = sumarHora(horaInicio);
 
-      // Comprobar si la hora actual está dentro del rango de la clase
-      if (horaActual >= int.parse(horaInicio.split(":")[0]) &&
-          horaActual < int.parse(horaFin.split(":")[0])) {
+      // Convertir horas a enteros para la comparación
+      int horaInicioInt = int.parse(horaInicio.split(":")[0]);
+      int minutoInicioInt = int.parse(horaInicio.split(":")[1]);
+      int horaFinInt = int.parse(horaFin.split(":")[0]);
+      int minutoFinInt = int.parse(horaFin.split(":")[1]);
+
+      // Verificar si la hora actual está dentro del rango de la clase
+      if ((horaActual > horaInicioInt ||
+              (horaActual == horaInicioInt && minutoActual >= minutoInicioInt)) &&
+          (horaActual < horaFinInt ||
+              (horaActual == horaFinInt && minutoActual < minutoFinInt))) {
         asignatura = horariosProfesor[i].asignatura;
         aula = horariosProfesor[i].aulas;
-        break;
+        break; // Se encontró la clase, salir del bucle
       }
     }
 
-    // Si no hay asignatura ni aula no esta disponible
+    // Construir el mensaje a mostrar en el AlertDialog
     if (aula.isEmpty || asignatura.isEmpty) {
-      texto = "el profesor no está disponible en este momento";
+      texto =
+          "El profesor ${profesor.nombre} ${profesor.apellidos} no está disponible en este momentooooooooooooooooooooooooooooooooooooooooooooooooooooooooo";
     } else {
       texto =
-          "El profesor ${listaProfesores[index].nombre} ${listaProfesores[index].apellidos} está actualmente en el aula $aula, impartiendo la asignatura $asignatura";
+          "El profesor ${profesor.nombre} ${profesor.apellidos} está actualmente en el aula $aula, impartiendo la asignatura $asignatura";
     }
 
+    // Mostrar el AlertDialog
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -86,7 +100,7 @@ class _LocalizacionProfesorScreenState
         return AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text("${listaProfesores[index].nombre} ${listaProfesores[index].apellidos}"),
+          title: Text("${profesor.nombre} ${profesor.apellidos}"),
           content: Text(texto),
           actions: [
             TextButton(
@@ -99,23 +113,17 @@ class _LocalizacionProfesorScreenState
     );
   }
 
+  // Función para sumar una hora a la hora inicial
   String sumarHora(String hora) {
-  int horas = int.parse(hora.split(":")[0]);
-  int minutos = int.parse(hora.split(":")[1]);
+    int horas = int.parse(hora.split(":")[0]) + 1;
+    int minutos = int.parse(hora.split(":")[1]);
 
-  if (minutos == 30) {
-    // Si los minutos son 30, sumamos una hora y los minutos se establecen a 00
-    horas += 1;
-    minutos = 30;
+    // Asegurar que los minutos no superen 59
+    minutos = minutos % 60;
+
+    // Formatear los minutos a dos dígitos
+    String minutosString = minutos.toString().padLeft(2, '0');
+
+    return "$horas:$minutosString";
   }
-   else 
-   {
-    horas += 1;
-  }
-  // Formatear los minutos a dos dígitos
-  String minutosString = minutos.toString().padLeft(2, '0');
-
-  return "$horas:$minutosString";
-}
-
 }
