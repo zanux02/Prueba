@@ -13,7 +13,10 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
     final listadoProfesores = profesorProvider.listadoProfesor;
     final listadoHorarios = profesorProvider.listadoHorarios;
 
-    // Crear lista de horas a partir de los horarios disponibles
+    // Ordenar los días de la semana
+    List<String> diasOrdenados = ["L", "M", "X", "J", "V"];
+
+    // Crear lista de horas únicas y ordenarlas
     Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
     List<String> horasOrdenadas = horasUnicas.toList()..sort();
 
@@ -33,9 +36,9 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
               child: Table(
                 border: TableBorder.all(style: BorderStyle.solid),
                 children: [
-                  diasSemana(),
+                  diasSemana(diasOrdenados),
                   for (int i = 0; i < horasOrdenadas.length; i++)
-                    diaHorario(context, index, listadoHorarios, horasOrdenadas[i]),
+                    diaHorario(context, listadoHorarios, horasOrdenadas[i], diasOrdenados),
                 ],
               ),
             ),
@@ -45,29 +48,42 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
     );
   }
 
-  TableRow diasSemana() {
-    return TableRow(children: [
-      Container(),
-      const Text("L", textAlign: TextAlign.center),
-      const Text("M", textAlign: TextAlign.center),
-      const Text("X", textAlign: TextAlign.center),
-      const Text("J", textAlign: TextAlign.center),
-      const Text("V", textAlign: TextAlign.center),
-    ]);
+  TableRow diasSemana(List<String> diasOrdenados) {
+    List<Widget> widgetsDias = [];
+
+    // Agregar una celda vacía para la columna de horas
+    widgetsDias.add(Container());
+
+    // Agregar los días de la semana ordenados
+    for (var dia in diasOrdenados) {
+      widgetsDias.add(
+        Container(
+          color: Colors.blue,
+          child: Center(
+            child: Text(
+              dia,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return TableRow(children: widgetsDias);
   }
 
-  TableRow diaHorario(BuildContext context, int index, List<HorarioResult> listadoHorarios, String hora) {
-
-
+  TableRow diaHorario(BuildContext context, List<HorarioResult> listadoHorarios, String hora, List<String> diasOrdenados) {
     List<Widget> widgetsClases = [];
 
-    for (int numDia = 0; numDia < 5; numDia++) { // Asumiendo L, M, X, J, V
+    // Recorrer los días ordenados
+    for (var dia in diasOrdenados) {
       String asignatura = "";
       String aula = "";
 
+      // Buscar la asignatura y el aula correspondiente para cada día y hora
       for (int i = 0; i < listadoHorarios.length; i++) {
-        if (listadoHorarios[i].dia.startsWith(_getDiaSemana(numDia)) &&
-            listadoHorarios[i].hora == hora) {
+        if (listadoHorarios[i].dia.startsWith(dia) && listadoHorarios[i].hora == hora) {
           asignatura = listadoHorarios[i].asignatura;
           aula = listadoHorarios[i].aulas;
           break;
@@ -94,33 +110,40 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
       );
     }
 
+    // Calcular hora de fin basada en la duración estándar de una hora (60 minutos)
+    String horaFin = _calculateEndTime(hora);
+
     return TableRow(children: [
       Container(
         color: Colors.blue,
-        child: Text(
-          hora,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-          textAlign: TextAlign.center,
+        child: Column(
+          children: [
+            Text(
+              "$hora - $horaFin",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
       ...widgetsClases,
     ]);
   }
 
-  String _getDiaSemana(int index) {
-    switch (index) {
-      case 0:
-        return "L";
-      case 1:
-        return "M";
-      case 2:
-        return "X";
-      case 3:
-        return "J";
-      case 4:
-        return "V";
-      default:
-        return "";
-    }
+  String _calculateEndTime(String horaInicio) {
+    // Obtener la hora de inicio y los minutos
+    List<String> parts = horaInicio.split(":");
+    int startHour = int.parse(parts[0]);
+    int startMinute = int.parse(parts[1]);
+
+    // Calcular la hora de fin sumando 1 hora
+    int endHour = startHour + 1;
+    int endMinute = startMinute;
+
+    // Formatear la hora de fin
+    String formattedEndHour = endHour.toString().padLeft(2, '0');
+    String formattedEndMinute = endMinute.toString().padLeft(2, '0');
+
+    return "$formattedEndHour:$formattedEndMinute";
   }
 }

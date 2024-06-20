@@ -25,7 +25,7 @@ class HorarioProfesoresScreen extends StatelessWidget {
             if (index == 0) {
               return GestureDetector(
                 onTap: () {
-                  // Puedes añadir lógica aquí si deseas manejar el primer elemento de manera diferente.
+                  null;
                 },
                 child: Container(),
               );
