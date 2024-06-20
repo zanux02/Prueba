@@ -9,43 +9,42 @@ class ProfesorResponse {
     required this.result,
   });
 
-  List<DatosAlumnos> result;
+  List<ProfesorRes> result;
 
   factory ProfesorResponse.fromJson(String str) =>
       ProfesorResponse.fromMap(json.decode(str));
 
   factory ProfesorResponse.fromMap(Map<String, dynamic> json) => ProfesorResponse(
-        result: List<DatosAlumnos>.from(
-            json["results"].map((x) => DatosAlumnos.fromMap(x))),
+        result: List<ProfesorRes>.from(
+            json["results"].map((x) => ProfesorRes.fromMap(x))),
       );
 }
+class ProfesorRes {
+  String id;
+  String usuario;
+  String rol;
+  String nombre;
+  String apellidos;
+  String telefono;
 
-class DatosAlumnos {
-  DatosAlumnos({
+  ProfesorRes({
+    required this.id,
+    required this.usuario,
+    required this.rol,
     required this.nombre,
-    required this.curso,
-    required this.email,
-    required this.telefonoAlumno,
-    required this.telefonoPadre,
-    required this.telefonoMadre,
+    required this.apellidos,
+    required this.telefono,
   });
 
-  String nombre;
-  String curso;
-  String email;
-  String telefonoAlumno;
-  String telefonoPadre;
-  String telefonoMadre;
-
-  factory DatosAlumnos.fromJson(String str) =>
-      DatosAlumnos.fromMap(json.decode(str));
-
-  factory DatosAlumnos.fromMap(Map<String, dynamic> json) => DatosAlumnos(
-        nombre: json["nombre"],
-        curso: json["curso"],
-        email: json["email"],
-        telefonoAlumno: json["telefonoAlumno"],
-        telefonoPadre: json["telefonoPadre"],
-        telefonoMadre: json["telefonoMadre"],
-      );
+  factory ProfesorRes.fromMap(Map<String, dynamic> json) {
+    return ProfesorRes(
+      id: json['ID'],
+      usuario: json['Usuario'],
+      rol: json['Rol'],
+      nombre: json['Nombre'],
+      apellidos: json['Apellidos'],
+      telefono: json['Teléfono'],
+    );
+  }
 }
+

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:kk/models/horario_response.dart';
-import 'package:kk/models/profesor_horario_response.dart';
+import 'package:kk/models/profesor_response.dart';
 import 'package:kk/utils/utilidades.dart';
 
 class ProfesorProvider extends ChangeNotifier{
-  List<ProfesorHorarioResult> listadoProfesor = [];
+  List<ProfesorRes> listadoProfesor = [];
   List<HorarioResult> listadoHorarios = [];
 
    ProfesorProvider() {
@@ -24,12 +24,12 @@ class ProfesorProvider extends ChangeNotifier{
   }
 
   getProfesor() async {
-    const url ="https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=11Y4M52bYFMCIa5uU52vKll2-OY0VtFiGK2PhMWShngg&sheet=Horarios";
+    const url ="https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1qREuUYht73nx_fS2dxm9m6qPs_uvBwsK74dOprmwdjE&sheet=Credenciales";
         
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
-    final cursosResponse = ProfesorHorarioResponse.fromJson(jsonData);
-    listadoProfesor = cursosResponse.result;
+    final responseProfesor = ProfesorResponse.fromJson(jsonData);
+    listadoProfesor = responseProfesor.result;
     notifyListeners();
   }
 }

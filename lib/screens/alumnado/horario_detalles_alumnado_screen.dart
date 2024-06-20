@@ -13,11 +13,11 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
     final listadoHorarios = alumnadoProvider.listadoHorarios;
 
-    // Get unique days sorted and remove numbers
+    // Obtenemos los dias
     Set<String> diasUnicos = listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
     List<String> diasOrdenados = ["L", "M", "X", "J", "V"].where((dia) => diasUnicos.contains(dia)).toList();
 
-    // Get unique hours sorted
+    // Obtenemos las horas ordeandas
     Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
     List<String> horasOrdenadas = horasUnicas.toList()
       ..sort((a, b) => int.parse(a.split(":")[0]).compareTo(int.parse(b.split(":")[0])));
@@ -72,7 +72,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
 
-    // Get the horarios for the specific curso
+    // Obtenemos el horaria del curso
     List<HorarioResult> cursoHorarios = listadoHorarios
         .where((horario) => horario.curso == listadoAlumnos[index].curso)
         .toList();
