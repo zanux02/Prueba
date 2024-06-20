@@ -2,90 +2,107 @@ import 'package:flutter/material.dart';
 import 'package:kk/models/profesor_response.dart';
 import 'package:provider/provider.dart';
 import 'package:kk/providers/profesor_provider.dart';
+import 'package:intl/intl.dart';
 
-class ListadoProfesores extends StatelessWidget {
-  const ListadoProfesores({Key? key}) : super(key: key);
+import '../../models/models.dart';
 
+class LocalizacionProfesorScreen extends StatefulWidget {
+  const LocalizacionProfesorScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LocalizacionProfesorScreen> createState() =>
+      _LocalizacionProfesorScreenState();
+}
+
+class _LocalizacionProfesorScreenState
+    extends State<LocalizacionProfesorScreen> {
   @override
   Widget build(BuildContext context) {
     final profesorProvider = Provider.of<ProfesorProvider>(context);
     final listadoProfesores = profesorProvider.listadoProfesor;
+    final listadoHorarios = profesorProvider.listadoHorarios;
+
+    List<ProfesorRes> listaOrdenada = [];
+    listaOrdenada.addAll(listadoProfesores);
+
+    listaOrdenada.sort((a, b) => a.nombre.compareTo(b.nombre));
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("LISTA PROFESORES"),
-      ),
+      appBar: AppBar(title: const Text("LOCALIZACION PROFESORES")),
       body: ListView.builder(
-        itemCount: listadoProfesores.length,
+        itemCount: listaOrdenada.length,
         itemBuilder: (BuildContext context, int index) {
-          final profesor = listadoProfesores[index];
-          final nombreProfesor = profesor.nombre;
-          final apellidoProfesor = profesor.apellidos;
-
-          return ListTile(
-            title: Text("$nombreProfesor $apellidoProfesor"),
+          return GestureDetector(
             onTap: () {
-              _mostrarLocalizacion(context, profesor);
+              _mostrarAlert(context, index, listaOrdenada, listadoHorarios);
             },
+            child: ListTile(
+              title: Text("${listaOrdenada[index].nombre} ${listaOrdenada[index].apellidos}"),
+            ),
           );
         },
       ),
     );
   }
 
-  void _mostrarLocalizacion(BuildContext context, ProfesorRes profesor) {
-    final profesorProvider = Provider.of<ProfesorProvider>(context, listen: false);
-    final listadoHorarios = profesorProvider.listadoHorarios;
+  void _mostrarAlert(BuildContext context, int index,
+      List<ProfesorRes> listaProfesores, List<HorarioResult> listadoHorarios) {
+    DateTime ahora = DateTime.now();
+    int horaActual = ahora.hour;
 
-    final horarioProfesor = listadoHorarios.firstWhere(
+    List<HorarioResult> horariosProfesor = listadoHorarios.where(
       (horario) =>
-          horario.nombreProfesor == profesor.nombre &&
-          horario.apellidoProfesor == profesor.apellidos,
-    );
+          horario.nombreProfesor == listaProfesores[index].nombre &&
+          horario.apellidoProfesor == listaProfesores[index].apellidos,
+    ).toList();
 
-    if (horarioProfesor != null) {
-      showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("${profesor.nombre} ${profesor.apellidos}"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Curso: ${horarioProfesor.curso}"),
-                Text("Asignatura: ${horarioProfesor.asignatura}"),
-                Text("Hora: ${horarioProfesor.hora}"),
-                Text("Aula: ${horarioProfesor.aulas}"),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("${profesor.nombre} ${profesor.apellidos}"),
-            content: const Text("No se encontraron horarios para este profesor."),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
+    String asignatura = "";
+    String aula = "";
+    String texto = "";
+
+    for (int i = 0; i < horariosProfesor.length; i++) {
+      String horaInicio = horariosProfesor[i].hora;
+      String horaFin = sumarHora(horaInicio);
+
+      if (horaActual >= int.parse(horaInicio.split(":")[0]) &&
+          horaActual < int.parse(horaFin.split(":")[0])) {
+        asignatura = horariosProfesor[i].asignatura;
+        aula = horariosProfesor[i].aulas;
+        break;
+      }
     }
+
+    if (aula.isEmpty || asignatura.isEmpty) {
+      texto = "El profesor no está en clase en este momento";
+    } else {
+      texto =
+          "El profesor ${listaProfesores[index].nombre} ${listaProfesores[index].apellidos} está actualmente en el aula $aula, impartiendo la asignatura $asignatura";
+    }
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          title: Text("${listaProfesores[index].nombre} ${listaProfesores[index].apellidos}"),
+          content: Text(texto),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cerrar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String sumarHora(String hora) {
+    final DateFormat formatter = DateFormat('HH:mm');
+    DateTime dateTime = formatter.parse(hora);
+    dateTime = dateTime.add(const Duration(hours: 1));
+    return formatter.format(dateTime);
   }
 }
