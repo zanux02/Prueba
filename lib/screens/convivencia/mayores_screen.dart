@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:kk/models/models.dart';
 import 'package:kk/providers/providers.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:intl/intl.dart';
 
 class MayoresScreen extends StatefulWidget {
   const MayoresScreen({super.key});
@@ -34,7 +35,9 @@ class _MayoresScreenState extends State<MayoresScreen> {
       listadoMayoresHoy = listadoMayoresHoy.where((mayor) {
         DateTime fecInic = DateTime.parse(mayor.fecInic);
         DateTime fecFin = DateTime.parse(mayor.fecFin);
-        return selectedDate!.isAfter(fecInic) && selectedDate!.isBefore(fecFin);
+        return selectedDate!.isAtSameMomentAs(fecInic) ||
+               selectedDate!.isAtSameMomentAs(fecFin) ||
+               (selectedDate!.isAfter(fecInic) && selectedDate!.isBefore(fecFin));
       }).toList();
     }
 
@@ -59,7 +62,7 @@ class _MayoresScreenState extends State<MayoresScreen> {
             child: Text(
               selectedDate == null
                   ? "Seleccionar Fecha"
-                  : "Fecha: ${selectedDate!.toLocal()}".split(' ')[0],
+                  : DateFormat('dd/MM/yyyy').format(selectedDate!),
             ),
           ),
           Expanded(
@@ -95,9 +98,10 @@ class _MayoresScreenState extends State<MayoresScreen> {
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
+    final DateTime initialDate = selectedDate ?? now;
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: now,
+      initialDate: initialDate,
       firstDate: DateTime(2000),
       lastDate: now,
     );
