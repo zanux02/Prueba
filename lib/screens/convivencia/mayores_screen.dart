@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:kk/models/models.dart';
 import 'package:kk/providers/providers.dart';
-//import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class MayoresScreen extends StatelessWidget {
@@ -19,76 +18,74 @@ class MayoresScreen extends StatelessWidget {
     List<Mayor> listadoMayoresHoy = [];
     List<DatosAlumnos> cogerDatosMayores = [];
 
-    // DateTime now = DateTime.now();
-
     for (int i = 0; i < listadoMayores.length; i++) {
-      // debugPrint('Dentro del for');
-      // final listaMayor = listadoMayores[i].fec_inic.split("-");
-      // debugPrint(listaMayor);
-
-      // if (int.parse(listaMayor[0]) == now.year &&
-      //     int.parse(listaMayor[1]) == now.month &&
-      //     int.parse(listaMayor[2]) == now.day) {
       listadoMayoresHoy.add(listadoMayores[i]);
       listadoMayoresHoy.sort((a, b) => b.fecFin.compareTo(a.fecFin));
-      // debugPrint('Entra en el if');
-      for (int i = 0; i < listadoMayoresHoy.length; i++) {
-        // debugPrint(listadoMayoresHoy[i].apellidosNombre);
-        // debugPrint(listadoMayoresHoy[i].fec_fin);
-        // }
-      }
     }
 
     for (int i = 0; i < listadoMayoresHoy.length; i++) {
       for (int j = 0; j < listadoAlumnos.length; j++) {
         if (listadoMayoresHoy[i].apellidosNombre == listadoAlumnos[j].nombre) {
-          // debugPrint(listadoMayoresHoy[i].apellidosNombre);
-          // debugPrint(listadoAlumnos[j].nombre);
-          listadoAlumnos[j].email;
-          listadoAlumnos[j].telefonoAlumno;
-          listadoAlumnos[j].telefonoMadre;
-          listadoAlumnos[j].telefonoPadre;
-
           cogerDatosMayores.add(listadoAlumnos[j]);
         }
       }
-    }
-
-    for (int j = 0; j < cogerDatosMayores.length; j++) {
-      // debugPrint(cogerDatosMayores[j].email);
-      // debugPrint(cogerDatosMayores[j].telefonoAlumno);
-      // debugPrint(cogerDatosMayores[j].telefonoMadre);
-      // debugPrint(cogerDatosMayores[j].telefonoPadre);
     }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mayores'),
       ),
-      body: ListView.builder(
-          itemCount: listadoMayoresHoy.length,
-          itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: () {
-                _mostrarAlert(
-                    context, index, cogerDatosMayores, listadoMayoresHoy);
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              _selectDate(context);
+            },
+            child: const Text("Seleccionar Fecha"),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: listadoMayoresHoy.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    _mostrarAlert(
+                        context, index, cogerDatosMayores, listadoMayoresHoy);
+                  },
+                  child: ListTile(
+                    title: Text(listadoMayoresHoy[index].apellidosNombre),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(listadoMayoresHoy[index].fecInic),
+                        const Text(" - "),
+                        Text(listadoMayoresHoy[index].fecFin)
+                      ],
+                    ),
+                    subtitle: Text(listadoMayoresHoy[index].curso),
+                    leading: Text(listadoMayoresHoy[index].aula),
+                  ),
+                );
               },
-              child: ListTile(
-                title: Text(listadoMayoresHoy[index].apellidosNombre),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(listadoMayoresHoy[index].fecInic),
-                    const Text(" - "),
-                    Text(listadoMayoresHoy[index].fecFin)
-                  ],
-                ),
-                subtitle: Text(listadoMayoresHoy[index].curso),
-                leading: Text(listadoMayoresHoy[index].aula),
-              ),
-            );
-          }),
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime now = DateTime.now();
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: DateTime(2000),
+      lastDate: now,
+    );
+
+    if (selectedDate != null && selectedDate != now) {
+      print("Fecha seleccionada: ${selectedDate.toLocal()}");
+    }
   }
 
   void _mostrarAlert(BuildContext context, int index,
