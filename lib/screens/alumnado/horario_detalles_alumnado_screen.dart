@@ -13,19 +13,15 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
     final listadoHorarios = alumnadoProvider.listadoHorarios;
 
-    // Obtenemos los dias
-    Set<String> diasUnicos = listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
-    List<String> diasOrdenados = ["L", "M", "X", "J", "V"].where((dia) => diasUnicos.contains(dia)).toList();
-
-    // Obtenemos las horas ordeandas
+    // Obtener horas únicas ordenadas
     Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
     List<String> horasOrdenadas = horasUnicas.toList()
-      ..sort((a, b) => int.parse(a.split(":")[0]).compareTo(int.parse(b.split(":")[0])));
+      ..sort((a, b) => _compareHours(a, b));
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "HORARIO DE ${listadoAlumnos[index].curso} ",
+          "HORARIO DE ${listadoAlumnos[index].curso}",
           style: const TextStyle(fontSize: 16),
         ),
       ),
@@ -36,9 +32,9 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
             Table(
               border: TableBorder.all(style: BorderStyle.solid),
               children: [
-                diasSemana(diasOrdenados),
+                _buildDaysRow(listadoHorarios),
                 for (int i = 0; i < horasOrdenadas.length; i++)
-                  diaHorario(context, index, listadoHorarios, i, diasOrdenados, horasOrdenadas),
+                  _buildScheduleRow(context, index, listadoHorarios, i, horasOrdenadas),
               ],
             ),
           ],
@@ -47,7 +43,19 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     );
   }
 
-  TableRow diasSemana(List<String> diasOrdenados) {
+  // Comparar horas para ordenarlas correctamente
+  int _compareHours(String a, String b) {
+    final aHour = int.parse(a.split(":")[0]);
+    final bHour = int.parse(b.split(":")[0]);
+    return aHour.compareTo(bHour);
+  }
+
+  // Construir la fila de días de la semana
+  TableRow _buildDaysRow(List<HorarioResult> listadoHorarios) {
+    // Obtener días únicos ordenados
+    Set<String> diasUnicos = listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
+    List<String> diasOrdenados = ["L", "M", "X", "J", "V"].where((dia) => diasUnicos.contains(dia)).toList();
+
     List<Widget> widgetsDias = [Container()];
 
     for (var dia in diasOrdenados) {
@@ -68,55 +76,76 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     return TableRow(children: widgetsDias);
   }
 
-  TableRow diaHorario(BuildContext context, int index, List<HorarioResult> listadoHorarios, int horaDia, List<String> diasOrdenados, List<String> horasOrdenadas) {
+  // Construir fila del horario
+  TableRow _buildScheduleRow(BuildContext context, int index, List<HorarioResult> listadoHorarios, int horaIndex, List<String> horasOrdenadas) {
     final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
 
-    // Obtenemos el horaria del curso
+    // Filtrar horarios por curso y hora
     List<HorarioResult> cursoHorarios = listadoHorarios
-        .where((horario) => horario.curso == listadoAlumnos[index].curso)
+        .where((horario) => horario.curso == listadoAlumnos[index].curso && horario.hora == horasOrdenadas[horaIndex])
         .toList();
 
     List<Widget> widgetsClases = [];
 
-    for (int numDia = 0; numDia < diasOrdenados.length; numDia++) {
+    for (int diaIndex = 0; diaIndex < 5; diaIndex++) {
       String asignatura = "";
       String aula = "";
 
+      // Encontrar la clase correspondiente al día y hora
+      HorarioResult? claseEncontrada;
       for (int i = 0; i < cursoHorarios.length; i++) {
-        if (cursoHorarios[i].dia.startsWith(diasOrdenados[numDia]) &&
-            cursoHorarios[i].hora == horasOrdenadas[horaDia]) {
-          asignatura = cursoHorarios[i].asignatura;
-          aula = cursoHorarios[i].aulas;
+        if (cursoHorarios[i].dia.startsWith(["L", "M", "X", "J", "V"][diaIndex])) {
+          claseEncontrada = cursoHorarios[i];
           break;
         }
       }
 
-      widgetsClases.add(
-        Container(
-          color: Colors.white,
-          child: Column(
-            children: [
-              Text(
-                asignatura.isNotEmpty ? asignatura.toUpperCase().substring(0, 3) : '',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
-              Text(
-                aula.toUpperCase(),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
+      if (claseEncontrada != null) {
+        asignatura = claseEncontrada.asignatura;
+        aula = claseEncontrada.aulas;
+      }
+
+      // Mostrar la asignatura y aula si corresponde, o indicar que no hay clase en ese momento
+      if (claseEncontrada != null && _isInClassTime(horasOrdenadas[horaIndex], claseEncontrada.hora)) {
+        widgetsClases.add(
+          Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                Text(
+                  asignatura.isNotEmpty ? asignatura.toUpperCase().substring(0, 3) : '',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                ),
+                Text(
+                  aula.toUpperCase(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        widgetsClases.add(
+          Container(
+            color: Colors.grey[300],
+            child: const Center(
+              child: Text(
+                "NO CLASE",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        );
+      }
     }
 
     return TableRow(children: [
       Container(
         color: Colors.blue,
         child: Text(
-          _formatHourRange(horasOrdenadas[horaDia]),
+          _formatHourRange(horasOrdenadas[horaIndex]),
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
           textAlign: TextAlign.center,
         ),
@@ -125,6 +154,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     ]);
   }
 
+  // Formatear el rango de horas
   String _formatHourRange(String hour) {
     final parts = hour.split(":");
     final startHour = int.parse(parts[0]);
@@ -133,6 +163,14 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final endHour = startHour + 1;
     final endMinutes = startMinutes == 30 ? "30" : "00";
 
-    return "$hour  -  $endHour:$endMinutes";
+    return "$hour - $endHour:$endMinutes";
+  }
+
+  // Verificar si la hora está dentro del rango de la clase
+  bool _isInClassTime(String startTime, String classTime) {
+    final startHour = int.parse(startTime.split(":")[0]);
+    final classHour = int.parse(classTime.split(":")[0]);
+
+    return startHour == classHour;
   }
 }
