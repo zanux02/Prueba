@@ -104975,7 +104975,7 @@ $0(){A.c7(this.a,!1).h7(null)
 return null},
 $S:0}
 A.wO.prototype={
-F(a){var s,r,q=null,p=A.cz(A.ky(a,t.X).b.b),o=A.ef(a,!1,t.qi),n=o.a,m=o.b,l=new A.af(m,new A.ail(),A.a6(m).i("af<1,m>")).hW(0),k=t.s,j=t.He,i=A.a4(new A.ba(A.a(["08:00","09:00","10:00","11:00","11:30","12:30","13:30","14:30"],k),new A.aim(l),j),!0,j.i("o.E")),h=A.a(["L","M","X","J","V"],k)
+F(a){var s,r,q=null,p=A.cz(A.ky(a,t.X).b.b),o=A.ef(a,!1,t.qi),n=o.a,m=o.b,l=new A.af(m,new A.ail(),A.a6(m).i("af<1,m>")).hW(0),k=t.s,j=t.He,i=A.a4(new A.ba(A.a(["8:00","9:00","10:00","11:00","11:30","12:30","13:30","14:30"],k),new A.aim(l),j),!0,j.i("o.E")),h=A.a(["L","M","X","J","V"],k)
 k=A.dK(q,q,q,q,A.a0("HORARIO DE "+n[p].d,q,q,q,q,B.KU,q,q,q))
 j=A.aWq(B.D)
 s=A.a([this.adi(h)],t.nk)

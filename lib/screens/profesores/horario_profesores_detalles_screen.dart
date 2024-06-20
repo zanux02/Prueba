@@ -48,7 +48,7 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
                 children: [
                   _buildDiasSemana(diasOrdenados),
                   for (int i = 0; i < horasFiltradas.length; i++)
-                    _buildHorarioRow(context, listadoHorarios, horasFiltradas[i], diasOrdenados),
+                    _buildHorarioRow(context, listadoHorarios, horasFiltradas[i], diasOrdenados, listadoProfesores[index].nombre),
                 ],
               ),
             ),
@@ -79,7 +79,7 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
     return TableRow(children: widgetsDias);
   }
 
-  TableRow _buildHorarioRow(BuildContext context, List<HorarioResult> listadoHorarios, String horaInicio, List<String> diasOrdenados) {
+  TableRow _buildHorarioRow(BuildContext context, List<HorarioResult> listadoHorarios, String horaInicio, List<String> diasOrdenados, String nombreProfesor) {
     List<Widget> widgetsClases = [];
 
     // Calcular la hora de fin sumando 1 hora a la hora de inicio
@@ -91,12 +91,19 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
       String aula = "";
 
       // Buscar la asignatura y el aula correspondiente para cada día y hora
+      bool asignado = false;
       for (int i = 0; i < listadoHorarios.length; i++) {
-        if (listadoHorarios[i].dia.startsWith(dia) && listadoHorarios[i].hora == horaInicio) {
+        if (listadoHorarios[i].dia.startsWith(dia) && listadoHorarios[i].hora == horaInicio && listadoHorarios[i].nombreProfesor == nombreProfesor) {
           asignatura = listadoHorarios[i].asignatura;
           aula = listadoHorarios[i].aulas;
+          asignado = true;
           break;
         }
+      }
+
+      if (!asignado) {
+        asignatura = "";
+        aula = "";
       }
 
       widgetsClases.add(
