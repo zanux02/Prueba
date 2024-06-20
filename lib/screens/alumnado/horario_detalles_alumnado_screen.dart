@@ -116,12 +116,18 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
       Container(
         color: Colors.blue,
         child: Text(
-          horasOrdenadas[horaDia],
+          _formatHourRange(horasOrdenadas[horaDia]),
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ),
       ...widgetsClases,
     ]);
+  }
+
+  String _formatHourRange(String hour) {
+    final startHour = int.parse(hour.split(":")[0]);
+    final endHour = startHour + 1;
+    return "$hour a $endHour:00";
   }
 }
