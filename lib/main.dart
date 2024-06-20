@@ -2,30 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kk/firebase_options.dart';
 import 'package:kk/providers/expulsados_provider.dart';
+import 'package:kk/providers/profesor_provider.dart';
 import 'package:kk/providers/providers.dart';
-import 'package:kk/screens/alumnado/alumnado_screen.dart';
-import 'package:kk/screens/alumnado/contacto_alumnado_screen.dart';
-import 'package:kk/screens/alumnado/contacto_detalles_alumnado_screen.dart';
-import 'package:kk/screens/alumnado/horario_alumnado_screen.dart';
-import 'package:kk/screens/alumnado/horario_detalles_alumnado_screen.dart';
-import 'package:kk/screens/alumnado/localizacion_alumnado_screen.dart';
-import 'package:kk/screens/convivencia/convivencia_screen.dart';
-import 'package:kk/screens/convivencia/expulsados_screen.dart';
 import 'package:kk/screens/convivencia/incidencia_telefono_screen.dart';
-import 'package:kk/screens/convivencia/mayores_screen.dart';
 import 'package:kk/screens/convivencia/reflexion_screen.dart';
 import 'package:kk/screens/convivencia/screen_expulsados.dart';
 import 'package:kk/screens/convivencia/comportamiento_alumno_screen.dart';
 import 'package:kk/screens/convivencia/carnet_screen.dart';
-import 'package:kk/screens/dace/dace_screen.dart';
-import 'package:kk/screens/interfaz/home_screen.dart';
-import 'package:kk/screens/interfaz/login_screen.dart';
-import 'package:kk/screens/interfaz/main_screen.dart';
-import 'package:kk/screens/profesores/contacto_profesores_screen.dart';
-import 'package:kk/screens/profesores/horario_profesores_detalles_screen.dart';
-import 'package:kk/screens/profesores/horario_profesores_screen.dart';
-import 'package:kk/screens/profesores/listado_profesores.dart';
-import 'package:kk/screens/profesores/personal_screen.dart';
 import 'package:kk/screens/screens.dart';
 import 'package:kk/service/services.dart';
 import 'package:provider/provider.dart';
@@ -63,6 +46,10 @@ class AppState extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) => CredencialesProvider(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProfesorProvider(),
           lazy: false,
         ),
         ChangeNotifierProvider(
