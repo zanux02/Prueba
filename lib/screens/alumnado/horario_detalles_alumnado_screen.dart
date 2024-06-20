@@ -73,7 +73,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
         .toList();
 
     // Predefined sorted list of hours
-    List<String> sortedHours = ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00"];
+    List<String> sortedHours = ["8:30", "9:00", "10:00", "11:00", "12:00", "13:00"];
 
     List<Widget> widgetsClases = [];
 
