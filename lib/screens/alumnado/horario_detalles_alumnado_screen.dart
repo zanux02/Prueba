@@ -126,8 +126,13 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
   }
 
   String _formatHourRange(String hour) {
-    final startHour = int.parse(hour.split(":")[0]);
-    final endHour = startHour + 1;
-    return "$hour a $endHour:00";
+    final parts = hour.split(":");
+    final startHour = int.parse(parts[0]);
+    final startMinutes = int.parse(parts[1]);
+
+    final endHour = startMinutes == 30 ? startHour + 1 : startHour;
+    final endMinutes = startMinutes == 30 ? "30" : "00";
+
+    return "$hour - $endHour:$endMinutes";
   }
 }
