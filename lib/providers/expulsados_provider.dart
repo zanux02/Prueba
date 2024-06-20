@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kk/models/models.dart';
 import 'package:kk/utils/peticion_expulsados.dart';
-import 'package:kk/utils/human_formats.dart';
 
 class ExpulsadosProvider extends ChangeNotifier {
   String seleccionCursos = ''; 
@@ -18,17 +17,7 @@ class ExpulsadosProvider extends ChangeNotifier {
 
   Future<List<Expulsado>> getExpulsados() async {
     final List<Expulsado> expulsadoResponse = await PeticionExpulsados().getExpulsados();
-
-    // Filtrar la lista de expulsados por la fecha seleccionada
-    List<Expulsado> expulsadosFiltrados = expulsadoResponse.where((expulsado) {
-      DateTime fecInic = HumanFormats.formatStringToDate(expulsado.fecInic);
-      DateTime fecFin = HumanFormats.formatStringToDate(expulsado.fecFin);
-      return selectedDate.isAtSameMomentAs(fecInic) ||
-          selectedDate.isAtSameMomentAs(fecFin) ||
-          (selectedDate.isAfter(fecInic) && selectedDate.isBefore(fecFin));
-    }).toList();
-
-    return expulsadosFiltrados;
+    return expulsadoResponse;
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -40,8 +29,8 @@ class ExpulsadosProvider extends ChangeNotifier {
     );
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> getCursos() async {
@@ -59,13 +48,13 @@ class ExpulsadosProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setSeleccionCursos(String value){
+  void setSeleccionCursos(String value) {
     seleccionCursos = value;
     seleccionAula = cursos[seleccionCursos]![0];
     notifyListeners(); 
   }
 
-  void setSeleccionAulas(String value){
+  void setSeleccionAulas(String value) {
     seleccionAula = value;
     notifyListeners(); 
   }

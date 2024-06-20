@@ -27,9 +27,9 @@ class MenuExpulsados extends StatelessWidget {
         future: expulsadosProvider.getExpulsados(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            expulsados = snapshot.data;
+            if (snapshot.hasData) {
+              expulsados = snapshot.data;
 
-            if (expulsadosProvider.selectedDate != null) {
               expulsados = expulsados.where((expulsado) {
                 DateTime fecInic = HumanFormats.formatStringToDate(expulsado.fecInic);
                 DateTime fecFin = HumanFormats.formatStringToDate(expulsado.fecFin);
@@ -38,42 +38,42 @@ class MenuExpulsados extends StatelessWidget {
                     selectedDate.isAtSameMomentAs(fecFin) ||
                     (selectedDate.isAfter(fecInic) && selectedDate.isBefore(fecFin));
               }).toList();
-            }
 
-            return Column(
-              children: [
-                ElevatedButton(
-                  onPressed: () => expulsadosProvider.selectDate(context),
-                  child: Text(
-                    expulsadosProvider.selectedDate == null
-                        ? "Seleccionar Fecha"
-                        : DateFormat('dd/MM/yyyy').format(expulsadosProvider.selectedDate.toLocal()),
+              return Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () => expulsadosProvider.selectDate(context),
+                    child: Text(
+                      DateFormat('dd/MM/yyyy').format(expulsadosProvider.selectedDate.toLocal()),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: expulsados.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {},
-                        child: ListTile(
-                          title: Text(expulsados[index].apellidosNombre),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(expulsados[index].fecInic),
-                              const Text(" - "),
-                              Text(expulsados[index].fecFin),
-                            ],
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: expulsados.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {},
+                          child: ListTile(
+                            title: Text(expulsados[index].apellidosNombre),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(expulsados[index].fecInic),
+                                const Text(" - "),
+                                Text(expulsados[index].fecFin),
+                              ],
+                            ),
+                            subtitle: Text(expulsados[index].curso),
                           ),
-                          subtitle: Text(expulsados[index].curso),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
-            );
+                ],
+              );
+            } else {
+              return const Center(child: Text('No hay datos disponibles'));
+            }
           } else {
             return const Center(child: CircularProgressIndicator());
           }
