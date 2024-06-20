@@ -100,13 +100,22 @@ class _LocalizacionProfesorScreenState
   }
 
   String sumarHora(String hora) {
-    int horas = int.parse(hora.split(":")[0]);
-    String periodo = hora.split(":")[1].substring(2);
-    if (periodo == "00") {
-      horas += 1;
-    } else {
-      horas += 2;
-    }
-    return "$horas:00";
+  int horas = int.parse(hora.split(":")[0]);
+  int minutos = int.parse(hora.split(":")[1]);
+
+  if (minutos == 30) {
+    // Si los minutos son 30, sumamos una hora y los minutos se establecen a 00
+    horas += 1;
+    minutos = 30;
   }
+   else 
+   {
+    horas += 1;
+  }
+  // Formatear los minutos a dos dígitos
+  String minutosString = minutos.toString().padLeft(2, '0');
+
+  return "$horas:$minutosString";
+}
+
 }
