@@ -4,8 +4,15 @@ import 'package:kk/models/models.dart';
 import 'package:kk/providers/providers.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class MayoresScreen extends StatelessWidget {
+class MayoresScreen extends StatefulWidget {
   const MayoresScreen({super.key});
+
+  @override
+  _MayoresScreenState createState() => _MayoresScreenState();
+}
+
+class _MayoresScreenState extends State<MayoresScreen> {
+  DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +28,14 @@ class MayoresScreen extends StatelessWidget {
     for (int i = 0; i < listadoMayores.length; i++) {
       listadoMayoresHoy.add(listadoMayores[i]);
       listadoMayoresHoy.sort((a, b) => b.fecFin.compareTo(a.fecFin));
+    }
+
+    if (selectedDate != null) {
+      listadoMayoresHoy = listadoMayoresHoy.where((mayor) {
+        DateTime fecInic = DateTime.parse(mayor.fecInic);
+        DateTime fecFin = DateTime.parse(mayor.fecFin);
+        return selectedDate!.isAfter(fecInic) && selectedDate!.isBefore(fecFin);
+      }).toList();
     }
 
     for (int i = 0; i < listadoMayoresHoy.length; i++) {
@@ -41,7 +56,11 @@ class MayoresScreen extends StatelessWidget {
             onPressed: () {
               _selectDate(context);
             },
-            child: const Text("Seleccionar Fecha"),
+            child: Text(
+              selectedDate == null
+                  ? "Seleccionar Fecha"
+                  : "Fecha: ${selectedDate!.toLocal()}".split(' ')[0],
+            ),
           ),
           Expanded(
             child: ListView.builder(
@@ -76,15 +95,17 @@ class MayoresScreen extends StatelessWidget {
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime now = DateTime.now();
-    final DateTime? selectedDate = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: now,
       firstDate: DateTime(2000),
       lastDate: now,
     );
 
-    if (selectedDate != null && selectedDate != now) {
-      print("Fecha seleccionada: ${selectedDate.toLocal()}");
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
     }
   }
 
