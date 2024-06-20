@@ -11,7 +11,6 @@ class MenuExpulsados extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final convivenciaProvider = Provider.of<ConvivenciaProvider>(context);
-    List<Expulsado> expulsados = [];
 
     return Scaffold(
       appBar: AppBar(
@@ -27,8 +26,8 @@ class MenuExpulsados extends StatelessWidget {
         future: convivenciaProvider.getExpulsados(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              expulsados = convivenciaProvider.listaExpulsados;
+            if (convivenciaProvider.listaExpulsados.isNotEmpty) {
+              List<Expulsado> expulsados = convivenciaProvider.listaExpulsados;
 
               expulsados = expulsados.where((expulsado) {
                 DateTime fecInic = HumanFormats.formatStringToDate(expulsado.fecInic);
