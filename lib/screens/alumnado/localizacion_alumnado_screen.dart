@@ -46,31 +46,29 @@ class _LocalizacionAlumnadoScreenState
       List<DatosAlumnos> listaAlumnos, List<HorarioResult> listadoHorarios) {
     DateTime ahora = DateTime.now();
 
-    List<HorarioResult> listadoHorarioCurso = [];
-    for (int i = 0; i < listadoHorarios.length; i++) {
-      if (listaAlumnos[index].curso == listadoHorarios[i].curso) {
-        listadoHorarioCurso.add(listadoHorarios[i]);
-      }
-    }
-
-    int horaActual = ahora.hour;
-    int minutosActual = ahora.minute;
+    // Obtener el día de la semana (1=Lunes, 7=Domingo)
     int dia = ahora.weekday;
+
+    // Filtrar los horarios por el curso del alumno
+    List<HorarioResult> listadoHorarioCurso = listadoHorarios
+        .where((horario) => horario.curso == listaAlumnos[index].curso)
+        .toList();
 
     String asignatura = "";
     String aula = "";
     String texto = "";
 
-    List<HorarioResult> listadoHorarioCursoDia = [];
-    for (int i = 0; i < 6; i++) {
-      if (dia == 1) {
-        listadoHorarioCursoDia.add(listadoHorarioCurso[i]);
-      } else {
-        listadoHorarioCursoDia
-            .add(listadoHorarioCurso[i + (6 * (dia - 1))]);
-      }
-    }
+    // Buscar los horarios para el día actual
+    List<HorarioResult> listadoHorarioCursoDia = listadoHorarioCurso
+        .where((horario) =>
+            horario.dia.startsWith(_getDiaSemanaString(dia)))
+        .toList();
 
+    // Obtener la hora actual y los minutos
+    int horaActual = ahora.hour;
+    int minutosActual = ahora.minute;
+
+    // Verificar si el alumno está en clase en este momento
     bool alumnoEnClase = false;
     for (int i = 0; i < listadoHorarioCursoDia.length; i++) {
       String horaInicio = listadoHorarioCursoDia[i].hora;
@@ -83,13 +81,15 @@ class _LocalizacionAlumnadoScreenState
       int endMinute = int.parse(horaFin.split(":")[1]);
 
       // Verificar si el alumno está en clase en este momento
-      if (horaActual == startHour &&
-          minutosActual >= startMinute &&
-          (horaActual < endHour || (horaActual == endHour && minutosActual <= endMinute))) {
-        asignatura = listadoHorarioCursoDia[i].asignatura;
-        aula = listadoHorarioCursoDia[i].aulas;
-        alumnoEnClase = true;
-        break;
+      if (horaActual > startHour ||
+          (horaActual == startHour && minutosActual >= startMinute)) {
+        if (horaActual < endHour ||
+            (horaActual == endHour && minutosActual <= endMinute)) {
+          asignatura = listadoHorarioCursoDia[i].asignatura;
+          aula = listadoHorarioCursoDia[i].aulas;
+          alumnoEnClase = true;
+          break;
+        }
       }
     }
 
@@ -134,5 +134,22 @@ class _LocalizacionAlumnadoScreenState
     String formattedEndMinute = startMinute.toString().padLeft(2, '0');
 
     return "$formattedEndHour:$formattedEndMinute";
+  }
+
+  String _getDiaSemanaString(int dia) {
+    switch (dia) {
+      case 1:
+        return "L"; // Lunes
+      case 2:
+        return "M"; // Martes
+      case 3:
+        return "X"; // Miércoles
+      case 4:
+        return "J"; // Jueves
+      case 5:
+        return "V"; // Viernes
+      default:
+        return ""; // No debería ocurrir si se usa DateTime.now().weekday
+    }
   }
 }
