@@ -46,15 +46,8 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
   // Comparar horas para ordenarlas correctamente
   int _compareHours(String a, String b) {
     final aHour = int.parse(a.split(":")[0]);
-    final aMinute = int.parse(a.split(":")[1]);
     final bHour = int.parse(b.split(":")[0]);
-    final bMinute = int.parse(b.split(":")[1]);
-
-    if (aHour == bHour) {
-      return aMinute.compareTo(bMinute);
-    } else {
-      return aHour.compareTo(bHour);
-    }
+    return aHour.compareTo(bHour);
   }
 
   // Construir la fila de días de la semana
@@ -142,7 +135,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
         widgetsClases.add(
           Container(
             color: Colors.grey[300],
-            child: Center(
+            child: const Center(
               child: Text(
                 "NO CLASE",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -186,20 +179,12 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final classHour = int.parse(classTime.split(":")[0]);
     final classMinute = int.parse(classTime.split(":")[1]);
 
-    // Calcular la hora de fin de la clase
-    int endHour = classHour;
-    int endMinute = classMinute == 30 ? 0 : 30; // Si la clase termina en :30, ajustar los minutos
-
-    // Verificar si la hora actual está dentro del rango de la clase
-    if (startHour < endHour) {
-      return true; // La clase está dentro del rango de horas
-    } else if (startHour == endHour) {
-      // Misma hora, verificar los minutos
-      if (startMinute < classMinute || (startMinute == classMinute && startMinute < endMinute)) {
-        return true; // La clase está dentro del rango de minutos
-      }
+    if (startHour == classHour) {
+      // Misma hora, comprobar minutos
+      return startMinute < classMinute;
+    } else {
+      // Si la hora de inicio es anterior a la hora de clase, está en clase
+      return startHour < classHour;
     }
-
-    return false;
   }
 }
