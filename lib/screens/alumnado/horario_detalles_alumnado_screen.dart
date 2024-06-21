@@ -46,8 +46,15 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
   // Comparar horas para ordenarlas correctamente
   int _compareHours(String a, String b) {
     final aHour = int.parse(a.split(":")[0]);
+    final aMinute = int.parse(a.split(":")[1]);
     final bHour = int.parse(b.split(":")[0]);
-    return aHour.compareTo(bHour);
+    final bMinute = int.parse(b.split(":")[1]);
+
+    if (aHour == bHour) {
+      return aMinute.compareTo(bMinute);
+    } else {
+      return aHour.compareTo(bHour);
+    }
   }
 
   // Construir la fila de días de la semana
