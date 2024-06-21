@@ -9,30 +9,23 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final index = ModalRoute.of(context)!.settings.arguments as int;
-    final profesorProvider =
-        Provider.of<ProfesorProvider>(context, listen: false);
+    final profesorProvider = Provider.of<ProfesorProvider>(context, listen: false);
     final listadoProfesores = profesorProvider.listadoProfesor;
     final listadoHorarios = profesorProvider.listadoHorarios;
 
     // Obtener todas las horas disponibles
-    Set<String> horasUnicas =
-        listadoHorarios.map((horario) => horario.hora).toSet();
+    Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
 
     // Definir el orden deseado de las horas
     List<String> horasOrdenadas = [
-      "8:00",
-      "9:00",
-      "10:00",
-      "11:00",
-      "11:30",
-      "12:30",
-      "13:30",
-      "14:30"
+      "8:00", "9:00",
+      "10:00", "11:00",
+      "11:30", "12:30",
+      "13:30", "14:30"
     ];
 
     // Filtrar y ordenar solo las horas presentes en los horarios
-    List<String> horasFiltradas =
-        horasOrdenadas.where((hora) => horasUnicas.contains(hora)).toList();
+    List<String> horasFiltradas = horasOrdenadas.where((hora) => horasUnicas.contains(hora)).toList();
 
     // Ordenar los días de la semana
     List<String> diasOrdenados = ["L", "M", "X", "J", "V"];
@@ -55,8 +48,7 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
                 children: [
                   _buildDiasSemana(diasOrdenados),
                   for (int i = 0; i < horasFiltradas.length; i++)
-                    _buildHorarioRow(context, listadoHorarios, horasFiltradas[i],
-                        diasOrdenados, listadoProfesores[index].nombre),
+                    _buildHorarioRow(context, listadoHorarios, horasFiltradas[i], diasOrdenados, listadoProfesores[index].nombre),
                 ],
               ),
             ),
@@ -77,8 +69,7 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
             child: Text(
               dia,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
         ),
@@ -88,12 +79,7 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
     return TableRow(children: widgetsDias);
   }
 
-  TableRow _buildHorarioRow(
-      BuildContext context,
-      List<HorarioResult> listadoHorarios,
-      String horaInicio,
-      List<String> diasOrdenados,
-      String nombreProfesor) {
+  TableRow _buildHorarioRow(BuildContext context, List<HorarioResult> listadoHorarios, String horaInicio, List<String> diasOrdenados, String nombreProfesor) {
     List<Widget> widgetsClases = [];
 
     // Calcular la hora de fin sumando 1 hora a la hora de inicio
@@ -107,9 +93,7 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
       // Buscar la asignatura y el aula correspondiente para cada día y hora
       bool asignado = false;
       for (int i = 0; i < listadoHorarios.length; i++) {
-        if (listadoHorarios[i].dia.startsWith(dia) &&
-            listadoHorarios[i].hora == horaInicio &&
-            listadoHorarios[i].nombreProfesor == nombreProfesor) {
+        if (listadoHorarios[i].dia.startsWith(dia) && listadoHorarios[i].hora == horaInicio && listadoHorarios[i].nombreProfesor == nombreProfesor) {
           asignatura = listadoHorarios[i].asignatura;
           aula = listadoHorarios[i].aulas;
           asignado = true;
@@ -127,22 +111,14 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
           color: Colors.white,
           child: Column(
             children: [
-              Expanded(
-                child: Center(
-                  child: Text(
-                    asignatura.isNotEmpty ? asignatura.toUpperCase().substring(0, 3) : '',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                ),
+              Text(
+                asignatura.isNotEmpty ? asignatura.toUpperCase().substring(0, 3) : '',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               ),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    aula.toUpperCase(),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
+              Text(
+                aula.toUpperCase(),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -156,17 +132,10 @@ class HorarioProfesoresDetallesScreen extends StatelessWidget {
           color: Colors.blue,
           child: Column(
             children: [
-              Expanded(
-                child: Center(
-                  child: Text(
-                    "$horaInicio - $horaFin",
-                    style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              Text(
+                "$horaInicio - $horaFin",
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
