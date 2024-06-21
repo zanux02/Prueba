@@ -9,37 +9,46 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final index = ModalRoute.of(context)!.settings.arguments as int;
-    final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
+    final alumnadoProvider =
+        Provider.of<AlumnadoProvider>(context, listen: false);
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
     final listadoHorarios = alumnadoProvider.listadoHorarios;
 
-    // Obtenemos los dias
-    Set<String> diasUnicos = listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
-    List<String> diasOrdenados = ["L", "M", "X", "J", "V"].where((dia) => diasUnicos.contains(dia)).toList();
+    Set<String> diasUnicos =
+        listadoHorarios.map((horario) => horario.dia.substring(0, 1)).toSet();
+    List<String> diasOrdenados = ["L", "M", "X", "J", "V"]
+        .where((dia) => diasUnicos.contains(dia))
+        .toList();
 
-    // Obtenemos las horas ordeandas
-    Set<String> horasUnicas = listadoHorarios.map((horario) => horario.hora).toSet();
+    Set<String> horasUnicas =
+        listadoHorarios.map((horario) => horario.hora).toSet();
     List<String> horasOrdenadas = horasUnicas.toList()
-      ..sort((a, b) => int.parse(a.split(":")[0]).compareTo(int.parse(b.split(":")[0])));
+      ..sort((a, b) =>
+          int.parse(a.split(":")[0]).compareTo(int.parse(b.split(":")[0])));
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: Text(
           "HORARIO DE ${listadoAlumnos[index].curso} ",
           style: const TextStyle(fontSize: 16),
         ),
       ),
       body: Container(
-        decoration: const BoxDecoration(color: Colors.white),
+        decoration: const BoxDecoration(color: Colors.blue),
         child: Column(
           children: [
-            Table(
-              border: TableBorder.all(style: BorderStyle.solid),
-              children: [
-                diasSemana(diasOrdenados),
-                for (int i = 0; i < horasOrdenadas.length; i++)
-                  diaHorario(context, index, listadoHorarios, i, diasOrdenados, horasOrdenadas),
-              ],
+            Container(
+              color: Colors.blue,
+              child: Table(
+                border: TableBorder.all(style: BorderStyle.solid),
+                children: [
+                  _buildDiasSemana(diasOrdenados),
+                  for (int i = 0; i < horasOrdenadas.length; i++)
+                    _buildHorarioRow(context, index, listadoHorarios, i,
+                        diasOrdenados, horasOrdenadas),
+                ],
+              ),
             ),
           ],
         ),
@@ -47,8 +56,8 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     );
   }
 
-  TableRow diasSemana(List<String> diasOrdenados) {
-    List<Widget> widgetsDias = [Container()];
+  TableRow _buildDiasSemana(List<String> diasOrdenados) {
+    List<Widget> widgetsDias = [];
 
     for (var dia in diasOrdenados) {
       widgetsDias.add(
@@ -58,7 +67,8 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
             child: Text(
               dia,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
         ),
@@ -68,33 +78,34 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     return TableRow(children: widgetsDias);
   }
 
-  TableRow diaHorario(BuildContext context, int index, List<HorarioResult> listadoHorarios, int horaDia, List<String> diasOrdenados, List<String> horasOrdenadas) {
-    final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
+  TableRow _buildHorarioRow(BuildContext context, int index,
+      List<HorarioResult> listadoHorarios, int horaDia,
+      List<String> diasOrdenados, List<String> horasOrdenadas) {
+    final alumnadoProvider =
+        Provider.of<AlumnadoProvider>(context, listen: false);
     final listadoAlumnos = alumnadoProvider.listadoAlumnos;
 
-    // Obtenemos el horaria del curso
     List<HorarioResult> cursoHorarios = listadoHorarios
         .where((horario) => horario.curso == listadoAlumnos[index].curso)
         .toList();
 
-    List<Widget> widgetsClases = [];
+    List<Widget> widgetsClases = List.generate(
+      diasOrdenados.length,
+      (numDia) {
+        String asignatura = "";
+        String aula = "";
 
-    for (int numDia = 0; numDia < diasOrdenados.length; numDia++) {
-      String asignatura = "";
-      String aula = "";
-
-      for (int i = 0; i < cursoHorarios.length; i++) {
-        if (cursoHorarios[i].dia.startsWith(diasOrdenados[numDia]) &&
-            cursoHorarios[i].hora == horasOrdenadas[horaDia]) {
-          asignatura = cursoHorarios[i].asignatura;
-          aula = cursoHorarios[i].aulas;
-          break;
+        for (int i = 0; i < cursoHorarios.length; i++) {
+          if (cursoHorarios[i].dia.startsWith(diasOrdenados[numDia]) &&
+              cursoHorarios[i].hora == horasOrdenadas[horaDia]) {
+            asignatura = cursoHorarios[i].asignatura;
+            aula = cursoHorarios[i].aulas;
+            break;
+          }
         }
-      }
 
-      widgetsClases.add(
-        Container(
-          color: Colors.white,
+        return Container(
+          color: Colors.blue,
           child: Column(
             children: [
               Text(
@@ -108,21 +119,25 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      );
-    }
+        );
+      },
+    );
 
-    return TableRow(children: [
-      Container(
-        color: Colors.blue,
-        child: Text(
-          _formatHourRange(horasOrdenadas[horaDia]),
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-          textAlign: TextAlign.center,
+    return TableRow(
+      children: [
+        Container(
+          color: Colors.blue,
+          child: Center(
+            child: Text(
+              _formatHourRange(horasOrdenadas[horaDia]),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
-      ),
-      ...widgetsClases,
-    ]);
+        ...widgetsClases,
+      ],
+    );
   }
 
   String _formatHourRange(String hour) {
@@ -133,6 +148,6 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final endHour = startHour + 1;
     final endMinutes = startMinutes == 30 ? "30" : "00";
 
-    return "$hour  -  $endHour:$endMinutes";
+    return "$hour - $endHour:$endMinutes";
   }
 }

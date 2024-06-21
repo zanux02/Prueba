@@ -50,11 +50,13 @@ class _LocalizacionProfesorScreenState
     DateTime ahora = DateTime.now();
     int horaActual = ahora.hour;
     int minutoActual = ahora.minute;
+    String diaActual = obtenerDiaSemana(ahora.weekday);
 
-    // Filtrar los horarios del profesor actual
+    // Filtrar los horarios del profesor actual para el día actual
     List<HorarioResult> horariosProfesor = listadoHorarios.where((horario) =>
             horario.nombreProfesor == profesor.nombre &&
-            horario.apellidoProfesor == profesor.apellidos)
+            horario.apellidoProfesor == profesor.apellidos &&
+            horario.dia.startsWith(diaActual))
         .toList();
 
     String asignatura = "";
@@ -122,5 +124,27 @@ class _LocalizacionProfesorScreenState
     String minutosString = minutos.toString().padLeft(2, '0');
 
     return "$horas:$minutosString";
+  }
+
+  // Función para obtener el día de la semana en formato 'L', 'M', etc.
+  String obtenerDiaSemana(int weekday) {
+    switch (weekday) {
+      case DateTime.monday:
+        return 'L';
+      case DateTime.tuesday:
+        return 'M';
+      case DateTime.wednesday:
+        return 'X';
+      case DateTime.thursday:
+        return 'J';
+      case DateTime.friday:
+        return 'V';
+      case DateTime.saturday:
+        return 'S';
+      case DateTime.sunday:
+        return 'D';
+      default:
+        return '';
+    }
   }
 }
