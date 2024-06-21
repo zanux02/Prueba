@@ -142,7 +142,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
         widgetsClases.add(
           Container(
             color: Colors.grey[300],
-            child: const Center(
+            child: Center(
               child: Text(
                 "NO CLASE",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -186,12 +186,20 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
     final classHour = int.parse(classTime.split(":")[0]);
     final classMinute = int.parse(classTime.split(":")[1]);
 
-    if (startHour == classHour) {
-      // Misma hora, comprobar minutos
-      return startMinute < classMinute;
-    } else {
-      // Si la hora de inicio es anterior a la hora de clase, está en clase
-      return startHour < classHour;
+    // Calcular la hora de fin de la clase
+    int endHour = classHour;
+    int endMinute = classMinute == 30 ? 0 : 30; // Si la clase termina en :30, ajustar los minutos
+
+    // Verificar si la hora actual está dentro del rango de la clase
+    if (startHour < endHour) {
+      return true; // La clase está dentro del rango de horas
+    } else if (startHour == endHour) {
+      // Misma hora, verificar los minutos
+      if (startMinute < classMinute || (startMinute == classMinute && startMinute < endMinute)) {
+        return true; // La clase está dentro del rango de minutos
+      }
     }
+
+    return false;
   }
 }
