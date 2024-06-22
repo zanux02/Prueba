@@ -49,6 +49,29 @@ class _LocalizacionAlumnadoScreenState
     // Obtener el día de la semana (1=Lunes, 7=Domingo)
     int dia = ahora.weekday;
 
+    if (dia >= 6) {
+      // Mostrar un mensaje especial para fines de semana
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            title: Text(listaAlumnos[index].nombre),
+            content: const Text("El alumno no tiene clases durante el fin de semana."),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cerrar"),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
     // Filtrar los horarios por el curso del alumno
     List<HorarioResult> listadoHorarioCurso = listadoHorarios
         .where((horario) => horario.curso == listaAlumnos[index].curso)
@@ -60,8 +83,7 @@ class _LocalizacionAlumnadoScreenState
 
     // Buscar los horarios para el día actual
     List<HorarioResult> listadoHorarioCursoDia = listadoHorarioCurso
-        .where((horario) =>
-            horario.dia.startsWith(_getDiaSemanaString(dia)))
+        .where((horario) => horario.dia.startsWith(_getDiaSemanaString(dia)))
         .toList();
 
     // Obtener la hora actual y los minutos
@@ -139,17 +161,17 @@ class _LocalizacionAlumnadoScreenState
   String _getDiaSemanaString(int dia) {
     switch (dia) {
       case 1:
-        return "L"; // Lunes
+        return "L"; 
       case 2:
-        return "M"; // Martes
+        return "M"; 
       case 3:
-        return "X"; // Miércoles
+        return "X"; 
       case 4:
-        return "J"; // Jueves
+        return "J"; 
       case 5:
-        return "V"; // Viernes
+        return "V"; 
       default:
-        return ""; // No debería ocurrir si se usa DateTime.now().weekday
+        return ""; 
     }
   }
 }
