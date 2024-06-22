@@ -49,12 +49,6 @@ class _LocalizacionAlumnadoScreenState
     int minutoActual = ahora.minute;
     String diaActual = obtenerDiaSemana(ahora.weekday);
 
-    // Verificar si es fin de semana
-    if (diaActual == 'S' || diaActual == 'D') {
-      _mostrarDialog(context, alumno.nombre,
-          "El alumno no tiene clases durante el fin de semana.");
-      return;
-    }
 
     // Filtrar los horarios del alumno actual para el día actual
     List<HorarioResult> horariosAlumno = listadoHorarios.where((horario) =>
