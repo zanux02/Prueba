@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/models.dart';
 import '../../providers/alumnado_provider.dart';
 
@@ -31,7 +30,8 @@ class _LocalizacionAlumnadoScreenState
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              _mostrarAlert(context, index, listaOrdenada, listadoHorarios);
+              _mostrarAlert(
+                  context, index, listaOrdenada[index], listadoHorarios);
             },
             child: ListTile(
               title: Text(listaOrdenada[index].nombre),
@@ -42,86 +42,66 @@ class _LocalizacionAlumnadoScreenState
     );
   }
 
-  void _mostrarAlert(BuildContext context, int index,
-      List<DatosAlumnos> listaAlumnos, List<HorarioResult> listadoHorarios) {
+  void _mostrarAlert(BuildContext context, int index, DatosAlumnos alumno,
+      List<HorarioResult> listadoHorarios) {
     DateTime ahora = DateTime.now();
+    int horaActual = ahora.hour;
+    int minutoActual = ahora.minute;
+    String diaActual = obtenerDiaSemana(ahora.weekday);
 
-    // Obtener el día de la semana (1=Lunes, 7=Domingo)
-    int dia = ahora.weekday;
-
-    if (dia >= 6) {
-      // Mostrar un mensaje especial para fines de semana
-      showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            title: Text(listaAlumnos[index].nombre),
-            content: const Text("El alumno no tiene clases durante el fin de semana."),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Cerrar"),
-              ),
-            ],
-          );
-        },
-      );
+    // Verificar si es fin de semana
+    if (diaActual == 'S' || diaActual == 'D') {
+      _mostrarDialog(context, alumno.nombre,
+          "El alumno no tiene clases durante el fin de semana.");
       return;
     }
 
-    // Filtrar los horarios por el curso del alumno
-    List<HorarioResult> listadoHorarioCurso = listadoHorarios
-        .where((horario) => horario.curso == listaAlumnos[index].curso)
+    // Filtrar los horarios del alumno actual para el día actual
+    List<HorarioResult> horariosAlumno = listadoHorarios.where((horario) =>
+            horario.curso == alumno.curso &&
+            horario.dia.startsWith(diaActual))
         .toList();
 
     String asignatura = "";
     String aula = "";
     String texto = "";
 
-    // Buscar los horarios para el día actual
-    List<HorarioResult> listadoHorarioCursoDia = listadoHorarioCurso
-        .where((horario) => horario.dia.startsWith(_getDiaSemanaString(dia)))
-        .toList();
+    // Iterar sobre los horarios del alumno actual
+    for (int i = 0; i < horariosAlumno.length; i++) {
+      String horaInicio = horariosAlumno[i].hora;
+      String horaFin = sumarHora(horaInicio);
 
-    // Obtener la hora actual y los minutos
-    int horaActual = ahora.hour;
-    int minutosActual = ahora.minute;
+      // Convertir horas a enteros para la comparación
+      int horaInicioInt = int.parse(horaInicio.split(":")[0]);
+      int minutoInicioInt = int.parse(horaInicio.split(":")[1]);
+      int horaFinInt = int.parse(horaFin.split(":")[0]);
+      int minutoFinInt = int.parse(horaFin.split(":")[1]);
 
-    // Verificar si el alumno está en clase en este momento
-    bool alumnoEnClase = false;
-    for (int i = 0; i < listadoHorarioCursoDia.length; i++) {
-      String horaInicio = listadoHorarioCursoDia[i].hora;
-      String horaFin = _calculateEndTime(horaInicio);
-
-      // Parsear la hora de inicio y fin
-      int startHour = int.parse(horaInicio.split(":")[0]);
-      int startMinute = int.parse(horaInicio.split(":")[1]);
-      int endHour = int.parse(horaFin.split(":")[0]);
-      int endMinute = int.parse(horaFin.split(":")[1]);
-
-      // Verificar si el alumno está en clase en este momento
-      if (horaActual > startHour ||
-          (horaActual == startHour && minutosActual >= startMinute)) {
-        if (horaActual < endHour ||
-            (horaActual == endHour && minutosActual <= endMinute)) {
-          asignatura = listadoHorarioCursoDia[i].asignatura;
-          aula = listadoHorarioCursoDia[i].aulas;
-          alumnoEnClase = true;
-          break;
-        }
+      // Verificar si la hora actual está dentro del rango de la clase
+      if ((horaActual > horaInicioInt ||
+              (horaActual == horaInicioInt && minutoActual >= minutoInicioInt)) &&
+          (horaActual < horaFinInt ||
+              (horaActual == horaFinInt && minutoActual < minutoFinInt))) {
+        asignatura = horariosAlumno[i].asignatura;
+        aula = horariosAlumno[i].aulas;
+        break; // Se encontró la clase, salir del bucle
       }
     }
 
-    if (!alumnoEnClase) {
-      texto = "El alumno no está disponible en este momento";
+    // Construir el mensaje a mostrar en el AlertDialog
+    if (aula.isEmpty || asignatura.isEmpty) {
+      texto =
+          "El alumno ${alumno.nombre} no está disponible en este momento";
     } else {
       texto =
-          "El alumno ${listaAlumnos[index].nombre} se encuentra actualmente en el aula $aula, en la asignatura $asignatura";
+          "El alumno ${alumno.nombre} está actualmente en el aula $aula, en la asignatura $asignatura";
     }
 
+    // Mostrar el AlertDialog
+    _mostrarDialog(context, alumno.nombre, texto);
+  }
+
+  void _mostrarDialog(BuildContext context, String titulo, String contenido) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -129,8 +109,8 @@ class _LocalizacionAlumnadoScreenState
         return AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text(listaAlumnos[index].nombre),
-          content: Text(texto),
+          title: Text(titulo),
+          content: Text(contenido),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -142,36 +122,36 @@ class _LocalizacionAlumnadoScreenState
     );
   }
 
-  String _calculateEndTime(String horaInicio) {
-    // Parsear la hora de inicio
-    final parts = horaInicio.split(":");
-    int startHour = int.parse(parts[0]);
-    int startMinute = int.parse(parts[1]);
+  // Función para sumar una hora a la hora inicial
+  String sumarHora(String hora) {
+    int horas = int.parse(hora.split(":")[0]) + 1;
+    int minutos = int.parse(hora.split(":")[1]);
 
-    // Calcular la hora de fin sumando 1 hora
-    int endHour = startHour + 1;
+    // Formatear los minutos a dos dígitos
+    String minutosString = minutos.toString().padLeft(2, '0');
 
-    // Formatear la hora de fin
-    String formattedEndHour = endHour.toString().padLeft(2, '0');
-    String formattedEndMinute = startMinute.toString().padLeft(2, '0');
-
-    return "$formattedEndHour:$formattedEndMinute";
+    return "$horas:$minutosString";
   }
 
-  String _getDiaSemanaString(int dia) {
-    switch (dia) {
-      case 1:
-        return "L"; 
-      case 2:
-        return "M"; 
-      case 3:
-        return "X"; 
-      case 4:
-        return "J"; 
-      case 5:
-        return "V"; 
+  // Función para obtener el día de la semana en formato 'L', 'M', etc.
+  String obtenerDiaSemana(int weekday) {
+    switch (weekday) {
+      case DateTime.monday:
+        return 'L';
+      case DateTime.tuesday:
+        return 'M';
+      case DateTime.wednesday:
+        return 'X';
+      case DateTime.thursday:
+        return 'J';
+      case DateTime.friday:
+        return 'V';
+      case DateTime.saturday:
+        return 'S';
+      case DateTime.sunday:
+        return 'D';
       default:
-        return ""; 
+        return '';
     }
   }
 }
