@@ -118,7 +118,7 @@ class HorarioDetallesAlumnadoScreen extends StatelessWidget {
           child: Center(
             child: Text(
               _formatHourRange(horasOrdenadas[horaDia]),
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
               textAlign: TextAlign.center,
             ),
           ),
