@@ -116,30 +116,13 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                 repeticiones =
                     _calcularRepeticiones(listaAlumnosNombres[index]);
 
-                // Obtener la lista de servicios para el alumno actual
-                List<Servicio> serviciosAlumno = listaAlumnosFechas.where((servicio) =>
-                    servicio.nombreAlumno == listaAlumnosNombres[index]).toList();
-
                 return GestureDetector(
                   onTap: () => Navigator.pushNamed(
                       context, "servicio_informes_detalles_screen",
                       arguments: listaAlumnosNombres[index]),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        title: Text(listaAlumnosNombres[index]),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: serviciosAlumno.map((servicio) {
-                            return Text(
-                              '${DateFormat("dd/MM/yyyy HH:mm").format(DateTime.parse(servicio.fechaEntrada + " " + servicio.horaEntrada))} - ${DateFormat("dd/MM/yyyy HH:mm").format(DateTime.parse(servicio.fechaSalida + " " + servicio.horaSalida))}',
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      const Divider(),
-                    ],
+                  child: ListTile(
+                    title: Text(listaAlumnosNombres[index]),
+                    subtitle: Text("Cantidad $repeticiones"),
                   ),
                 );
               },
