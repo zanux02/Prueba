@@ -102,12 +102,12 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
             onPressed: () {
                 // Separar fecha y hora de entrada
                 var fechaHoraEntrada = controllerTextoFechaEntrada.text.split(" ");
-                String fechaEntrada = fechaHoraEntrada[0].replaceAll("-", "/"); // Reemplazar guiones por barras
+                String fechaEntrada = fechaHoraEntrada[0].replaceAll("-", "/"); 
                 String horaEntrada = fechaHoraEntrada[1];
 
                 // Separar fecha y hora de salida
                 var fechaHoraSalida = controllerTextoFechaSalida.text.split(" ");
-                String fechaSalida = fechaHoraSalida[0].replaceAll("-", "/"); // Reemplazar guiones por barras
+                String fechaSalida = fechaHoraSalida[0].replaceAll("-", "/"); 
                 String horaSalida = fechaHoraSalida[1];
 
                 servicioProvider.setAlumnosServicio(
@@ -163,7 +163,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                       });
                     },
                     icon: const Icon(
-                      Icons.add_box_outlined,
+                      Icons.stop_circle_outlined,
                       size: 30,
                     ),
                   ),
