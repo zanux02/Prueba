@@ -17,15 +17,17 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
   bool fechaInicioEscogida = false;
   List<Servicio> listaAlumnosFechas = [];
   List<String> listaAlumnosNombres = [];
-  DateTime dateTimeInicio = DateTime.now();
-  DateTime dateTimeFin = DateTime.now();
   int size = 0;
   int repeticiones = 0;
+  late DateTime dateTimeInicio; // Declaración de dateTimeInicio como variable de instancia
+  late DateTime dateTimeFin;    // Declaración de dateTimeFin como variable de instancia
 
   @override
   void initState() {
     super.initState();
-    // Llamar a updateLista con las fechas actuales al iniciar la pantalla
+    // Inicializar dateTimeInicio y dateTimeFin con la fecha actual al iniciar la pantalla
+    dateTimeInicio = DateTime.now();
+    dateTimeFin = DateTime.now();
     updateLista(context, dateTimeInicio, dateTimeFin);
   }
 
@@ -86,25 +88,21 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                   ],
                 ),
                 ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        listaAlumnosFechas = [];
-                        listaAlumnosNombres = [];
-                        updateLista(context, dateTimeInicio, dateTimeFin);
+                  onPressed: () {
+                    setState(() {
+                      listaAlumnosFechas = [];
+                      listaAlumnosNombres = [];
+                      updateLista(context, dateTimeInicio, dateTimeFin);
 
-                        for (int i = 0; i < listaAlumnosFechas.length; i++) {
-                          listaAlumnosNombres
-                              .add(listaAlumnosFechas[i].nombreAlumno);
-                        }
+                      listaAlumnosNombres =
+                          listaAlumnosFechas.map((e) => e.nombreAlumno).toList();
 
-                        listaAlumnosNombres =
-                            listaAlumnosNombres.toSet().toList();
-
-                        listaAlumnosNombres.sort(((a, b) => a.compareTo(b)));
-                        size = listaAlumnosNombres.length;
-                      });
-                    },
-                    child: const Text("MOSTRAR"))
+                      listaAlumnosNombres.sort((a, b) => a.compareTo(b));
+                      size = listaAlumnosNombres.length;
+                    });
+                  },
+                  child: const Text("MOSTRAR"),
+                ),
               ],
             ),
           ),
@@ -112,13 +110,14 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
             child: ListView.builder(
               itemCount: size,
               itemBuilder: (context, index) {
-                repeticiones =
-                    _calcularRepeticiones(listaAlumnosNombres[index]);
+                repeticiones = _calcularRepeticiones(listaAlumnosNombres[index]);
 
                 return GestureDetector(
                   onTap: () => Navigator.pushNamed(
-                      context, "servicio_informes_detalles_screen",
-                      arguments: listaAlumnosNombres[index]),
+                    context,
+                    "servicio_informes_detalles_screen",
+                    arguments: listaAlumnosNombres[index],
+                  ),
                   child: ListTile(
                     title: Text(listaAlumnosNombres[index]),
                     subtitle: Text("Cantidad $repeticiones"),
@@ -126,7 +125,7 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     );
@@ -135,12 +134,12 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
   Future<void> _selectDate(BuildContext context, String mode) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: mode == "Inicio" ? dateTimeInicio : dateTimeFin,
       firstDate: DateTime(DateTime.now().year - 2),
       lastDate: DateTime.now(),
     );
 
-    if (pickedDate != null && pickedDate != DateTime.now()) {
+    if (pickedDate != null) {
       String formattedDate = DateFormat("dd/MM/yyyy").format(pickedDate);
       setState(() {
         if (mode == "Inicio") {
@@ -162,6 +161,8 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
     final listadoAlumnadoServicio =
         servicioProviderLista.listadoAlumnosServicio;
 
+    listaAlumnosFechas.clear(); // Limpiar la lista antes de agregar los nuevos datos
+
     for (int i = 0; i < listadoAlumnadoServicio.length; i++) {
       bool dentro = compararFechas(
           listadoAlumnadoServicio[i], dateTimeInicio, dateTimeFin);
@@ -175,28 +176,14 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
   bool compararFechas(
       Servicio listadoAlumnadoServicio, DateTime dateInicio, DateTime dateFin) {
     bool estaDentro = false;
-    List<String> listaFechasEntrada =
-        listadoAlumnadoServicio.fechaEntrada.split("/");
 
-    List<String> listaFechasSalida =
-        listadoAlumnadoServicio.fechaSalida.split("/");
+    DateTime fechaEntradaParseada =
+        DateFormat("dd/MM/yyyy").parse(listadoAlumnadoServicio.fechaEntrada);
+    DateTime fechaSalidaParseada =
+        DateFormat("dd/MM/yyyy").parse(listadoAlumnadoServicio.fechaSalida);
 
-    String diaAlumnoEntrada = listaFechasEntrada[0];
-    String mesAlumnoEntrada = listaFechasEntrada[1];
-    String anoAlumnoEntrada = listaFechasEntrada[2];
-
-    String diaAlumnoSalida = listaFechasSalida[0];
-    String mesAlumnoSalida = listaFechasSalida[1];
-    String anoAlumnoSalida = listaFechasSalida[2];
-
-    String fechaEntrada = "$anoAlumnoEntrada$mesAlumnoEntrada$diaAlumnoEntrada";
-    DateTime fechaEntradaParseada = DateTime.parse(fechaEntrada);
-
-    String fechaSalida = "$anoAlumnoSalida$mesAlumnoSalida$diaAlumnoSalida";
-    DateTime fechaSalidaParseada = DateTime.parse(fechaSalida);
-
-    if (fechaEntradaParseada.isAfter(dateInicio.subtract(const Duration(days: 0))) &&
-        fechaSalidaParseada.isBefore(dateFin.add(const Duration(days: 0)))) {
+    if (fechaEntradaParseada.isAfter(dateInicio.subtract(const Duration(days: 1))) &&
+        fechaSalidaParseada.isBefore(dateFin.add(const Duration(days: 1)))) {
       estaDentro = true;
     }
 
