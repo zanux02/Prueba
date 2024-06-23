@@ -23,6 +23,13 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
   int repeticiones = 0;
 
   @override
+  void initState() {
+    super.initState();
+    // Llamar a updateLista con las fechas actuales al iniciar la pantalla
+    updateLista(context, dateTimeInicio, dateTimeFin);
+  }
+
+  @override
   Widget build(BuildContext context) {
     double anchura = MediaQuery.of(context).size.width;
 
