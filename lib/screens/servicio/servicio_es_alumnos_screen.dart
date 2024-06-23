@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:iJandula/models/models.dart';
 import 'package:iJandula/providers/providers.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class ServicioESAlumnosScreen extends StatefulWidget {
   const ServicioESAlumnosScreen({Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
   String fechaFormatoSalida = "";
   String nombreAlumno = "";
   final servicioProvider = ServicioProvider();
+  final http.Client client = http.Client(); // Cliente HTTP para las solicitudes
 
   final controllerTextoNombreAlumno = TextEditingController();
   final controllerTextoFechaEntrada = TextEditingController();
@@ -102,10 +104,11 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                   if (!fechaCompleta) {
                     null;
                   } else {
-                    servicio.setAlumnosServicio(
-                        controllerTextoNombreAlumno.text,
-                        controllerTextoFechaEntrada.text,
-                        controllerTextoFechaSalida.text);
+                    _enviarDatosServicio(
+                      controllerTextoNombreAlumno.text,
+                      controllerTextoFechaEntrada.text,
+                      controllerTextoFechaSalida.text,
+                    );
                     Navigator.pop(context);
                   }
                 },
@@ -166,5 +169,36 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                 ],
               ))),
     );
+  }
+
+  Future<void> _enviarDatosServicio(String nombreAlumno, String fechaEntrada, String fechaSalida) async {
+    final url = Uri.https('script.google.com', '/macros/s/AKfycbww17NqHZU5opz9SkMtUASKZOg1Hg6KsExRSvlqAMyrx4i0Ax9P5I7IQtKRcnsMKVivdw/exec', {
+      'spreadsheetId': '1u79XugcalPc4aPcymy9OsWu1qdg8aKCBvaPWQOH187I',
+      'sheet': 'Servicio',
+      'nombreAlumno': nombreAlumno,
+      'fechaEntrada': fechaEntrada,
+      'fechaSalida': fechaSalida,
+    });
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        // Aquí puedes manejar la respuesta si es exitosa
+        debugPrint('Datos enviados correctamente');
+      } else {
+        // Manejar el error si no se pudo enviar
+        debugPrint('Error al enviar los datos: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      // Manejar cualquier excepción
+      debugPrint('Error: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    client.close(); // Cerrar el cliente HTTP al finalizar
+    super.dispose();
   }
 }
