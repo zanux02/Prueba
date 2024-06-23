@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1093981067133:android:f901af221c02ebfc291e14",
         "android_client_info": {
-          "package_name": "com.example.kk"
+          "package_name": "com.example.ijandula"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "1093981067133-oit6o7f4c75v9lg5h1ho51a7bvk6fsc6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.kk",
+            "package_name": "com.example.ijandula",
             "certificate_hash": "4a961ecba8e0f91884d7874094a64ec3c6545ab8"
           }
         },
@@ -42,7 +42,7 @@
               "client_id": "1093981067133-14hppf58bgbcsh38qrfcb0fftj69uqt9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.kk"
+                "bundle_id": "com.example.ijandula"
               }
             }
           ]

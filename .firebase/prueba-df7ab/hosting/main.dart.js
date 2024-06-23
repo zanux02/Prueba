@@ -105413,7 +105413,7 @@ return A.c5(this.b,!1).es("servicio_informes_detalles_screen",s,t.X)},
 $S:0}
 A.aIm.prototype={
 $1(a){var s=null,r=A.bI(this.b,s,t.l).w.iJ(),q=Date.now(),p=Date.now()
-return A.ap(s,A.aSR(new A.z(q,!1),A.bA(new A.z(Date.now(),!1)),A.bA(new A.z(p,!1))-1,B.rW,new A.aIl(this.a,this.c)),B.h,B.k,s,s,s,r.a.b*0.25,s,s,s,s,s)},
+return A.ap(s,A.aSR(new A.z(q,!1),A.bA(new A.z(Date.now(),!1)),A.bA(new A.z(p,!1))-2,B.rW,new A.aIl(this.a,this.c)),B.h,B.k,s,s,s,r.a.b*0.25,s,s,s,s,s)},
 $S:237}
 A.aIl.prototype={
 $1(a){var s,r=A.c1("dd-MM-yyyy",null).c3(a),q=this.b

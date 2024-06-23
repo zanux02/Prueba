@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:kk/models/servicio_response.dart';
@@ -26,10 +25,6 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //final servicioProvider = Provider.of<ServicioProvider>(context);
-    //final listadoAlumnosServicio = servicioProvider.listadoAlumnosServicio;
-
-    //double altura = MediaQuery.of(context).size.height;
     double anchura = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -38,139 +33,120 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
       ),
       body: Column(
         children: [
-      Container(
-        padding: const EdgeInsets.only(top: 15),
-        child: Column(
-          children: [
-            Row(
+          Container(
+            padding: const EdgeInsets.only(top: 15),
+            child: Column(
               children: [
-                SizedBox(
-                  width: anchura * 0.5,
-                  child: TextField(
-                    readOnly: true,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                    controller:
-                        TextEditingController(text: selectedDateInicio),
-                    decoration: InputDecoration(
-                      labelText: "FECHA INICIO",
-                      border: const OutlineInputBorder(),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.calendar_today_rounded),
-                        onPressed: () {
-                          fechaInicioEscogida = true;
-                          mostrarFecha(
-                              "Inicio", listaAlumnosFechas, context);
-                        },
+                Row(
+                  children: [
+                    SizedBox(
+                      width: anchura * 0.5,
+                      child: TextField(
+                        readOnly: true,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        controller:
+                            TextEditingController(text: selectedDateInicio),
+                        decoration: InputDecoration(
+                          labelText: "FECHA INICIO",
+                          border: const OutlineInputBorder(),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.calendar_today_rounded),
+                            onPressed: () {
+                              fechaInicioEscogida = true;
+                              _selectDate(context, "Inicio");
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      width: anchura * 0.5,
+                      child: TextField(
+                        enabled: fechaInicioEscogida,
+                        readOnly: true,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        controller:
+                            TextEditingController(text: selectedDateFin),
+                        decoration: InputDecoration(
+                          labelText: "FECHA FIN",
+                          border: const OutlineInputBorder(),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.calendar_today_rounded),
+                            onPressed: () => _selectDate(context, "Fin"),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                SizedBox(
-                  width: anchura * 0.5,
-                  child: TextField(
-                    enabled: fechaInicioEscogida,
-                    readOnly: true,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                    controller:
-                        TextEditingController(text: selectedDateFin),
-                    decoration: InputDecoration(
-                      labelText: "FECHA FIN",
-                      border: const OutlineInputBorder(),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.calendar_today_rounded),
-                        onPressed: () => mostrarFecha(
-                            "Fin", listaAlumnosFechas, context),
-                      ),
-                    ),
-                  ),
-                )
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        listaAlumnosFechas = [];
+                        listaAlumnosNombres = [];
+                        updateLista(context, dateTimeInicio, dateTimeFin);
+
+                        for (int i = 0; i < listaAlumnosFechas.length; i++) {
+                          listaAlumnosNombres
+                              .add(listaAlumnosFechas[i].nombreAlumno);
+                        }
+
+                        listaAlumnosNombres =
+                            listaAlumnosNombres.toSet().toList();
+
+                        listaAlumnosNombres.sort(((a, b) => a.compareTo(b)));
+                        size = listaAlumnosNombres.length;
+                      });
+                    },
+                    child: const Text("MOSTRAR"))
               ],
             ),
-            ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    listaAlumnosFechas = [];
-                    listaAlumnosNombres = [];
-                    updateLista(context, dateTimeInicio, dateTimeFin);
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: size,
+              itemBuilder: (context, index) {
+                repeticiones =
+                    _calcularRepeticiones(listaAlumnosNombres[index]);
 
-                    // for (int i = 0; i < listaAlumnosFechas.length; i++) {
-                    //   debugPrint(listaAlumnosFechas[i].nombreAlumno);
-                    // }
-
-                    for (int i = 0; i < listaAlumnosFechas.length; i++) {
-                      listaAlumnosNombres
-                          .add(listaAlumnosFechas[i].nombreAlumno);
-                    }
-
-                    listaAlumnosNombres =
-                        listaAlumnosNombres.toSet().toList();
-
-                    listaAlumnosNombres.sort(((a, b) => a.compareTo(b)));
-                    size = listaAlumnosNombres.length;
-                  });
-                },
-                child: const Text("MOSTRAR"))
-          ],
-        ),
-      ),
-      Expanded(
-        child: ListView.builder(
-          itemCount: size,
-          itemBuilder: (context, index) {
-            repeticiones =
-                _calcularRepeticiones(listaAlumnosNombres[index]);
-
-            return GestureDetector(
-              onTap: () => Navigator.pushNamed(
-                  context, "servicio_informes_detalles_screen",
-                  arguments: listaAlumnosNombres[index]),
-              child: ListTile(
-                title: Text(listaAlumnosNombres[index]),
-                subtitle: Text("Cantidad $repeticiones"),
-              ),
-            );
-          },
-        ),
-      )
+                return GestureDetector(
+                  onTap: () => Navigator.pushNamed(
+                      context, "servicio_informes_detalles_screen",
+                      arguments: listaAlumnosNombres[index]),
+                  child: ListTile(
+                    title: Text(listaAlumnosNombres[index]),
+                    subtitle: Text("Cantidad $repeticiones"),
+                  ),
+                );
+              },
+            ),
+          )
         ],
       ),
     );
   }
 
-  void mostrarFecha(
-      String modo, List<Servicio> listaAlumnosFechas, BuildContext context) {
-    showCupertinoModalPopup(
-        context: context,
-        builder: (BuildContext builder) {
-          return Container(
-            color: Colors.white,
-            height: MediaQuery.of(context).copyWith().size.height * 0.25,
-            child: CupertinoDatePicker(
-                initialDateTime: DateTime.now(),
-                minimumYear: DateTime.now().year - 2,
-                maximumYear: DateTime.now().year,
-                mode: CupertinoDatePickerMode.date,
-                onDateTimeChanged: (value) {
-                  String valueFormat = DateFormat("dd-MM-yyyy").format(value);
+  Future<void> _selectDate(BuildContext context, String mode) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(DateTime.now().year - 2),
+      lastDate: DateTime.now(),
+    );
 
-                  if (modo == "Inicio") {
-                    setState(() {
-                      selectedDateInicio = valueFormat;
-                      dateTimeInicio = value;
-                    });
-                  }
-
-                  if (modo == "Fin") {
-                    setState(() {
-                      selectedDateFin = valueFormat;
-                      dateTimeFin = value;
-                    });
-
-                    // updateLista(servicioProvider, dateTimeInicio, dateTimeFin);
-                  }
-                }),
-          );
-        });
+    if (pickedDate != null && pickedDate != DateTime.now()) {
+      String formattedDate = DateFormat("dd-MM-yyyy").format(pickedDate);
+      setState(() {
+        if (mode == "Inicio") {
+          selectedDateInicio = formattedDate;
+          dateTimeInicio = pickedDate;
+          fechaInicioEscogida = true;
+        } else {
+          selectedDateFin = formattedDate;
+          dateTimeFin = pickedDate;
+        }
+      });
+    }
   }
 
   void updateLista(
