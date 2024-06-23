@@ -14,11 +14,13 @@ class ServicioInformesScreen extends StatefulWidget {
 class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
   String selectedDateInicio = "";
   String selectedDateFin = "";
+  bool fechaInicioEscogida = false;
   List<Servicio> listaAlumnosFechas = [];
   List<String> listaAlumnosNombres = [];
   DateTime dateTimeInicio = DateTime.now();
   DateTime dateTimeFin = DateTime.now();
   int size = 0;
+  int repeticiones = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.calendar_today_rounded),
                             onPressed: () {
+                              fechaInicioEscogida = true;
                               _selectDate(context, "Inicio");
                             },
                           ),
@@ -58,6 +61,7 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                     SizedBox(
                       width: anchura * 0.5,
                       child: TextField(
+                        enabled: fechaInicioEscogida,
                         readOnly: true,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                         controller:
@@ -89,7 +93,7 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                         listaAlumnosNombres =
                             listaAlumnosNombres.toSet().toList();
 
-                        listaAlumnosNombres.sort((a, b) => a.compareTo(b));
+                        listaAlumnosNombres.sort(((a, b) => a.compareTo(b)));
                         size = listaAlumnosNombres.length;
                       });
                     },
@@ -101,12 +105,16 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
             child: ListView.builder(
               itemCount: size,
               itemBuilder: (context, index) {
+                repeticiones =
+                    _calcularRepeticiones(listaAlumnosNombres[index]);
+
                 return GestureDetector(
                   onTap: () => Navigator.pushNamed(
                       context, "servicio_informes_detalles_screen",
                       arguments: listaAlumnosNombres[index]),
                   child: ListTile(
                     title: Text(listaAlumnosNombres[index]),
+                    subtitle: Text("Cantidad $repeticiones"),
                   ),
                 );
               },
@@ -126,11 +134,12 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
     );
 
     if (pickedDate != null && pickedDate != DateTime.now()) {
-      String formattedDate = DateFormat("dd-MM-yyyy").format(pickedDate);
+      String formattedDate = DateFormat("dd/MM/yyyy").format(pickedDate);
       setState(() {
         if (mode == "Inicio") {
           selectedDateInicio = formattedDate;
           dateTimeInicio = pickedDate;
+          fechaInicioEscogida = true;
         } else {
           selectedDateFin = formattedDate;
           dateTimeFin = pickedDate;
@@ -158,13 +167,43 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
 
   bool compararFechas(
       Servicio listadoAlumnadoServicio, DateTime dateInicio, DateTime dateFin) {
-    DateTime fechaSalida = DateTime.parse(listadoAlumnadoServicio.fechaSalida);
-    
-    if (fechaSalida.isAfter(dateInicio.subtract(const Duration(days: 1))) &&
-        fechaSalida.isBefore(dateFin.add(const Duration(days: 1)))) {
-      return true;
+    bool estaDentro = false;
+    List<String> listaFechasEntrada =
+        listadoAlumnadoServicio.fechaEntrada.split("/");
+
+    List<String> listaFechasSalida =
+        listadoAlumnadoServicio.fechaSalida.split("/");
+
+    String diaAlumnoEntrada = listaFechasEntrada[0];
+    String mesAlumnoEntrada = listaFechasEntrada[1];
+    String anoAlumnoEntrada = listaFechasEntrada[2];
+
+    String diaAlumnoSalida = listaFechasSalida[0];
+    String mesAlumnoSalida = listaFechasSalida[1];
+    String anoAlumnoSalida = listaFechasSalida[2];
+
+    String fechaEntrada = "$anoAlumnoEntrada$mesAlumnoEntrada$diaAlumnoEntrada";
+    DateTime fechaEntradaParseada = DateTime.parse(fechaEntrada);
+
+    String fechaSalida = "$anoAlumnoSalida$mesAlumnoSalida$diaAlumnoSalida";
+    DateTime fechaSalidaParseada = DateTime.parse(fechaSalida);
+
+    if (fechaEntradaParseada.isAfter(dateInicio.subtract(const Duration(days: 0))) &&
+        fechaSalidaParseada.isBefore(dateFin.add(const Duration(days: 0)))) {
+      estaDentro = true;
     }
 
-    return false;
+    return estaDentro;
+  }
+
+  int _calcularRepeticiones(String nombreAlumno) {
+    int num = 0;
+
+    for (int i = 0; i < listaAlumnosFechas.length; i++) {
+      if (nombreAlumno == listaAlumnosFechas[i].nombreAlumno) {
+        num++;
+      }
+    }
+    return num;
   }
 }
