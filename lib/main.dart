@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kk/firebase_options.dart';
-import 'package:kk/providers/expulsados_provider.dart';
-import 'package:kk/providers/profesor_provider.dart';
-import 'package:kk/providers/providers.dart';
-import 'package:kk/screens/convivencia/incidencia_telefono_screen.dart';
-import 'package:kk/screens/convivencia/reflexion_screen.dart';
-import 'package:kk/screens/convivencia/screen_expulsados.dart';
-import 'package:kk/screens/convivencia/comportamiento_alumno_screen.dart';
-import 'package:kk/screens/convivencia/carnet_screen.dart';
-import 'package:kk/screens/screens.dart';
-import 'package:kk/service/services.dart';
+import 'package:iJandula/firebase_options.dart';
+import 'package:iJandula/providers/alumnado_provider.dart';
+import 'package:iJandula/providers/centro_provider.dart';
+import 'package:iJandula/providers/convivencia_provider.dart';
+import 'package:iJandula/providers/credenciales_provider.dart';
+import 'package:iJandula/providers/dace_provider.dart';
+import 'package:iJandula/providers/expulsados_provider.dart';
+import 'package:iJandula/providers/profesor_provider.dart';
+import 'package:iJandula/providers/servicio_provider.dart';
+import 'package:iJandula/screens/convivencia/incidencia_telefono_screen.dart';
+import 'package:iJandula/screens/convivencia/reflexion_screen.dart';
+import 'package:iJandula/screens/convivencia/screen_expulsados.dart';
+import 'package:iJandula/screens/convivencia/comportamiento_alumno_screen.dart';
+import 'package:iJandula/screens/convivencia/carnet_screen.dart';
+import 'package:iJandula/screens/screens.dart';
+import 'package:iJandula/service/services.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -95,7 +100,7 @@ class MyApp extends StatelessWidget {
         "/": (BuildContext context) => const LoginScreen(),
         "home_screen": (BuildContext context) => const HomeScreen(),
         "main_screen": (BuildContext context) => const MainScreen(),
-        "convivencia_screen": (BuildContext context) => const ConvivenciaScreen(),
+        "convivencia_screen": (BuildContext context) =>  const ConvivenciaScreen(),
         "expulsados_screen": (BuildContext context) => const ExpulsadosScreen(),
         "screen_expulsados": (BuildContext context) => const ScreenExpulsados(),
         "mayores_screen": (BuildContext context) => const MayoresScreen(),

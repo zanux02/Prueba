@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:kk/providers/providers.dart';
+import 'package:iJandula/providers/providers.dart';
 //import 'package:url_launcher/url_launcher.Dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';

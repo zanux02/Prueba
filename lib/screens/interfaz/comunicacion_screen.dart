@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kk/screens/interfaz/agenda_screen.dart';
-import 'package:kk/widgets/lista_opciones.dart';
+import 'package:iJandula/screens/interfaz/agenda_screen.dart';
+import 'package:iJandula/widgets/lista_opciones.dart';
 
 import '../screens.dart';
 

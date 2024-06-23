@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kk/widgets/lista_opciones.dart';
-import 'package:kk/widgets/widgets.dart';
+import 'package:iJandula/widgets/lista_opciones.dart';
+import 'package:iJandula/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

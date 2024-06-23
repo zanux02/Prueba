@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kk/main.dart';
-import 'package:kk/service/services.dart';
+import 'package:iJandula/main.dart';
+import 'package:iJandula/service/services.dart';
 
 Size size = Size.zero;
 

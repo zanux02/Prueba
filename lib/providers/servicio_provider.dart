@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:kk/models/servicio_response.dart';
-import 'package:kk/utils/utilidades.dart';
+import 'package:iJandula/models/servicio_response.dart';
+import 'package:iJandula/utils/utilidades.dart';
 
 class ServicioProvider extends ChangeNotifier {
   List<Servicio> listadoAlumnosServicio = [];

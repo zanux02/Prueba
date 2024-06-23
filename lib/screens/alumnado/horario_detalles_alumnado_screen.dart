@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:kk/providers/alumnado_provider.dart';
-import 'package:kk/models/horario_response.dart';
+import 'package:iJandula/providers/alumnado_provider.dart';
+import 'package:iJandula/models/horario_response.dart';
 
 class HorarioDetallesAlumnadoScreen extends StatelessWidget {
   const HorarioDetallesAlumnadoScreen({Key? key}) : super(key: key);

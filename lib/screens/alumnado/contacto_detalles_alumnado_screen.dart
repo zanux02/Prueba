@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kk/providers/alumnado_provider.dart';
+import 'package:iJandula/providers/alumnado_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:kk/models/alumnos_response.dart';
-import 'package:kk/providers/providers.dart';
+import 'package:iJandula/models/alumnos_response.dart';
+import 'package:iJandula/providers/providers.dart';
 //import 'package:iseneca/screens/interfaz/login_screen.dart';
 //import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';

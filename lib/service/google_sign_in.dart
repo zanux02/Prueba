@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:kk/providers/credenciales_provider.dart';
-import 'package:kk/service/firebase_service.dart';
+import 'package:iJandula/providers/credenciales_provider.dart';
+import 'package:iJandula/service/firebase_service.dart';
 
 class GoogleSignIn extends StatefulWidget {
   const GoogleSignIn({Key? key}) : super(key: key);

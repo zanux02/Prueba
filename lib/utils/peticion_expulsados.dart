@@ -1,5 +1,5 @@
 
-import 'package:kk/models/expulsados_response.dart';
+import 'package:iJandula/models/expulsados_response.dart';
 
 class PeticionExpulsados{
 

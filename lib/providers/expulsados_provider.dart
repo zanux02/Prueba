@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kk/models/models.dart';
-import 'package:kk/utils/peticion_expulsados.dart';
+import 'package:iJandula/models/models.dart';
+import 'package:iJandula/utils/peticion_expulsados.dart';
 
 class ExpulsadosProvider extends ChangeNotifier {
   String seleccionCursos = ''; 

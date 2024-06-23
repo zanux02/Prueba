@@ -1,5 +1,5 @@
-export 'package:kk/widgets/item_table.dart';
-export 'package:kk/widgets/single_card.dart';
-export 'package:kk/widgets/background.dart';
-export 'package:kk/widgets/user_card.dart';
-export 'package:kk/widgets/title_page.dart';
+export 'package:iJandula/widgets/item_table.dart';
+export 'package:iJandula/widgets/single_card.dart';
+export 'package:iJandula/widgets/background.dart';
+export 'package:iJandula/widgets/user_card.dart';
+export 'package:iJandula/widgets/title_page.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kk/screens/interfaz/agenda_screen.dart';
-import 'package:kk/screens/interfaz/home_screen.dart';
-import 'package:kk/screens/screens.dart';
+import 'package:iJandula/screens/interfaz/agenda_screen.dart';
+import 'package:iJandula/screens/interfaz/home_screen.dart';
+import 'package:iJandula/screens/screens.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

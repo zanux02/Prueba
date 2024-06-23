@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kk/screens/convivencia/menu_expulsados.dart';
+import 'package:iJandula/screens/convivencia/menu_expulsados.dart';
 //import 'package:url_launcher/url_launcher.dart';
 
 class ScreenExpulsados extends StatelessWidget {

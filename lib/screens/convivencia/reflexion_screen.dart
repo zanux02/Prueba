@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kk/models/models.dart';
-import 'package:kk/providers/alumnado_provider.dart';
+import 'package:iJandula/models/models.dart';
+import 'package:iJandula/providers/alumnado_provider.dart';
 import 'package:provider/provider.dart';
 
 class ReflexionScreen extends StatelessWidget{

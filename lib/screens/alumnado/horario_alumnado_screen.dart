@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kk/providers/alumnado_provider.dart';
+import 'package:iJandula/providers/alumnado_provider.dart';
 import 'package:provider/provider.dart';
 
 class HorarioAlumnadoScreen extends StatelessWidget {

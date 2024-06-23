@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kk/widgets/single_card.dart';
-import 'package:kk/widgets/widgets.dart';
+import 'package:iJandula/widgets/single_card.dart';
+import 'package:iJandula/widgets/widgets.dart';
 
 class ItemTable extends StatelessWidget {
   const ItemTable({

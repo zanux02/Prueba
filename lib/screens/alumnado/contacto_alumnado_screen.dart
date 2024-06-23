@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kk/providers/alumnado_provider.dart';
+import 'package:iJandula/providers/alumnado_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:kk/providers/providers.dart';
+import 'package:iJandula/providers/providers.dart';
 
 class ContactoAlumnadoScreen extends StatelessWidget {
   const ContactoAlumnadoScreen({Key? key}) : super(key: key);

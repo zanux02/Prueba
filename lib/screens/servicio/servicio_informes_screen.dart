@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:kk/models/servicio_response.dart';
-import 'package:kk/providers/servicio_provider.dart';
+import 'package:iJandula/models/servicio_response.dart';
+import 'package:iJandula/providers/servicio_provider.dart';
 
 class ServicioInformesScreen extends StatefulWidget {
   const ServicioInformesScreen({Key? key}) : super(key: key);

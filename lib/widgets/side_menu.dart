@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kk/providers/expulsados_provider.dart';
+import 'package:iJandula/providers/expulsados_provider.dart';
 import 'package:provider/provider.dart';
 
 

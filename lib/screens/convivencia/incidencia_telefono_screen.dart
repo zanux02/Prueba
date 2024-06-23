@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kk/models/datos_incidencia_telefono.dart';
+import 'package:iJandula/models/datos_incidencia_telefono.dart';
 
 class IncidenciaTelefonoScreen extends StatefulWidget {
   const IncidenciaTelefonoScreen({Key? key}) : super(key: key);

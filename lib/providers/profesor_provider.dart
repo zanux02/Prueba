@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:kk/models/horario_response.dart';
-import 'package:kk/models/profesor_response.dart';
-import 'package:kk/utils/utilidades.dart';
+import 'package:iJandula/models/horario_response.dart';
+import 'package:iJandula/models/profesor_response.dart';
+import 'package:iJandula/utils/utilidades.dart';
 
 class ProfesorProvider extends ChangeNotifier{
   List<ProfesorRes> listadoProfesor = [];

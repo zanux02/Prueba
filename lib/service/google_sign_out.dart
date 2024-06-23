@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kk/service/firebase_service.dart';
+import 'package:iJandula/service/firebase_service.dart';
 
 class GoogleSignOut extends StatefulWidget {
   const GoogleSignOut({Key? key}) : super(key: key);

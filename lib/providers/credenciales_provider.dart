@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kk/models/credenciales_response.dart';
-import 'package:kk/utils/utilidades.dart';
+import 'package:iJandula/models/credenciales_response.dart';
+import 'package:iJandula/utils/utilidades.dart';
 
 class CredencialesProvider extends ChangeNotifier {
   //Script Google

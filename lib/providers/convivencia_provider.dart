@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kk/models/models.dart';
-import 'package:kk/utils/utilidades.dart';
+import 'package:iJandula/models/models.dart';
+import 'package:iJandula/utils/utilidades.dart';
 
 class ConvivenciaProvider extends ChangeNotifier {
   List<Expulsado> listaExpulsados = [];

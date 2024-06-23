@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kk/models/centro_response.dart';
+import 'package:iJandula/models/centro_response.dart';
 
 class CentroProvider extends ChangeNotifier {
   List<Profesor> listaProfesores = [];

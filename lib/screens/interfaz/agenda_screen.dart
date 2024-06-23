@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kk/widgets/lista_opciones.dart';
+import 'package:iJandula/widgets/lista_opciones.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class AgendaScreen extends StatelessWidget {

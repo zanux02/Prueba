@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kk/models/expulsados_response.dart';
-import 'package:kk/providers/expulsados_provider.dart';
-import 'package:kk/utils/human_formats.dart';
+import 'package:iJandula/models/expulsados_response.dart';
+import 'package:iJandula/providers/expulsados_provider.dart';
+import 'package:iJandula/utils/human_formats.dart';
 import 'package:provider/provider.dart';
 
 class MenuExpulsados extends StatelessWidget {

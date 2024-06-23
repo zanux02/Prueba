@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kk/models/profesor_response.dart';
-import 'package:kk/providers/profesor_provider.dart';
+import 'package:iJandula/models/profesor_response.dart';
+import 'package:iJandula/providers/profesor_provider.dart';
 import 'package:provider/provider.dart';
 
 class HorarioProfesoresScreen extends StatelessWidget {
