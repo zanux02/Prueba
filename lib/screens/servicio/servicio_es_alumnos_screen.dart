@@ -56,7 +56,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                   pageBuilder: (context, animation, secondaryAnimation) {
                     controllerTextoNombreAlumno.text = listaAlumnos[index].nombre;
 
-                    controllerTextoFechaEntrada.text = DateFormat("dd/MM/yyyy hh:mm").format(DateTime.now());
+                    controllerTextoFechaEntrada.text = DateFormat("dd/MM/yyyy HH:mm:ss").format(DateTime.now());
                     return dialogoBotones(
                       fechaCompleta,
                       controllerTextoNombreAlumno,
@@ -100,17 +100,14 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
         actions: [
           TextButton(
             onPressed: () {
-
                 // Separar fecha y hora de entrada
                 var fechaHoraEntrada = controllerTextoFechaEntrada.text.split(" ");
                 String fechaEntrada = fechaHoraEntrada[0].replaceAll("-", "/"); // Reemplazar guiones por barras
-
                 String horaEntrada = fechaHoraEntrada[1];
 
                 // Separar fecha y hora de salida
                 var fechaHoraSalida = controllerTextoFechaSalida.text.split(" ");
                 String fechaSalida = fechaHoraSalida[0].replaceAll("-", "/"); // Reemplazar guiones por barras
-
                 String horaSalida = fechaHoraSalida[1];
 
                 servicioProvider.setAlumnosServicio(
@@ -121,8 +118,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                   horaSalida,
                 );
                 Navigator.pop(context);
-              }
-            ,
+              },
             child: const Text(
               "CONFIRMAR",
               style: TextStyle(color: Colors.white),
@@ -163,7 +159,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
                     onPressed: () {
                       setState(() {
                         fechaCompleta = true;
-                        controllerTextoFechaSalida.text = DateFormat("dd/MM/yyyy hh:mm").format(DateTime.now());
+                        controllerTextoFechaSalida.text = DateFormat("dd/MM/yyyy HH:mm:ss").format(DateTime.now());
                       });
                     },
                     icon: const Icon(
