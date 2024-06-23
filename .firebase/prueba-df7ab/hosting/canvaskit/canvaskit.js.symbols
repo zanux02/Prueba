@@ -1224,7 +1224,7 @@
 1223:SkPaint::refPathEffect\28\29\20const
 1224:SkPaint::operator=\28SkPaint\20const&\29
 1225:SkMipmap::getLevel\28int\2c\20SkMipmap::Level*\29\20const
-1226:SiJandulanownRuntimeEffects::GetKnownRuntimeEffect\28SiJandulanownRuntimeEffects::StableKey\29
+1226:SkKnownRuntimeEffects::GetKnownRuntimeEffect\28SkKnownRuntimeEffects::StableKey\29
 1227:SkJSONWriter::endArray\28\29
 1228:SkJSONWriter::appendCString\28char\20const*\2c\20char\20const*\29
 1229:SkIntersections::setCoincident\28int\29
@@ -1742,8 +1742,8 @@
 1741:SkMatrix::mapHomogeneousPoints\28SkPoint3*\2c\20SkPoint3\20const*\2c\20int\29\20const
 1742:SkMaskFilterBase::getFlattenableType\28\29\20const
 1743:SkMaskBuilder::AllocImage\28unsigned\20long\2c\20SkMaskBuilder::AllocType\29
-1744:SiJandulanownRuntimeEffects::\28anonymous\20namespace\29::make_blur_2D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
-1745:SiJandulanownRuntimeEffects::\28anonymous\20namespace\29::make_blur_1D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
+1744:SkKnownRuntimeEffects::\28anonymous\20namespace\29::make_blur_2D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
+1745:SkKnownRuntimeEffects::\28anonymous\20namespace\29::make_blur_1D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
 1746:SkJSONWriter::appendString\28char\20const*\2c\20unsigned\20long\29
 1747:SkIntersections::insertNear\28double\2c\20double\2c\20SkDPoint\20const&\2c\20SkDPoint\20const&\29
 1748:SkIntersections::flip\28\29
@@ -4626,7 +4626,7 @@
 4625:byn$mgfn-shared$SkPictureRecord::onDrawOval\28SkRect\20const&\2c\20SkPaint\20const&\29
 4626:byn$mgfn-shared$SkPictureRecord::didConcat44\28SkM44\20const&\29
 4627:byn$mgfn-shared$SkPairPathEffect::~SkPairPathEffect\28\29.1
-4628:byn$mgfn-shared$SiJandulanownRuntimeEffects::\28anonymous\20namespace\29::make_blur_1D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
+4628:byn$mgfn-shared$SkKnownRuntimeEffects::\28anonymous\20namespace\29::make_blur_1D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
 4629:byn$mgfn-shared$SkJSONWriter::endArray\28\29
 4630:byn$mgfn-shared$SkComposePathEffect::~SkComposePathEffect\28\29
 4631:byn$mgfn-shared$SkColorSpace::MakeSRGB\28\29

@@ -1757,9 +1757,9 @@
 1756:SkMask::computeImageSize\28\29\20const
 1757:SkMask::AlphaIter<\28SkMask::Format\294>::operator*\28\29\20const
 1758:SkMakeImageFromRasterBitmap\28SkBitmap\20const&\2c\20SkCopyPixelsMode\29
-1759:SiJandulanownRuntimeEffects::\28anonymous\20namespace\29::make_blur_2D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
-1760:SiJandulanownRuntimeEffects::\28anonymous\20namespace\29::make_blur_1D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
-1761:SiJandulanownRuntimeEffects::GetKnownRuntimeEffect\28SiJandulanownRuntimeEffects::StableKey\29
+1759:SkKnownRuntimeEffects::\28anonymous\20namespace\29::make_blur_2D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
+1760:SkKnownRuntimeEffects::\28anonymous\20namespace\29::make_blur_1D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
+1761:SkKnownRuntimeEffects::GetKnownRuntimeEffect\28SkKnownRuntimeEffects::StableKey\29
 1762:SkJSONWriter::beginValue\28bool\29
 1763:SkIntersections::flip\28\29
 1764:SkImageFilter::getInput\28int\29\20const
@@ -5846,7 +5846,7 @@
 5845:byn$mgfn-shared$SkPictureRecord::onDrawRect\28SkRect\20const&\2c\20SkPaint\20const&\29
 5846:byn$mgfn-shared$SkPictureRecord::onDrawPaint\28SkPaint\20const&\29
 5847:byn$mgfn-shared$SkPictureRecord::didConcat44\28SkM44\20const&\29
-5848:byn$mgfn-shared$SiJandulanownRuntimeEffects::\28anonymous\20namespace\29::make_blur_1D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
+5848:byn$mgfn-shared$SkKnownRuntimeEffects::\28anonymous\20namespace\29::make_blur_1D_effect\28int\2c\20SkRuntimeEffect::Options\20const&\29
 5849:byn$mgfn-shared$SkJSONWriter::endArray\28\29
 5850:byn$mgfn-shared$OT::cff1::sanitize\28hb_sanitize_context_t*\29\20const
 5851:byn$mgfn-shared$OT::IntType<unsigned\20short\2c\202u>*\20hb_serialize_context_t::extend_min<OT::IntType<unsigned\20short\2c\202u>>\28OT::IntType<unsigned\20short\2c\202u>*\29
