@@ -81,7 +81,7 @@ class TextoAplicacion extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: size.height * 0.05),
       child: const Text(
-        "iSéneca",
+        "iJándula",
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: 'ErasDemi',
