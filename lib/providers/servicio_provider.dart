@@ -7,8 +7,8 @@ class ServicioProvider extends ChangeNotifier {
   List<Servicio> listadoAlumnosServicio = [];
 
   final String _baseUrl =
-      'https://script.google.com/macros/s/AKfycbz7ZwCTn2XXpXuPO2-m9tyR1sIC9lOMgvPPOsbDehda2NRoko871PvZvzF1jQnaq8Du/exec';
-  final String _idHoja = '1Jq4ihUzE5r4fqK9HHZQv1dg4AAgzdjPbGkpJRByu-Ds';
+      'https://script.google.com/macros/s/AKfycbww17NqHZU5opz9SkMtUASKZOg1Hg6KsExRSvlqAMyrx4i0Ax9P5I7IQtKRcnsMKVivdw/exec';
+  final String _idHoja = '1u79XugcalPc4aPcymy9OsWu1qdg8aKCBvaPWQOH187I';
   final String _hojaServicio = 'Servicio';
 
   ServicioProvider() {
@@ -38,7 +38,7 @@ class ServicioProvider extends ChangeNotifier {
       String horaSalida) async {
     try {
       final url = Uri.parse(
-          '$_baseUrl?spreadsheetId=$_idHoja&sheet=$_hojaServicio&nombreAlumno=$nombreAlumno&fechaEntrada=$fechaEntrada&horaEntrada=$horaEntrada&fechaSalida=$fechaSalida&horaSalida=$horaSalida');
+          '$_baseUrl?spreadsheetId=$_idHoja&sheet=$_hojaServicio&nombreAlumno=$nombreAlumno&fechaEntrada=$fechaEntrada%20$horaEntrada&fechaSalida=$fechaSalida%20$horaSalida');
       
       final response = await http.get(url);
 
