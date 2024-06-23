@@ -61618,7 +61618,7 @@ this.a.toString
 s.push(B.Oo)
 s.push(B.Oh)
 return s},
-amP(a,b){return A.aTO(B.Tq,!0,b)},
+amP(a,b){return A.aTO(B.Tr,!0,b)},
 anz(a,b){var s,r,q,p,o,n,m,l,k,j=this,i=null
 j.a.toString
 s=A.cr(a,B.qi)
@@ -64418,7 +64418,7 @@ o=c.glm()
 n=o.y
 switch(n==null?A.l(o).i("bt.T").a(n):n){case B.eg:a.a=k.$0()
 o=c.a.cy
-o=A.aiZ(B.Tf,b,b,b)
+o=A.aiZ(B.Tg,b,b,b)
 i=A.dm(b,m,o,c.gUz(),b,"Switch to input")
 break
 case B.hy:a.a=k.$0()
@@ -103867,7 +103867,7 @@ A.YS.prototype={
 aH(){this.aX()
 A.kq(B.Rq,new A.azD(this),t.P)},
 F(b9){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1,a2,a3,a4,a5=this,a6=null,a7=a5.a5t($.lk()),a8=B.c.a8(127.5),a9=A.a([new A.bS(2,B.a0,A.B(a8,158,158,158),B.a7w,10),new A.bS(0,B.a0,A.B(a8,255,255,255),B.f,0)],t.V),b0=A.bX("dd-MM-yyyy",a6),b1=A.bK(b9,a6,t.l).w.a,b2=A.W(b9),b3=b2.fr,b4=A.dK(a6,b3,a6,a6,B.ON),b5=A.bf(a6,b1.b*0.05,a6),b6=a5.d?b1.a*0.95:250,b7=b2.id,b8=t.p
-b6=A.mw(A.be(A.a([A.aq(a6,A.cK(A.a2(" \ud83d\udcc6 FECHA \ud83d\udcc6 ",a6,a6,a6,a6,A.db(a6,a6,b7,a6,a6,a6,a6,a6,a6,a6,a6,18,B.cC,a6,B.ac,a6,a6,!0,a6,a6,a6,a6,a6,a6,a6,a6),a6,a6,a6),a6,a6),B.h,a6,a6,new A.br(b3,a6,a6,B.d9,a6,a6,B.F),a6,30,a6,a6,a6,a6,1/0),A.bf(a6,15,a6),A.be(A.a([A.a2("\ud83d\udcc6 Fecha Seleccionada: "+b0.c3(a5.e),a6,a6,a6,a6,B.e2,a6,a6,a6),A.bf(a6,10,a6),A.b5h(B.Tn,B.agx,new A.az8(a5,b2,b9,b1)),A.bf(a6,10,a6)],b8),B.l,B.bO,B.q)],b8),B.l,B.m,B.q),B.da,new A.br(b7,a6,a6,B.be,a9,a6,B.F),B.aQ,a6,b6)
+b6=A.mw(A.be(A.a([A.aq(a6,A.cK(A.a2(" \ud83d\udcc6 FECHA \ud83d\udcc6 ",a6,a6,a6,a6,A.db(a6,a6,b7,a6,a6,a6,a6,a6,a6,a6,a6,18,B.cC,a6,B.ac,a6,a6,!0,a6,a6,a6,a6,a6,a6,a6,a6),a6,a6,a6),a6,a6),B.h,a6,a6,new A.br(b3,a6,a6,B.d9,a6,a6,B.F),a6,30,a6,a6,a6,a6,1/0),A.bf(a6,15,a6),A.be(A.a([A.a2("\ud83d\udcc6 Fecha Seleccionada: "+b0.c3(a5.e),a6,a6,a6,a6,B.e2,a6,a6,a6),A.bf(a6,10,a6),A.b5h(B.To,B.agx,new A.az8(a5,b2,b9,b1)),A.bf(a6,10,a6)],b8),B.l,B.bO,B.q)],b8),B.l,B.m,B.q),B.da,new A.br(b7,a6,a6,B.be,a9,a6,B.F),B.aQ,a6,b6)
 s=A.bf(a6,25,a6)
 r=a5.d?b1.a*0.95:250
 q=A.aq(a6,A.cK(A.a2(" \ud83d\udd58 HORA \ud83d\udd58 ",a6,a6,a6,a6,A.db(a6,a6,b7,a6,a6,a6,a6,a6,a6,a6,a6,18,B.cC,a6,B.ac,a6,a6,!0,a6,a6,a6,a6,a6,a6,a6,a6),a6,a6,a6),a6,a6),B.h,a6,a6,new A.br(b3,a6,a6,B.d9,a6,a6,B.F),a6,30,a6,a6,a6,a6,1/0)
@@ -104498,7 +104498,7 @@ $S:0}
 A.SC.prototype={
 F(a){var s=null,r={},q=A.ef(a,!0,t.KQ)
 r.a=A.a([],t.Hd)
-return A.ds(A.dK(s,s,A.dm(s,s,B.Tm,new A.al5(a),s,s),s,B.lA),A.aTY(new A.al6(r,q),q.is(),t.We),s,s)}}
+return A.ds(A.dK(s,s,A.dm(s,s,B.Tn,new A.al5(a),s,s),s,B.lA),A.aTY(new A.al6(r,q),q.is(),t.We),s,s)}}
 A.al5.prototype={
 $0(){A.c5(this.a,!1).fG()},
 $S:0}
@@ -104878,10 +104878,10 @@ s.toString
 r=A.ef(s,!0,t.SR)
 s=A.iv(B.ahE,new A.aIa(n),m)
 q=t.p
-s=A.dK(A.a([A.iv(B.ahp,new A.aIb(n,c,d,r,b),m)],q),m,s,90,m)
+s=A.dK(A.a([A.iv(B.ahp,new A.aIb(n,c,d,r,b),m)],q),m,s,100,m)
 p=A.yW(!0,B.cl,!1,m,!0,B.E,m,A.Nz(),b,m,m,m,m,m,2,A.kw(m,new A.iq(4,A.dk(10),B.hh),m,m,m,m,m,m,!0,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,B.aM,"NOMBRE ALUMNO",m,m,m,m,m,m,m,m,m,m,m,m,m),B.u,!0,m,!0,!1,!1,m,m,m,m,m,m,m,m,1,m,m,!1,"\u2022",m,m,m,m,m,!1,m,!1,m,!0,m,B.dE,m,m,B.cw,B.bU,m,m,m,m,m,m,m,B.a6,m,B.eF,m,m,m,m)
 o=A.yW(!0,B.cl,!1,m,!0,B.E,m,A.Nz(),c,m,m,m,m,m,2,A.kw(m,new A.iq(4,A.dk(10),B.hh),m,m,m,m,m,m,!0,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,B.aM,"FECHA ENTRADA",m,m,m,m,m,m,m,m,m,m,m,m,m),B.u,!0,m,!0,!1,!1,m,m,m,m,m,m,m,m,1,m,m,!1,"\u2022",m,m,m,m,m,!1,m,!1,m,!0,m,B.dE,m,m,B.cw,B.bU,m,m,m,m,m,m,m,B.a6,m,B.eF,m,m,m,m)
-l=A.dm(m,m,B.Tr,new A.aIc(l,n,d),m,m)
+l=A.dm(m,m,B.Tm,new A.aIc(l,n,d),m,m)
 return A.ds(s,A.nC(!0,A.aq(m,A.be(A.a([p,B.t2,o,B.t2,A.yW(!0,B.cl,!1,m,!0,B.E,m,A.Nz(),d,m,m,m,m,m,2,A.kw(m,new A.iq(4,A.dk(10),B.hh),m,m,m,m,m,m,!0,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,B.aM,"FECHA SALIDA",m,m,m,m,m,m,m,m,l,m,m,m,m),B.u,!0,m,!0,m,!1,m,m,m,m,m,m,m,m,1,m,m,!1,"\u2022",m,m,m,m,m,!1,m,!0,m,!0,m,B.dE,m,m,B.cw,B.bU,m,m,m,m,m,m,m,B.a6,m,B.eF,m,m,m,m)],q),B.l,B.m,B.q),B.h,B.k,m,m,m,m,m,B.nf,m,m,m),B.an,!0),m,m)}}
 A.aI8.prototype={
 $2(a,b){var s=null,r=this.b
@@ -105255,7 +105255,7 @@ $S:0}
 A.Ep.prototype={
 ae(){return new A.a0M(B.j)}}
 A.a0M.prototype={
-F(a){var s=null,r=t.p,q=A.cj(A.a([A.dG(A.aq(s,s,B.h,s,s,s,s,s,s,s,s,s,s),1),A.dm(s,s,B.To,new A.aEP(),s,s),A.dm(B.cN,B.k,B.Tt,new A.aEQ(this),s,s)],r),B.l,B.m,B.q),p=this.d
+F(a){var s=null,r=t.p,q=A.cj(A.a([A.dG(A.aq(s,s,B.h,s,s,s,s,s,s,s,s,s,s),1),A.dm(s,s,B.Tp,new A.aEP(),s,s),A.dm(B.cN,B.k,B.Tt,new A.aEQ(this),s,s)],r),B.l,B.m,B.q),p=this.d
 return A.be(A.a([q,new A.HW(A.cj(A.a([A.dG(A.aq(s,s,B.h,s,s,s,s,s,s,s,s,s,s),1),A.bf(A.hi(A.a([A.bC(s,B.OK,B.u,!1,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,new A.aER(a),s,s,s,s,s,s)],r),s,s,s,s,B.a3,!1),400,220)],r),B.l,B.m,B.q),p,!1,!1,!1,!1,!1,s)],r),B.l,B.m,B.q)}}
 A.aEP.prototype={
 $0(){A.eK("https://www.iesjandula.es")},
@@ -122225,21 +122225,21 @@ B.SZ=new A.da(57537,"MaterialIcons",null,!1)
 B.tQ=new A.da(58332,"MaterialIcons",null,!1)
 B.T7=new A.da(58372,"MaterialIcons",null,!1)
 B.Tc=new A.da(58929,"MaterialIcons",null,!1)
-B.Tf=new A.da(61453,"MaterialIcons",null,!1)
+B.Tg=new A.da(61453,"MaterialIcons",null,!1)
 B.Tj=new A.df(null,null,null,null,null,B.k,null,null,null)
 B.Tk=new A.df(null,null,null,null,null,B.w,null,null,null)
 B.tR=new A.df(24,0,400,0,48,B.w,1,null,!1)
 B.Th=new A.da(62974,"MaterialIcons",null,!1)
 B.tS=new A.dW(B.Th,null,null,null,null)
-B.Tm=new A.dW(B.nr,null,null,null,null)
+B.Tf=new A.da(60988,"MaterialIcons",null,!1)
+B.Tm=new A.dW(B.Tf,30,null,null,null)
+B.Tn=new A.dW(B.nr,null,null,null,null)
 B.Ti=new A.da(984763,"MaterialIcons",null,!1)
-B.Tn=new A.dW(B.Ti,null,null,null,null)
+B.To=new A.dW(B.Ti,null,null,null,null)
 B.T8=new A.da(58447,"MaterialIcons",null,!1)
-B.To=new A.dW(B.T8,null,B.k,null,null)
+B.Tp=new A.dW(B.T8,null,B.k,null,null)
 B.Tb=new A.da(58727,"MaterialIcons",null,!1)
-B.Tq=new A.dW(B.Tb,null,null,null,null)
-B.Tg=new A.da(62441,"MaterialIcons",null,!1)
-B.Tr=new A.dW(B.Tg,30,null,null,null)
+B.Tr=new A.dW(B.Tb,null,null,null,null)
 B.T9=new A.da(58513,"MaterialIcons",null,!1)
 B.Ts=new A.dW(B.T9,null,null,null,null)
 B.Te=new A.da(60157,"MaterialIcons",null,!1)
@@ -124876,9 +124876,9 @@ B.ahc=new A.am("Bandeja de firmas",null,B.lu,null,null,null,null,null,null,null,
 B.a33=A.a(s([B.Tl,B.ahc]),t.p)
 B.a9q=new A.yh(B.bd,B.m,B.q,B.l,null,B.bT,null,B.a33,null)
 B.SY=new A.da(57458,"MaterialIcons",null,!1)
-B.Tp=new A.dW(B.SY,null,B.k,null,null)
+B.Tq=new A.dW(B.SY,null,B.k,null,null)
 B.ahS=new A.am("Avisos",null,B.lu,null,null,null,null,null,null,null,null)
-B.a13=A.a(s([B.Tp,B.ahS]),t.p)
+B.a13=A.a(s([B.Tq,B.ahS]),t.p)
 B.a9r=new A.yh(B.bd,B.m,B.q,B.l,null,B.bT,null,B.a13,null)
 B.a9s=new A.Gj(1333)
 B.p5=new A.Gj(2222)
@@ -125551,7 +125551,7 @@ B.ahx=new A.am("\xbfHace tareas?",null,B.pL,null,null,null,null,null,null,null,n
 B.ahA=new A.am("\xbfBuen comportamiento?",null,B.iw,null,null,null,null,null,null,null,null)
 B.ahB=new A.am("ALUMNADO",null,null,null,null,null,null,null,null,null,null)
 B.Qi=new A.u(4294906112)
-B.adS=new A.y(!0,B.Qi,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+B.adS=new A.y(!0,B.Qi,null,null,null,null,16,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.ahE=new A.am("CANCELAR",null,B.adS,null,null,null,null,null,null,null,null)
 B.ahF=new A.am("1BACH B",null,null,null,null,null,null,null,null,null,null)
 B.ahG=new A.am("El alumno ha realizado sus tareas correctamente",null,B.d5,null,null,null,null,null,null,null,null)
