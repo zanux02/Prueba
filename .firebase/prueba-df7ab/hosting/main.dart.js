@@ -103390,7 +103390,7 @@ zA(a,b,c,d,e){return this.a6a(a,b,c,d,e)},
 a6a(a,b,c,d,e){var s=0,r=A.G(t.H),q=1,p,o,n,m,l,k
 var $async$zA=A.H(function(f,g){if(f===1){p=g
 s=q}while(true)switch(s){case 0:q=3
-o=A.i_("https://script.google.com/macros/s/AKfycbww17NqHZU5opz9SkMtUASKZOg1Hg6KsExRSvlqAMyrx4i0Ax9P5I7IQtKRcnsMKVivdw/exec?spreadsheetId=1u79XugcalPc4aPcymy9OsWu1qdg8aKCBvaPWQOH187I&sheet=Servicio&nombreAlumno="+a+"&fechaEntrada="+b+"&horaEntrada="+c+"&fechaSalida="+d+"&horaSalida="+e,0,null)
+o=A.i_("https://script.google.com/macros/s/AKfycbww17NqHZU5opz9SkMtUASKZOg1Hg6KsExRSvlqAMyrx4i0Ax9P5I7IQtKRcnsMKVivdw/exec?spreadsheetId=1u79XugcalPc4aPcymy9OsWu1qdg8aKCBvaPWQOH187I&sheet=Servicio&nombreAlumno="+a+"&fechaEntrada="+b+"&horaEntrada="+c+"&fechaSalida="+d+"&horaSalida="+e+" ",0,null)
 s=6
 return A.P(A.beX(o),$async$zA)
 case 6:n=g

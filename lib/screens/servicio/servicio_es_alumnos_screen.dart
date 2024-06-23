@@ -93,7 +93,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
           onPressed: () => Navigator.pop(context),
           child: const Text(
             "CANCELAR",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Color.fromARGB(255, 255, 17, 0)),
           ),
         ),
         leadingWidth: 90,
@@ -121,7 +121,7 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
               },
             child: const Text(
               "CONFIRMAR",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Color.fromARGB(255, 0, 255, 8)),
             ),
           ),
         ],
