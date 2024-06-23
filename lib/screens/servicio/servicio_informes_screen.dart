@@ -147,7 +147,7 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
             height: MediaQuery.of(context).copyWith().size.height * 0.25,
             child: CupertinoDatePicker(
                 initialDateTime: DateTime.now(),
-                minimumYear: DateTime.now().year - 1,
+                minimumYear: DateTime.now().year - 2,
                 maximumYear: DateTime.now().year,
                 mode: CupertinoDatePickerMode.date,
                 onDateTimeChanged: (value) {
