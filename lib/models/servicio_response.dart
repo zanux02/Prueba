@@ -10,29 +10,41 @@ class ServicioResponse {
   factory ServicioResponse.fromJson(String str) =>
       ServicioResponse.fromMap(json.decode(str));
 
-  factory ServicioResponse.fromMap(Map<String, dynamic> json) =>
-      ServicioResponse(
-        result: List<Servicio>.from(
-            json["results"].map((x) => Servicio.fromMap(x))),
-      );
+  factory ServicioResponse.fromMap(Map<String, dynamic> json) {
+    List<Servicio> serviciosList = [];
+
+    if (json.containsKey("results")) {
+      serviciosList = List<Servicio>.from(
+          json["results"].map((x) => Servicio.fromJson(x)));
+    }
+    return ServicioResponse(
+      result: serviciosList,
+    );
+  }
 }
+
 
 class Servicio {
   Servicio({
     required this.nombreAlumno,
     required this.fechaEntrada,
+    required this.horaEntrada,
     required this.fechaSalida,
+    required this.horaSalida,
   });
 
   String nombreAlumno;
   String fechaEntrada;
+  String horaEntrada;
   String fechaSalida;
+  String horaSalida;
 
-  factory Servicio.fromJson(String str) => Servicio.fromMap(json.decode(str));
-
-  factory Servicio.fromMap(Map<String, dynamic> json) => Servicio(
-        nombreAlumno: json["NombreAlumno"],
-        fechaEntrada: json["FechaEntrada"],
-        fechaSalida: json["FechaSalida"],
+  factory Servicio.fromJson(Map<String, dynamic> json) => Servicio(
+        nombreAlumno: json[" "] ?? "",
+        fechaEntrada: json["FechaEntrada"] ?? "",
+        horaEntrada: json["HoraEntrada"] ?? "",
+        fechaSalida: json["FechaSalida"] ?? "",
+        horaSalida: json["HoraSalida"] ?? "",
       );
 }
+

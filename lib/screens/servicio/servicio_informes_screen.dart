@@ -17,17 +17,15 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
   bool fechaInicioEscogida = false;
   List<Servicio> listaAlumnosFechas = [];
   List<String> listaAlumnosNombres = [];
+  DateTime dateTimeInicio = DateTime.now();
+  DateTime dateTimeFin = DateTime.now();
   int size = 0;
   int repeticiones = 0;
-  late DateTime dateTimeInicio; // Declaración de dateTimeInicio como variable de instancia
-  late DateTime dateTimeFin;    // Declaración de dateTimeFin como variable de instancia
 
   @override
   void initState() {
     super.initState();
-    // Inicializar dateTimeInicio y dateTimeFin con la fecha actual al iniciar la pantalla
-    dateTimeInicio = DateTime.now();
-    dateTimeFin = DateTime.now();
+    // Llamar a updateLista con las fechas actuales al iniciar la pantalla
     updateLista(context, dateTimeInicio, dateTimeFin);
   }
 
@@ -94,15 +92,20 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                       listaAlumnosNombres = [];
                       updateLista(context, dateTimeInicio, dateTimeFin);
 
+                      for (int i = 0; i < listaAlumnosFechas.length; i++) {
+                        listaAlumnosNombres
+                            .add(listaAlumnosFechas[i].nombreAlumno);
+                      }
+
                       listaAlumnosNombres =
-                          listaAlumnosFechas.map((e) => e.nombreAlumno).toList();
+                          listaAlumnosNombres.toSet().toList();
 
                       listaAlumnosNombres.sort((a, b) => a.compareTo(b));
                       size = listaAlumnosNombres.length;
                     });
                   },
                   child: const Text("MOSTRAR"),
-                ),
+                )
               ],
             ),
           ),
@@ -110,14 +113,13 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
             child: ListView.builder(
               itemCount: size,
               itemBuilder: (context, index) {
-                repeticiones = _calcularRepeticiones(listaAlumnosNombres[index]);
+                repeticiones =
+                    _calcularRepeticiones(listaAlumnosNombres[index]);
 
                 return GestureDetector(
                   onTap: () => Navigator.pushNamed(
-                    context,
-                    "servicio_informes_detalles_screen",
-                    arguments: listaAlumnosNombres[index],
-                  ),
+                      context, "servicio_informes_detalles_screen",
+                      arguments: listaAlumnosNombres[index]),
                   child: ListTile(
                     title: Text(listaAlumnosNombres[index]),
                     subtitle: Text("Cantidad $repeticiones"),
@@ -125,7 +127,7 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                 );
               },
             ),
-          ),
+          )
         ],
       ),
     );
@@ -134,12 +136,12 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
   Future<void> _selectDate(BuildContext context, String mode) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: mode == "Inicio" ? dateTimeInicio : dateTimeFin,
+      initialDate: DateTime.now(),
       firstDate: DateTime(DateTime.now().year - 2),
       lastDate: DateTime.now(),
     );
 
-    if (pickedDate != null) {
+    if (pickedDate != null && pickedDate != DateTime.now()) {
       String formattedDate = DateFormat("dd/MM/yyyy").format(pickedDate);
       setState(() {
         if (mode == "Inicio") {
@@ -161,8 +163,6 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
     final listadoAlumnadoServicio =
         servicioProviderLista.listadoAlumnosServicio;
 
-    listaAlumnosFechas.clear(); // Limpiar la lista antes de agregar los nuevos datos
-
     for (int i = 0; i < listadoAlumnadoServicio.length; i++) {
       bool dentro = compararFechas(
           listadoAlumnadoServicio[i], dateTimeInicio, dateTimeFin);
@@ -177,12 +177,13 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
       Servicio listadoAlumnadoServicio, DateTime dateInicio, DateTime dateFin) {
     bool estaDentro = false;
 
-    DateTime fechaEntradaParseada =
-        DateFormat("dd/MM/yyyy").parse(listadoAlumnadoServicio.fechaEntrada);
-    DateTime fechaSalidaParseada =
-        DateFormat("dd/MM/yyyy").parse(listadoAlumnadoServicio.fechaSalida);
+    DateTime fechaEntradaParseada = DateFormat("dd/MM/yyyy")
+        .parse(listadoAlumnadoServicio.fechaEntrada);
 
-    if (fechaEntradaParseada.isAfter(dateInicio.subtract(const Duration(days: 1))) &&
+    DateTime fechaSalidaParseada = DateFormat("dd/MM/yyyy")
+        .parse(listadoAlumnadoServicio.fechaSalida);
+
+    if (fechaEntradaParseada.isAfter(dateInicio.subtract(const Duration(days: 0))) &&
         fechaSalidaParseada.isBefore(dateFin.add(const Duration(days: 1)))) {
       estaDentro = true;
     }
