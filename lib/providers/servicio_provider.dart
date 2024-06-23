@@ -14,7 +14,6 @@ class ServicioProvider extends ChangeNotifier {
   ServicioProvider() {
     debugPrint('Servicio Provider inicializado');
     getAlumnosServicio();
-    notifyListeners();
   }
 
   Future<void> getAlumnosServicio() async {
@@ -31,11 +30,16 @@ class ServicioProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> _setAlumnos(String baseUrl, String api, String spreadsheetId,
-      String sheet, String nombreAlumno, String fechaEntrada, String fechaSalida) async {
-    final url = Uri.parse('$baseUrl?spreadsheetId=$spreadsheetId&sheet=$sheet&nombreAlumno=$nombreAlumno&fechaEntrada=$fechaEntrada&fechaSalida=$fechaSalida');
-
+  Future<void> setAlumnosServicio(
+      String nombreAlumno,
+      String fechaEntrada,
+      String horaEntrada,
+      String fechaSalida,
+      String horaSalida) async {
     try {
+      final url = Uri.parse(
+          '$_baseUrl?spreadsheetId=$_idHoja&sheet=$_hojaServicio&nombreAlumno=$nombreAlumno&fechaEntrada=$fechaEntrada&horaEntrada=$horaEntrada&fechaSalida=$fechaSalida&horaSalida=$horaSalida');
+      
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -46,12 +50,5 @@ class ServicioProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error: $e');
     }
-  }
-
-  void setAlumnosServicio(
-      String nombreAlumno, String fechaEntrada, String fechaSalida) {
-    _setAlumnos(
-        _baseUrl, '', _idHoja, _hojaServicio, nombreAlumno, fechaEntrada, fechaSalida);
-    notifyListeners();
   }
 }

@@ -103,10 +103,22 @@ class _ServicioESAlumnosScreenState extends State<ServicioESAlumnosScreen> {
               if (!fechaCompleta) {
                 return null;
               } else {
+                // Separar fecha y hora de entrada
+                var fechaHoraEntrada = controllerTextoFechaEntrada.text.split(" ");
+                String fechaEntrada = fechaHoraEntrada[0];
+                String horaEntrada = fechaHoraEntrada[1];
+
+                // Separar fecha y hora de salida
+                var fechaHoraSalida = controllerTextoFechaSalida.text.split(" ");
+                String fechaSalida = fechaHoraSalida[0];
+                String horaSalida = fechaHoraSalida[1];
+
                 servicioProvider.setAlumnosServicio(
                   controllerTextoNombreAlumno.text,
-                  controllerTextoFechaEntrada.text,
-                  controllerTextoFechaSalida.text,
+                  fechaEntrada,
+                  horaEntrada,
+                  fechaSalida,
+                  horaSalida,
                 );
                 Navigator.pop(context);
               }
