@@ -38,7 +38,7 @@ class ServicioProvider extends ChangeNotifier {
       String horaSalida) async {
     try {
       final url = Uri.parse(
-          '$_baseUrl?spreadsheetId=$_idHoja&sheet=$_hojaServicio&nombreAlumno=$nombreAlumno&fechaEntrada=$fechaEntrada&horaEntrada$horaEntrada&fechaSalida=$fechaSalida&horaSalida$horaSalida');
+          '$_baseUrl?spreadsheetId=$_idHoja&sheet=$_hojaServicio&nombreAlumno=$nombreAlumno&fechaEntrada=$fechaEntrada&horaEntrada$horaEntrada&fechaSalida=$fechaSalida&horaSalida=$horaSalida');
       
       final response = await http.get(url);
 
