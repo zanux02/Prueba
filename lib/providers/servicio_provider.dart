@@ -6,8 +6,7 @@ import 'package:iJandula/utils/utilidades.dart';
 class ServicioProvider extends ChangeNotifier {
   List<Servicio> listadoAlumnosServicio = [];
 
-  final String _baseUrl =
-      'https://script.google.com/macros/s/AKfycbww17NqHZU5opz9SkMtUASKZOg1Hg6KsExRSvlqAMyrx4i0Ax9P5I7IQtKRcnsMKVivdw/exec';
+  final String _baseUrl = 'https://script.google.com/macros/s/AKfycbyZ_S8DAf-qJbL8-WS3xL3-lUBHCL0gtLhWJ2bcN5PlovwqLcrzY4hzxECqeFll9UT01g/exec';
   final String _idHoja = '1u79XugcalPc4aPcymy9OsWu1qdg8aKCBvaPWQOH187I';
   final String _hojaServicio = 'Servicio';
 
@@ -18,8 +17,7 @@ class ServicioProvider extends ChangeNotifier {
 
   Future<void> getAlumnosServicio() async {
     try {
-      const url =
-          'https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1u79XugcalPc4aPcymy9OsWu1qdg8aKCBvaPWQOH187I&sheet=Servicio';
+      final url = '$_baseUrl?spreadsheetId=$_idHoja&sheet=$_hojaServicio';
       String jsonData = await Utilidades.getJsonData(url);
       jsonData = '{"results":$jsonData}';
       final servicioResponse = ServicioResponse.fromJson(jsonData);
