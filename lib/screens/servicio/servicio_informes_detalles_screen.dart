@@ -3,6 +3,7 @@ import 'package:iJandula/models/servicio_response.dart';
 import 'package:provider/provider.dart';
 import 'package:iJandula/models/models.dart';
 import 'package:iJandula/providers/providers.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ServicioInformesDetallesScreen extends StatelessWidget {
@@ -10,7 +11,11 @@ class ServicioInformesDetallesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nombreParametro = ModalRoute.of(context)!.settings.arguments;
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final nombreParametro = args['nombreAlumno'];
+    final dateTimeInicio = args['dateTimeInicio'];
+    final dateTimeFin = args['dateTimeFin'];
+
     final servicioProvider = Provider.of<ServicioProvider>(context);
     final alumnadoProvider = Provider.of<AlumnadoProvider>(context);
     final listaAlumnos = alumnadoProvider.listadoAlumnos;
@@ -24,10 +29,15 @@ class ServicioInformesDetallesScreen extends StatelessWidget {
 
     final listadoAlumnosDetalles = servicioProvider.listadoAlumnosServicio;
 
-    // Filtrar los servicios del alumno seleccionado
-    List<Servicio> serviciosAlumno = listadoAlumnosDetalles
-        .where((servicio) => servicio.nombreAlumno == nombreParametro)
-        .toList();
+    // Filtrar los servicios del alumno seleccionado dentro del rango de fechas
+    List<Servicio> serviciosAlumno = listadoAlumnosDetalles.where((servicio) {
+      if (servicio.nombreAlumno == nombreParametro) {
+        DateTime fechaEntradaParseada = DateFormat("dd/MM/yyyy").parse(servicio.fechaEntrada);
+        DateTime fechaSalidaParseada = DateFormat("dd/MM/yyyy").parse(servicio.fechaSalida);
+        return !fechaEntradaParseada.isBefore(dateTimeInicio) && !fechaSalidaParseada.isAfter(dateTimeFin);
+      }
+      return false;
+    }).toList();
 
     return Scaffold(
       appBar: AppBar(

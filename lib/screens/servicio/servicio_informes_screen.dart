@@ -25,7 +25,6 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
   @override
   void initState() {
     super.initState();
-    // Llamar a updateLista con las fechas actuales al iniciar la pantalla
     updateLista(context, dateTimeInicio, dateTimeFin);
   }
 
@@ -115,8 +114,14 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
 
                 return GestureDetector(
                   onTap: () => Navigator.pushNamed(
-                      context, "servicio_informes_detalles_screen",
-                      arguments: listaAlumnosNombres[index]),
+                    context, 
+                    "servicio_informes_detalles_screen",
+                    arguments: {
+                      'nombreAlumno': listaAlumnosNombres[index],
+                      'dateTimeInicio': dateTimeInicio,
+                      'dateTimeFin': dateTimeFin
+                    }
+                  ),
                   child: ListTile(
                     title: Text(listaAlumnosNombres[index]),
                     subtitle: Text("Cantidad $repeticiones"),
