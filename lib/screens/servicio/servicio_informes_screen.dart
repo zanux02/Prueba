@@ -50,8 +50,7 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                       child: TextField(
                         readOnly: true,
                         style: const TextStyle(fontWeight: FontWeight.bold),
-                        controller:
-                            TextEditingController(text: selectedDateInicio),
+                        controller: TextEditingController(text: selectedDateInicio),
                         decoration: InputDecoration(
                           labelText: "FECHA INICIO",
                           border: const OutlineInputBorder(),
@@ -71,8 +70,7 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                         enabled: fechaInicioEscogida,
                         readOnly: true,
                         style: const TextStyle(fontWeight: FontWeight.bold),
-                        controller:
-                            TextEditingController(text: selectedDateFin),
+                        controller: TextEditingController(text: selectedDateFin),
                         decoration: InputDecoration(
                           labelText: "FECHA FIN",
                           border: const OutlineInputBorder(),
@@ -97,8 +95,7 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
                             .add(listaAlumnosFechas[i].nombreAlumno);
                       }
 
-                      listaAlumnosNombres =
-                          listaAlumnosNombres.toSet().toList();
+                      listaAlumnosNombres = listaAlumnosNombres.toSet().toList();
 
                       listaAlumnosNombres.sort((a, b) => a.compareTo(b));
                       size = listaAlumnosNombres.length;
@@ -183,8 +180,8 @@ class _ServicioInformesScreenState extends State<ServicioInformesScreen> {
     DateTime fechaSalidaParseada = DateFormat("dd/MM/yyyy")
         .parse(listadoAlumnadoServicio.fechaSalida);
 
-    if (fechaEntradaParseada.isAfter(dateInicio.subtract(const Duration(days: 0))) &&
-        fechaSalidaParseada.isBefore(dateFin.add(const Duration(days: 1)))) {
+    if (!fechaEntradaParseada.isBefore(dateInicio) &&
+        !fechaSalidaParseada.isAfter(dateFin)) {
       estaDentro = true;
     }
 
