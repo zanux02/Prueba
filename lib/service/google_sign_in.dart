@@ -37,10 +37,8 @@ class GoogleSignInState extends State<GoogleSignIn> {
                 });
 
                 try {
-                  // Llamar al método para cargar credenciales periódicamente
+                  // Cargar credenciales
                   await cargarCredencialesPeriodicamente(credencialesProvider);
-
-                  // Volver a obtener la lista actualizada después de la carga de datos
                   final listaActualizada = credencialesProvider.listaCredenciales;
 
                   FirebaseService service = FirebaseService();
@@ -49,7 +47,7 @@ class GoogleSignInState extends State<GoogleSignIn> {
                   User? user = FirebaseAuth.instance.currentUser;
                   String? usuarioGoogle = user?.email;
                   String? nombreUsuarioGoogle = user?.displayName;
-                  String? uid = user?.uid;  // Aquí obtienes el UID del usuario logueado
+                  String? uid = user?.uid;  // Obtén el UID del usuario logueado
 
                   if (usuarioGoogle == null) {
                     _mostrarError(context, "No se pudo obtener el usuario de Google.");
@@ -59,12 +57,14 @@ class GoogleSignInState extends State<GoogleSignIn> {
                   // Guardar el UID en SharedPreferences
                   await _guardarUID(uid);
 
+                  // Mostrar el UID en una alerta
+                  _mostrarUID(uid);
+
                   bool existe = false;
 
-                  // Iterar sobre la lista actualizada solo si no está vacía
+                  // Verificar si el usuario existe en la lista de credenciales
                   if (listaActualizada.isNotEmpty) {
                     for (int i = 0; i < listaActualizada.length; i++) {
-                      debugPrint(listaActualizada[i].usuario);
                       if (listaActualizada[i].usuario == usuarioGoogle) {
                         existe = true;
                         Navigator.pushNamed(context, "main_screen",
@@ -165,6 +165,27 @@ class GoogleSignInState extends State<GoogleSignIn> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('uid', uid);
       print('UID guardado en SharedPreferences: $uid');
+    }
+  }
+
+  // Mostrar el UID en una alerta
+  void _mostrarUID(String? uid) {
+    if (uid != null) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("UID del usuario"),
+            content: Text("El UID del usuario es: $uid"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
