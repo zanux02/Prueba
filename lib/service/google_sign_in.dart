@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:iJandula/providers/credenciales_provider.dart';
 import 'package:iJandula/service/firebase_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GoogleSignIn extends StatefulWidget {
   const GoogleSignIn({Key? key}) : super(key: key);
@@ -20,7 +21,6 @@ class GoogleSignInState extends State<GoogleSignIn> {
   @override
   Widget build(BuildContext context) {
     final credencialesProvider = Provider.of<CredencialesProvider>(context);
-
 
     Size size = MediaQuery.of(context).size;
 
@@ -49,11 +49,15 @@ class GoogleSignInState extends State<GoogleSignIn> {
                   User? user = FirebaseAuth.instance.currentUser;
                   String? usuarioGoogle = user?.email;
                   String? nombreUsuarioGoogle = user?.displayName;
+                  String? uid = user?.uid;  // Aquí obtienes el UID del usuario logueado
 
                   if (usuarioGoogle == null) {
                     _mostrarError(context, "No se pudo obtener el usuario de Google.");
                     return;
                   }
+
+                  // Guardar el UID en SharedPreferences
+                  await _guardarUID(uid);
 
                   bool existe = false;
 
@@ -154,5 +158,18 @@ class GoogleSignInState extends State<GoogleSignIn> {
 
   void logOut() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  Future<void> _guardarUID(String? uid) async {
+    if (uid != null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('uid', uid);
+      print('UID guardado en SharedPreferences: $uid');
+    }
+  }
+
+  Future<String?> _obtenerUID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('uid');
   }
 }
