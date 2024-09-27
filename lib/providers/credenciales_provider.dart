@@ -19,7 +19,7 @@ class CredencialesProvider extends ChangeNotifier {
 
   getCredencialesUsuario() async {
     //spreadId privado=1MASSzGJdn5_NFoMq_EREVsj4nxV0rUv0qGHLXV1QT3g
-    const url = GoogleSheets.Credenciales;
+    const url = GoogleSheets.credenciales;
     String respuesta = await Utilidades.getJsonData(url);
     respuesta = '{"results":$respuesta}';
     final credencialesResponse = CredencialesResponse.fromJson(respuesta);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:iJandula/models/servicio_response.dart';
+import 'package:iJandula/utils/google_sheets.dart';
 import 'package:iJandula/utils/utilidades.dart';
 
 class ServicioProvider extends ChangeNotifier {
@@ -18,8 +19,7 @@ class ServicioProvider extends ChangeNotifier {
 
   Future<void> getAlumnosServicio() async {
     try {
-      const url =
-          'https://script.google.com/macros/u/1/s/AKfycbyZ_S8DAf-qJbL8-WS3xL3-lUBHCL0gtLhWJ2bcN5PlovwqLcrzY4hzxECqeFll9UT01g/exec?spreadsheetId=1u79XugcalPc4aPcymy9OsWu1qdg8aKCBvaPWQOH187I&sheet=Servicio';
+      const url = GoogleSheets.alumnosServicio;
       String jsonData = await Utilidades.getJsonData(url);
       jsonData = '{"results":$jsonData}';
       final servicioResponse = ServicioResponse.fromJson(jsonData);

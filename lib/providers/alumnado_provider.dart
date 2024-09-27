@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iJandula/models/models.dart';
 import 'package:iJandula/utils/utilidades.dart';
+import 'package:iJandula/utils/google_sheets.dart';
 
 class AlumnadoProvider extends ChangeNotifier {
   List<DatosAlumnos> listadoAlumnos = [];
   List<HorarioResult> listadoHorarios = [];
-  final String baseUrl = 'http://5.250.184.231:8088';
 
   AlumnadoProvider() {
     debugPrint("Alumnado Provider inicializado");
@@ -14,8 +14,7 @@ class AlumnadoProvider extends ChangeNotifier {
   }
 
   Future<List<String>> getCursos() async {
-    const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=11Y4M52bYFMCIa5uU52vKll2-OY0VtFiGK2PhMWShngg&sheet=Cursos";
+    const url = GoogleSheets.cursos;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final cursosResponse = CursosResponse.fromJson(jsonData);
@@ -28,8 +27,7 @@ class AlumnadoProvider extends ChangeNotifier {
   }
 
   Future<List<dynamic>> getAlumnos(String cursoABuscarAlumnos) async {
-    const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=11Y4M52bYFMCIa5uU52vKll2-OY0VtFiGK2PhMWShngg&sheet=Datos_Alumnado";
+    const url = GoogleSheets.alumnos;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final cursosResponse = AlumnosResponse.fromJson(jsonData);
@@ -43,8 +41,8 @@ class AlumnadoProvider extends ChangeNotifier {
   }
 
   Future<void> getAlumno() async {
-    const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=11Y4M52bYFMCIa5uU52vKll2-OY0VtFiGK2PhMWShngg&sheet=Datos_Alumnado";
+    const url =GoogleSheets.alumnos;
+        
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final cursosResponse = AlumnosResponse.fromJson(jsonData);
@@ -53,8 +51,7 @@ class AlumnadoProvider extends ChangeNotifier {
   }
 
   Future<void> getHorario() async {
-    const url =
-        "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=11Y4M52bYFMCIa5uU52vKll2-OY0VtFiGK2PhMWShngg&sheet=Horarios";
+    const url = GoogleSheets.horarios;
     String jsonData = await Utilidades.getJsonData(url);
     jsonData = '{"results":$jsonData}';
     final cursosResponse = HorarioResponse.fromJson(jsonData);
