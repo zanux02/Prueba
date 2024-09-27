@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iJandula/models/credenciales_response.dart';
 import 'package:iJandula/utils/utilidades.dart';
+import 'package:iJandula/utils/google_sheets.dart';
 
 class CredencialesProvider extends ChangeNotifier {
   //Script Google
@@ -17,7 +18,8 @@ class CredencialesProvider extends ChangeNotifier {
   }
 
   getCredencialesUsuario() async {
-    const url = "https://script.google.com/macros/s/AKfycbyPsB_koj3MwkmRFn8IJU-k4sOP8nRfnHHKNNt9xov9INZ1VEsQbu96gDR8Seiz0oDGOQ/exec?spreadsheetId=1qREuUYht73nx_fS2dxm9m6qPs_uvBwsK74dOprmwdjE&sheet=Credenciales"; 
+    //spreadId privado=1MASSzGJdn5_NFoMq_EREVsj4nxV0rUv0qGHLXV1QT3g
+    const url = GoogleSheets.Credenciales;
     String respuesta = await Utilidades.getJsonData(url);
     respuesta = '{"results":$respuesta}';
     final credencialesResponse = CredencialesResponse.fromJson(respuesta);
