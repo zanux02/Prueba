@@ -15,7 +15,7 @@ class TitlePage extends StatelessWidget {
       child: const Column(
         children: [
           Center(
-            child: Text("iJándula",
+            child: Text("iJándul",
                 style: TextStyle(
                     fontSize: 60, color: Colors.white, fontFamily: 'ErasDemi')),
           ),
